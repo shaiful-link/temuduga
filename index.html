@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock Interview / Latihan Temuduga</title>
+<style>
+  :root{
+    --bg:#f4f1ea; --card:#ffffff; --ink:#1d2a2e; --muted:#5d6b70;
+    --main:#0f5c63; --main-dark:#0a4348; --soft:#e3efef;
+    --ok:#2e7d4f; --warn:#b4581a; --line:#d9d4c8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+  header{background:var(--main);color:#fff;padding:18px 16px}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  header h1{margin:0;font-size:1.15rem;letter-spacing:.2px}
+  header small{opacity:.85;display:block;font-weight:400;font-size:.8rem}
+  .wrap{max-width:760px;margin:0 auto}
+  main{padding:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
+  h2{font-size:1.05rem;margin:0 0 10px}
+  .label{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin:0 0 8px}
+  .jobs{display:grid;gap:10px}
+  .job{border:2px solid var(--line);border-radius:12px;padding:16px;cursor:pointer;background:#fff;text-align:left;font:inherit;color:inherit;width:100%;display:flex;gap:14px;align-items:center}
+  .job:hover{border-color:var(--main);background:var(--soft)}
+  .job .ico{flex:0 0 46px;height:46px;border-radius:12px;background:var(--main);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem}
+  .job b{display:block}
+  .job span.d{font-size:.85rem;color:var(--muted);display:block}
+  .job .go{margin-left:auto;color:var(--main);font-size:1.3rem}
+  .picked{font-weight:600;font-size:1.05rem}
+  .picked small{display:block;font-weight:400;color:var(--muted);font-size:.85rem}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font:inherit;font-size:.85rem;cursor:pointer;color:var(--ink)}
+  .chip.on{background:var(--main);border-color:var(--main);color:#fff}
+  button.btn{font:inherit;font-weight:600;border:0;border-radius:10px;padding:12px 18px;cursor:pointer;background:var(--main);color:#fff}
+  button.btn:hover{background:var(--main-dark)}
+  button.btn.ghost{background:#fff;color:var(--main);border:1px solid var(--main)}
+  button.btn.ok{background:var(--ok)}
+  button.btn.warn{background:var(--warn)}
+  button.btn.small{padding:7px 12px;font-size:.85rem;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4)}
+  .row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+  .meta{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:.85rem;color:var(--muted);margin-bottom:10px}
+  .badge{background:var(--soft);color:var(--main-dark);border-radius:999px;padding:4px 11px;font-weight:600;font-size:.8rem}
+  .bar{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin-bottom:14px}
+  .bar i{display:block;height:100%;background:var(--main);width:0;transition:width .3s}
+  .question{font-size:1.25rem;font-weight:600;margin:6px 0 14px}
+  textarea{width:100%;min-height:140px;border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit;resize:vertical;background:#fcfbf8}
+  textarea:focus{outline:2px solid var(--main);border-color:transparent}
+  .hint{font-size:.83rem;color:var(--muted);margin-top:6px}
+  .answer{border-left:5px solid var(--main);background:var(--soft);border-radius:0 12px 12px 0;padding:14px 16px;margin-top:16px}
+  .answer ul{margin:6px 0 0;padding-left:20px}
+  .answer li{margin-bottom:6px}
+  .tip{margin-top:12px;background:#fff7e6;border:1px solid #f0dcae;border-radius:10px;padding:10px 12px;font-size:.9rem}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center}
+  .stats div{background:var(--soft);border-radius:12px;padding:12px 6px}
+  .stats b{display:block;font-size:1.5rem;color:var(--main-dark)}
+  .stats span{font-size:.8rem;color:var(--muted)}
+  ol.review{padding-left:20px;margin:8px 0 0}
+  ol.review li{margin-bottom:6px}
+  .hidden{display:none}
+  footer{text-align:center;font-size:.78rem;color:var(--muted);padding:6px 16px 26px}
+  @media (max-width:480px){.question{font-size:1.1rem}.row .btn{flex:1 1 100%}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1><span id="hTitle">Mock Interview</span><small id="hSub"></small></h1>
+    <button class="btn small hidden" id="btnHome">Menu</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ========== SCREEN 0: MAIN MENU (select job) ========== -->
+  <section id="scrMenu">
+    <div class="card">
+      <p class="label">Menu &mdash; Pilih jawatan / Select a role</p>
+      <div class="jobs" id="jobList"></div>
+    </div>
+  </section>
+
+  <!-- ========== SCREEN 1: SETUP (company + category) ========== -->
+  <section id="scrSetup" class="hidden">
+    <div class="card">
+      <p class="label" id="lblPicked"></p>
+      <div class="picked" id="pickedJob"></div>
+    </div>
+    <div class="card" id="companyCard">
+      <p class="label" id="lblCompany"></p>
+      <div class="chips" id="companyList"></div>
+    </div>
+    <div class="card">
+      <p class="label" id="lblCat"></p>
+      <div class="chips" id="catList"></div>
+      <p class="hint" id="countInfo"></p>
+      <div class="row">
+        <button class="btn" id="btnStart"></button>
+        <button class="btn ghost" id="btnBack"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SCREEN 2: QUESTION ========== -->
+  <section id="scrQuiz" class="hidden">
+    <div class="card">
+      <div class="meta">
+        <span class="badge" id="qCat"></span>
+        <span><span id="qNum"></span> &bull; <span id="qTime">00:00</span></span>
+      </div>
+      <div class="bar"><i id="qBar"></i></div>
+      <p class="label" id="lblPanel"></p>
+      <div class="question" id="qText"></div>
+
+      <textarea id="qInput"></textarea>
+      <p class="hint" id="qHint"></p>
+
+      <div class="row" id="rowAnswer">
+        <button class="btn" id="btnShow"></button>
+        <button class="btn ghost" id="btnSkip"></button>
+      </div>
+
+      <div id="ansBox" class="hidden">
+        <div class="answer">
+          <p class="label" id="lblAns"></p>
+          <ul id="ansList"></ul>
+          <div class="tip" id="ansTip"></div>
+        </div>
+        <p class="label" style="margin-top:16px" id="lblRate"></p>
+        <div class="row" style="margin-top:0">
+          <button class="btn ok" id="btnGood"></button>
+          <button class="btn warn" id="btnAgain"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SCREEN 3: SUMMARY ========== -->
+  <section id="scrEnd" class="hidden">
+    <div class="card">
+      <h2 id="endTitle"></h2>
+      <div class="stats">
+        <div><b id="sGood">0</b><span id="lblSGood"></span></div>
+        <div><b id="sAgain">0</b><span id="lblSAgain"></span></div>
+        <div><b id="sSkip">0</b><span id="lblSSkip"></span></div>
+      </div>
+      <div id="reviewBox" class="hidden">
+        <p class="label" style="margin-top:16px" id="lblReview"></p>
+        <ol class="review" id="reviewList"></ol>
+      </div>
+      <div class="row">
+        <button class="btn hidden" id="btnRetry"></button>
+        <button class="btn ghost" id="btnRestart"></button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="footText"></footer>
+
+<script>
+/* =====================================================================
+   UI TEXT (two languages). Each job sets lang: "ms" or "en".
+   ===================================================================== */
+var TEXT = {
+  ms: {
+    title:"Latihan Temuduga", sub:"Soalan rawak \u2022 Jawab dahulu \u2022 Semak cadangan jawapan",
+    picked:"Jawatan dipilih", company:"Pilih syarikat", cat:"Pilih kategori soalan", all:"Semua",
+    count:" soalan akan ditanya secara rawak.", start:"Mula Temuduga", back:"Tukar jawatan",
+    panel:"Soalan panel", placeholder:"Taip jawapan anda di sini, atau jawab secara lisan seperti temuduga sebenar...",
+    hint:"Petua: cuba jawab dengan suara kuat dalam masa 2 minit, kemudian baru semak cadangan jawapan.",
+    show:"Tunjuk Cadangan Jawapan", skip:"Langkau", ans:"Cadangan jawapan \u2014 isi penting", tip:"Tip: ",
+    rate:"Nilai jawapan anda sendiri", good:"Saya yakin \u2192 Soalan seterusnya", again:"Perlu ulang kaji \u2192 Soalan seterusnya",
+    qn:"Soalan ", end:"Sesi tamat", sGood:"Yakin", sAgain:"Perlu ulang", sSkip:"Dilangkau",
+    review:"Soalan untuk diulang kaji", retry:"Ulang soalan yang lemah", restart:"Kembali ke menu", questions:" soalan",
+    foot:"Cadangan jawapan ialah panduan sahaja. Sesuaikan dengan pengalaman sendiri dan semak pekeliling / SOP terkini jabatan anda."
+  },
+  en: {
+    title:"Mock Interview", sub:"Random question \u2022 Answer first \u2022 Then check the suggested answer",
+    picked:"Selected role", company:"Select the company", cat:"Select question category", all:"All",
+    count:" questions will be asked in random order.", start:"Start Interview", back:"Change role",
+    panel:"Interviewer asks", placeholder:"Type your answer here, or answer out loud like a real interview...",
+    hint:"Tip: answer out loud within 2 minutes first, then check the suggested answer.",
+    show:"Show Suggested Answer", skip:"Skip", ans:"Suggested answer \u2014 key points", tip:"Tip: ",
+    rate:"Rate your own answer", good:"I am confident \u2192 Next question", again:"Need more practice \u2192 Next question",
+    qn:"Question ", end:"Session complete", sGood:"Confident", sAgain:"To practise", sSkip:"Skipped",
+    review:"Questions to practise again", retry:"Retry weak questions", restart:"Back to menu", questions:" questions",
+    foot:"Suggested answers are a guide only. Use your own experience and check each company's website for the latest facts."
+  }
+};
+
+/* =====================================================================
+   QUESTION DATA
+   To add a new job: copy one { id, nama, ... } block and change the content.
+   Each question:  k = category, s = question, j = key points, t = tip,
+                   c = company (optional, only shown when that company is selected)
+   ===================================================================== */
+var JOBS = [
+
+/* =============== JOB 1: JTMP U7 -> U8 (Bahasa Melayu) =============== */
+{
+  id: "jtmp-u7-u8", lang: "ms", ikon: "U8",
+  nama: "Juruteknologi Makmal Perubatan",
+  butiran: "Kenaikan pangkat Gred U7 ke Gred U8 \u2022 Kementerian Kesihatan Malaysia",
+  soalan: [
+
+  /* ---------- A. Pengenalan diri & kerjaya ---------- */
+  { k:"Pengenalan Diri", s:"Sila perkenalkan diri anda dan latar belakang perkhidmatan anda.",
+    j:["Nama, jawatan dan gred semasa, tempat bertugas (hospital / makmal / unit).",
+       "Tempoh perkhidmatan: tahun lantikan, tahun naik ke gred semasa, penempatan terdahulu.",
+       "Kelulusan akademik dan kursus kepakaran / pos basik yang berkaitan.",
+       "Bidang tugas utama sekarang (contoh: penyelia unit hematologi, pegawai kualiti, pegawai aset).",
+       "Tutup dengan 1-2 pencapaian utama dan tugas tambahan yang dipegang."],
+    t:"Hadkan 1 hingga 2 minit. Susun ikut turutan: siapa saya, pengalaman, tugas sekarang, pencapaian." },
+
+  { k:"Pengenalan Diri", s:"Mengapa anda layak dinaikkan pangkat ke Gred U8?",
+    j:["Pengalaman dan kekananan: sudah menguasai tugas teknikal dan penyeliaan di gred U7.",
+       "Bukti prestasi: markah penilaian prestasi yang baik, anugerah, tiada rekod tatatertib.",
+       "Sudah memikul tugas seperti gred lebih tinggi: mengetuai unit, menyelia staf, urus jadual, audit, perolehan.",
+       "Sumbangan nyata kepada jabatan: projek kualiti, inovasi, penambahbaikan TAT, akreditasi.",
+       "Bersedia memikul tanggungjawab lebih besar dan membimbing pegawai muda."],
+    t:"Beri bukti, bukan dakwaan. Sebut angka jika ada, contohnya 'TAT turun daripada 90 minit kepada 60 minit'." },
+
+  { k:"Pengenalan Diri", s:"Apakah sumbangan terbesar anda sepanjang berada di gred sekarang?",
+    j:["Pilih SATU sumbangan yang paling memberi kesan dan ceritakan dengan jelas.",
+       "Situasi: apa masalah asal (contoh: kadar penolakan spesimen tinggi).",
+       "Tindakan: apa yang ANDA sendiri lakukan (analisis punca, latihan wad, borang baharu).",
+       "Hasil: data sebelum dan selepas, penjimatan kos atau masa.",
+       "Kesinambungan: bagaimana penambahbaikan itu dikekalkan atau diperluas ke unit lain."],
+    t:"Guna kaedah STAR: Situasi, Tugas, Tindakan, Hasil." },
+
+  { k:"Pengenalan Diri", s:"Apakah kekuatan dan kelemahan anda?",
+    j:["Kekuatan: pilih 2-3 yang berkaitan dengan jawatan penyelia, contohnya teliti, tenang ketika tekanan, pandai membimbing.",
+       "Sokong setiap kekuatan dengan satu contoh ringkas di tempat kerja.",
+       "Kelemahan: pilih yang jujur tetapi boleh dibaiki, contohnya terlalu terperinci atau sukar mengagih tugas.",
+       "Nyatakan langkah yang sedang diambil untuk membaiki kelemahan itu."],
+    t:"Elakkan kelemahan yang menjejaskan tugas teras (contoh: 'saya selalu lewat')." },
+
+  { k:"Pengenalan Diri", s:"Jika dinaikkan pangkat, apakah perancangan anda dalam 6 bulan pertama?",
+    j:["Fahami dahulu: semak prestasi unit, KPI, aduan, laporan audit dan keperluan staf.",
+       "Kenal pasti 2-3 keutamaan, contohnya TAT, kompetensi staf, pengurusan stok reagen.",
+       "Perkemas penyeliaan: jadual tugas, penilaian kompetensi, mesyuarat unit berkala.",
+       "Laksana satu projek penambahbaikan yang boleh diukur.",
+       "Lapor kemajuan kepada ketua jabatan dan dapatkan maklum balas."],
+    t:"Tunjuk anda berfikir sebagai pengurus: rancang, laksana, pantau, lapor." },
+
+  { k:"Pengenalan Diri", s:"Apakah perbezaan peranan antara Gred U7 dan Gred U8 pada pandangan anda?",
+    j:["Gred U7: lebih kepada penyeliaan operasi harian unit dan kerja teknikal lanjutan.",
+       "Gred U8: skop lebih luas, merancang dan menyelaras beberapa unit atau keseluruhan perkhidmatan makmal.",
+       "Lebih banyak tugas pengurusan: sumber manusia, bajet, perolehan, aset, kualiti dan akreditasi.",
+       "Menjadi penghubung antara pengurusan atasan dengan staf pelaksana.",
+       "Bertanggungjawab membangunkan pelapis dan menjadi pakar rujuk."],
+    t:"Semak senarai tugas (JD) sebenar jawatan U8 di tempat anda sebelum temuduga." },
+
+  /* ---------- B. Teknikal makmal ---------- */
+  { k:"Teknikal Makmal", s:"Terangkan perbezaan antara Kawalan Kualiti Dalaman (IQC) dan Penilaian Kualiti Luaran (EQA).",
+    j:["IQC: dijalankan oleh makmal sendiri setiap hari atau setiap kelompok ujian menggunakan bahan kawalan.",
+       "Tujuan IQC: memantau ketepatan dan kejituan harian sebelum keputusan pesakit dikeluarkan.",
+       "EQA: sampel dihantar oleh penganjur luar, makmal uji dan hantar keputusan untuk dibandingkan dengan makmal lain.",
+       "Tujuan EQA: menilai prestasi makmal secara bebas dan mengesan ralat sistematik jangka panjang.",
+       "Kedua-duanya saling melengkapi dan menjadi keperluan MS ISO 15189."],
+    t:"Tambah contoh program EQA yang makmal anda sertai." },
+
+  { k:"Teknikal Makmal", s:"Apakah tindakan anda jika keputusan IQC berada di luar had kawalan?",
+    j:["Hentikan pengeluaran keputusan pesakit bagi ujian tersebut.",
+       "Semak punca mudah: bahan kawalan (luput, cara simpan, cara bancuh), reagen, kalibrasi, penyelenggaraan alat.",
+       "Rujuk peraturan Westgard: 1-3s dan R-4s menunjukkan ralat rawak; 2-2s, 4-1s dan 10x menunjukkan ralat sistematik.",
+       "Ulang IQC selepas tindakan pembetulan; jika masih gagal, kalibrasi semula atau hubungi jurutera.",
+       "Nilai semula sampel pesakit yang diuji sejak IQC terakhir yang lulus.",
+       "Rekod kejadian dan tindakan pembetulan dalam log IQC."],
+    t:"Tekankan: jangan ulang IQC berkali-kali sehingga lulus tanpa mencari punca." },
+
+  { k:"Teknikal Makmal", s:"Terangkan tiga fasa dalam proses ujian makmal. Fasa manakah paling banyak berlaku kesilapan?",
+    j:["Pra-analitikal: permintaan ujian, pengenalan pesakit, pengambilan, pelabelan, pengangkutan dan penerimaan spesimen.",
+       "Analitikal: proses menguji termasuk IQC, kalibrasi dan prestasi alat.",
+       "Pasca-analitikal: semakan dan pengesahan keputusan, pelaporan, makluman nilai kritikal, penyimpanan spesimen.",
+       "Kebanyakan kesilapan berlaku pada fasa pra-analitikal kerana melibatkan ramai pihak di luar makmal.",
+       "Kawalan: kriteria penolakan spesimen, latihan kepada wad, pemantauan petunjuk kualiti."],
+    t:"Beri contoh kesilapan pra-analitikal di tempat anda dan cara anda mengurangkannya." },
+
+  { k:"Teknikal Makmal", s:"Bagaimanakah anda menguruskan keputusan nilai kritikal (critical value)?",
+    j:["Sahkan keputusan dahulu: semak IQC, keadaan spesimen (hemolisis, beku), ulang ujian jika perlu.",
+       "Maklumkan segera kepada doktor atau jururawat yang merawat dalam tempoh yang ditetapkan dalam SOP.",
+       "Guna kaedah baca semula (read-back) untuk memastikan maklumat diterima dengan betul.",
+       "Rekod: nama pesakit, keputusan, masa, nama pemberi dan penerima maklumat.",
+       "Pantau pematuhan makluman nilai kritikal sebagai petunjuk kualiti."],
+    t:"Sebut contoh ujian, misalnya kalium, glukosa, hemoglobin atau platelet yang sangat rendah." },
+
+  { k:"Teknikal Makmal", s:"Apakah kriteria penolakan spesimen dan bagaimana anda mengurangkan kadar penolakan?",
+    j:["Kriteria biasa: tiada label atau label tidak sepadan dengan borang, bekas salah, isipadu tidak cukup.",
+       "Juga: spesimen hemolisis, beku, tumpah, lewat sampai atau suhu pengangkutan tidak betul.",
+       "Tindakan: maklum kepada wad dengan segera, rekod penolakan dan minta spesimen baharu.",
+       "Pencegahan: analisis data penolakan mengikut wad dan punca.",
+       "Beri maklum balas dan latihan kepada wad, sediakan panduan pengambilan spesimen."],
+    t:"Spesimen yang sukar diulang (contoh CSF) dikendalikan mengikut budi bicara dan SOP, bukan terus ditolak." },
+
+  { k:"Teknikal Makmal", s:"Bagaimanakah anda memantau dan menambah baik masa pusingan ujian (TAT)?",
+    j:["Tetapkan sasaran TAT bagi ujian segera dan rutin, dan pantau melalui LIS setiap bulan.",
+       "Analisis punca kelewatan: penghantaran spesimen, pendaftaran, kerosakan alat, kekurangan staf, pengesahan lewat.",
+       "Tindakan: susun semula aliran kerja, agih staf mengikut waktu puncak, penyelenggaraan berjadual.",
+       "Sediakan alat sandaran atau makmal rujukan sandaran.",
+       "Bentang prestasi TAT dalam mesyuarat jabatan dan kepada pelanggan."],
+    t:"Jika ada, kongsi data TAT sebenar unit anda." },
+
+  { k:"Teknikal Makmal", s:"Apakah MS ISO 15189 dan mengapa ia penting kepada makmal perubatan?",
+    j:["Piawaian antarabangsa bagi makmal perubatan: keperluan kualiti dan kecekapan (versi terkini ISO 15189:2022).",
+       "Merangkumi keperluan pengurusan dan teknikal: personel, peralatan, proses pra-analitikal hingga pasca-analitikal, pengurusan risiko.",
+       "Akreditasi di Malaysia diberi oleh Jabatan Standard Malaysia melalui Skim Akreditasi Makmal Malaysia (SAMM).",
+       "Kepentingan: keputusan boleh dipercayai, keselamatan pesakit, keyakinan pelanggan, penambahbaikan berterusan.",
+       "Peranan penyelia: pastikan SOP dipatuhi, rekod lengkap, audit dalaman dan tindakan pembetulan dilaksana."],
+    t:"Nyatakan status akreditasi makmal anda dan peranan anda semasa audit." },
+
+  { k:"Teknikal Makmal", s:"Bagaimanakah anda menguruskan reagen dan stok bahan guna habis makmal?",
+    j:["Rekod stok yang kemas kini: tarikh terima, nombor lot, tarikh luput, baki.",
+       "Amalkan FEFO (yang luput dahulu, guna dahulu) dan tetapkan paras stok minimum.",
+       "Simpan mengikut syarat pengeluar dan pantau suhu peti sejuk setiap hari.",
+       "Buat verifikasi lot baharu sebelum digunakan untuk sampel pesakit.",
+       "Rancang perolehan awal mengikut penggunaan dan patuhi tatacara perolehan kerajaan.",
+       "Elak pembaziran: pantau reagen hampir luput dan agih ke fasiliti lain jika perlu."],
+    t:"Kaitkan dengan penjimatan kos. Panel suka jawapan yang menunjukkan kesedaran bajet." },
+
+  { k:"Teknikal Makmal", s:"Apakah langkah anda apabila menerima peralatan atau kaedah ujian baharu sebelum digunakan untuk pesakit?",
+    j:["Semak pemasangan dan pentauliahan oleh pembekal (Testing & Commissioning) serta dokumen lengkap.",
+       "Jalankan verifikasi kaedah: kejituan, ketepatan, julat pelaporan, perbandingan dengan kaedah sedia ada.",
+       "Sediakan atau kemas kini SOP, julat rujukan dan tetapan dalam LIS.",
+       "Latih staf dan nilai kompetensi sebelum dibenar mengendalikan alat.",
+       "Daftar aset, sediakan jadual penyelenggaraan dan kalibrasi.",
+       "Maklumkan kepada pelanggan jika ada perubahan julat rujukan atau jenis spesimen."],
+    t:"Bezakan: verifikasi untuk kaedah yang sudah disahkan pengeluar, validasi untuk kaedah baharu atau diubah suai." },
+
+  { k:"Teknikal Makmal", s:"Bagaimanakah anda memastikan peralatan makmal sentiasa berfungsi dengan baik?",
+    j:["Penyelenggaraan harian, mingguan dan bulanan oleh pengguna mengikut manual, direkod dalam log.",
+       "Penyelenggaraan pencegahan berjadual (PPM) dan kalibrasi oleh pembekal atau syarikat konsesi.",
+       "Pantau prestasi melalui IQC dan rekod kerosakan (downtime).",
+       "Semak sijil kalibrasi dan label status pada alat.",
+       "Rancang penggantian alat usang dan sediakan pelan sandaran."],
+    t:"Sebut pengalaman anda berurusan dengan pembekal atau jurutera semasa alat rosak." },
+
+  /* ---------- C. Keselamatan ---------- */
+  { k:"Keselamatan & Biosafety", s:"Berlaku tumpahan spesimen darah di lantai makmal. Apakah tindakan anda?",
+    j:["Maklumkan staf berdekatan dan hadkan kawasan tumpahan.",
+       "Pakai PPE yang sesuai: sarung tangan, kot makmal, pelindung muka jika perlu.",
+       "Tutup tumpahan dengan bahan penyerap, tuang disinfektan (contoh natrium hipoklorit) dari luar ke dalam.",
+       "Biarkan mengikut masa sentuhan dalam SOP, kemudian bersihkan. Kaca pecah diambil dengan forsep, bukan tangan.",
+       "Buang semua bahan sebagai sisa klinikal, cuci tangan.",
+       "Lapor dan rekod insiden; semak punca untuk mengelak berulang."],
+    t:"Sebut kit tumpahan (spill kit) dan latihan berkala kepada staf." },
+
+  { k:"Keselamatan & Biosafety", s:"Seorang staf anda tercucuk jarum terpakai. Apakah yang perlu dilakukan?",
+    j:["Pertolongan cemas segera: basuh luka dengan sabun dan air mengalir, jangan picit atau hisap luka.",
+       "Lapor segera kepada penyelia dan rujuk ke Jabatan Kecemasan atau klinik yang ditetapkan untuk penilaian risiko.",
+       "Kenal pasti sumber pesakit jika boleh; ujian saringan HIV, Hepatitis B dan Hepatitis C untuk staf dan sumber.",
+       "Rawatan profilaksis pasca pendedahan (PEP) jika disyorkan doktor, secepat mungkin.",
+       "Isi borang notifikasi kecederaan benda tajam dan lapor kepada unit keselamatan dan kesihatan pekerjaan.",
+       "Susulan ujian darah dan kaunseling; siasat punca dan baiki amalan kerja."],
+    t:"Tunjuk keprihatinan kepada staf, bukan hanya prosedur." },
+
+  { k:"Keselamatan & Biosafety", s:"Bagaimanakah sisa makmal diurus dengan betul?",
+    j:["Asingkan di punca mengikut jenis sisa.",
+       "Sisa klinikal ke dalam beg kuning; benda tajam ke dalam bekas benda tajam yang kalis tusukan.",
+       "Sisa berisiko tinggi seperti kultur dinyahcemar (autoklaf) dahulu mengikut SOP.",
+       "Sisa am ke dalam beg hitam; sisa kimia diurus berasingan sebagai buangan terjadual.",
+       "Bekas tidak diisi melebihi tiga per empat, dilabel dan dikutip oleh syarikat konsesi.",
+       "Tertakluk kepada Akta Kualiti Alam Sekeliling 1974 dan peraturan buangan terjadual."],
+    t:"Sebut pemantauan anda sebagai penyelia: audit pengasingan sisa dan latihan staf." },
+
+  { k:"Keselamatan & Biosafety", s:"Apakah langkah anda untuk memastikan keselamatan staf di makmal?",
+    j:["Amalan Standard Precautions: semua spesimen dianggap berpotensi berjangkit.",
+       "PPE mencukupi dan dipakai dengan betul; kabinet biokeselamatan diselenggara dan disahkan.",
+       "Taklimat keselamatan untuk staf baharu dan latihan berkala (tumpahan, kebakaran, bahan kimia).",
+       "Imunisasi Hepatitis B untuk staf dan rekod status.",
+       "Penilaian risiko, audit keselamatan dan pelaporan insiden atau kejadian nyaris.",
+       "Lembaran data keselamatan (SDS) bahan kimia mudah dicapai; patuh Akta Keselamatan dan Kesihatan Pekerjaan 1994."],
+    t:"Kebanyakan makmal diagnostik ialah Tahap Biokeselamatan 2 (BSL-2); kultur TB memerlukan kawalan lebih tinggi." },
+
+  /* ---------- D. Pengurusan & kepimpinan ---------- */
+  { k:"Pengurusan & Kepimpinan", s:"Seorang staf di bawah seliaan anda kerap datang lewat dan prestasinya merosot. Bagaimana anda menanganinya?",
+    j:["Kumpul fakta dahulu: rekod kehadiran, kesan kepada tugas.",
+       "Jumpa secara tertutup, dengar masalahnya (kesihatan, keluarga, kewangan).",
+       "Beri nasihat dan teguran lisan, tetapkan sasaran pembaikan dan tempoh pemantauan.",
+       "Tawar bantuan: tukar syif jika munasabah, rujuk kaunseling.",
+       "Jika berterusan: teguran bertulis dan lapor kepada ketua jabatan untuk tindakan mengikut peraturan tatatertib.",
+       "Rekod semua perbincangan dan tindakan."],
+    t:"Tunjuk turutan: siasat, bimbing, pantau, baru tindakan tegas. Jangan terus menghukum." },
+
+  { k:"Pengurusan & Kepimpinan", s:"Makmal anda kekurangan staf tetapi beban kerja meningkat. Apakah tindakan anda?",
+    j:["Analisis beban kerja: bilangan ujian, waktu puncak, tugas yang tidak menambah nilai.",
+       "Susun semula jadual dan agihan tugas; latih staf pelbagai kemahiran (multi-skilling) supaya boleh saling ganti.",
+       "Permudah aliran kerja: automasi, gabung proses, kurangkan kerja manual dan pendua.",
+       "Tetapkan keutamaan ujian segera dan kritikal.",
+       "Kemuka justifikasi berasaskan data kepada pengurusan untuk tambahan jawatan atau kerja lebih masa.",
+       "Jaga kebajikan dan moral staf: rehat mencukupi, penghargaan."],
+    t:"Panel mahu lihat penyelesaian anda sendiri dahulu, bukan sekadar 'minta tambah staf'." },
+
+  { k:"Pengurusan & Kepimpinan", s:"Dua orang staf anda berkonflik sehingga menjejaskan kerja unit. Bagaimana anda menyelesaikannya?",
+    j:["Bertindak awal, jangan biar berlarutan.",
+       "Dengar kedua-dua pihak secara berasingan tanpa berat sebelah.",
+       "Kenal pasti punca sebenar: agihan tugas, komunikasi atau hal peribadi.",
+       "Adakan perbincangan bersama, fokus kepada isu kerja dan cari persetujuan.",
+       "Tetapkan peraturan yang jelas dan pantau selepas itu.",
+       "Jika gagal, rujuk kepada ketua jabatan atau kaunselor."],
+    t:"Tekankan sikap adil dan profesional; keutamaan ialah perkhidmatan kepada pesakit tidak terjejas." },
+
+  { k:"Pengurusan & Kepimpinan", s:"Seorang doktor mengadu keputusan ujian lewat dan memarahi staf anda. Apakah tindakan anda?",
+    j:["Tenang dan dengar aduan sepenuhnya; mohon maaf atas kesulitan.",
+       "Selesaikan keperluan pesakit dahulu: semak status ujian dan segerakan keputusan.",
+       "Siasat punca kelewatan: spesimen lewat sampai, alat rosak, ujian diulang, kesilapan staf.",
+       "Beri maklum balas jujur kepada doktor tentang punca dan tindakan pembetulan.",
+       "Rekod aduan mengikut prosedur aduan pelanggan dan bincang dalam mesyuarat unit.",
+       "Sokong staf anda, dan bimbing jika ada kelemahan."],
+    t:"Tunjuk anda mengutamakan pesakit, menjaga hubungan dengan pelanggan dan melindungi staf secara adil." },
+
+  { k:"Pengurusan & Kepimpinan", s:"Anda dapati satu keputusan ujian yang salah telah dikeluarkan kepada wad. Apakah tindakan anda?",
+    j:["Hubungi doktor atau wad dengan segera untuk memaklumkan kesilapan supaya rawatan tidak tersasar.",
+       "Tarik balik keputusan dan keluarkan laporan pembetulan (amended report) dengan rekod yang jelas.",
+       "Semak sama ada sampel pesakit lain turut terjejas.",
+       "Lapor kepada ketua unit atau pakar patologi dan isi laporan insiden.",
+       "Jalankan analisis punca (root cause analysis) dan tindakan pembetulan serta pencegahan.",
+       "Kongsi pengajaran dengan staf tanpa mencari salah individu."],
+    t:"Kata kunci: keselamatan pesakit, ketelusan, tidak menyembunyikan kesilapan." },
+
+  { k:"Pengurusan & Kepimpinan", s:"Penganalisis utama rosak pada waktu malam dan banyak sampel segera menunggu. Apa tindakan anda?",
+    j:["Cuba penyelesaian asas mengikut manual (troubleshooting) dan semak mesej ralat.",
+       "Aktifkan pelan sandaran: guna alat sandaran, kaedah manual atau hantar ke makmal rujukan terdekat.",
+       "Utamakan sampel kecemasan dan kritikal.",
+       "Maklumkan kepada wad dan Jabatan Kecemasan tentang kelewatan dan anggaran masa.",
+       "Hubungi jurutera pembekal dan maklum kepada penyelia atau ketua unit.",
+       "Rekod kerosakan; sebelum alat diguna semula, jalankan IQC dan kalibrasi jika perlu."],
+    t:"Sebut 'pelan kesinambungan perkhidmatan' (contingency plan) yang patut wujud secara bertulis." },
+
+  { k:"Pengurusan & Kepimpinan", s:"Bagaimanakah anda melatih dan menilai kompetensi staf baharu?",
+    j:["Program orientasi: struktur organisasi, keselamatan, kerahsiaan, SOP asas.",
+       "Latihan berstruktur mengikut unit dengan mentor dan senarai semak latihan.",
+       "Penilaian kompetensi: pemerhatian langsung, ujian bertulis, sampel buta (blind sample).",
+       "Hanya dibenar bekerja sendiri dan bertugas atas panggilan selepas disahkan kompeten.",
+       "Penilaian semula berkala dan rekod latihan disimpan.",
+       "Galak pembelajaran berterusan (CPD)."],
+    t:"Kaitkan dengan keperluan personel dalam MS ISO 15189." },
+
+  { k:"Pengurusan & Kepimpinan", s:"Ceritakan satu inovasi atau projek penambahbaikan kualiti yang anda terlibat.",
+    j:["Nama projek dan peranan anda (ketua, ahli, fasilitator).",
+       "Masalah asal dan data yang menyokong.",
+       "Analisis punca dan penyelesaian yang dilaksana.",
+       "Hasil yang diukur: masa, kos, kadar ralat, kepuasan pelanggan.",
+       "Pengiktirafan atau perluasan ke tempat lain (konvensyen KIK, QA, Lean)."],
+    t:"Jika belum pernah mengetuai projek, cerita projek yang anda sertai dan apa yang anda mahu buat seterusnya." },
+
+  { k:"Pengurusan & Kepimpinan", s:"Ketua anda memberi arahan yang anda tidak persetujui. Apakah tindakan anda?",
+    j:["Fahami dahulu sebab dan tujuan arahan tersebut.",
+       "Kemuka pandangan dan cadangan alternatif secara berhemah, disokong fakta, melalui saluran yang betul.",
+       "Jika keputusan kekal dan arahan itu sah, laksanakan dengan sepenuh komitmen.",
+       "Jika arahan bercanggah dengan undang-undang, peraturan atau keselamatan pesakit, nyatakan bantahan secara bertulis dan rujuk pihak lebih atas.",
+       "Tidak memburukkan ketua di hadapan staf bawahan."],
+    t:"Panel menilai kematangan: boleh berbeza pendapat tetapi tetap profesional." },
+
+  /* ---------- E. Perkhidmatan awam & isu semasa ---------- */
+  { k:"Perkhidmatan Awam & Isu Semasa", s:"Seorang pembekal menawarkan hadiah kepada anda selepas urusan perolehan. Apakah tindakan anda?",
+    j:["Tolak dengan baik dan jelaskan penjawat awam tidak boleh menerima hadiah yang berkaitan tugas rasmi.",
+       "Rujuk peraturan penerimaan hadiah dalam Peraturan-Peraturan Pegawai Awam (Kelakuan dan Tatatertib) 1993.",
+       "Jika hadiah sukar ditolak atau sudah diterima, lapor secara bertulis kepada ketua jabatan.",
+       "Jika ada unsur rasuah, lapor kepada Unit Integriti atau SPRM (Akta SPRM 2009).",
+       "Pastikan keputusan perolehan dibuat telus mengikut tatacara, tanpa konflik kepentingan."],
+    t:"Semak pekeliling penerimaan hadiah yang terkini di jabatan anda." },
+
+  { k:"Perkhidmatan Awam & Isu Semasa", s:"Apakah yang anda faham tentang peraturan tatatertib penjawat awam?",
+    j:["Rujukan utama: Peraturan-Peraturan Pegawai Awam (Kelakuan dan Tatatertib) 1993.",
+       "Menetapkan tatakelakuan: taat setia, tidak mengutamakan kepentingan peribadi, jujur, amanah, bertanggungjawab.",
+       "Contoh pelanggaran: tidak hadir bertugas tanpa cuti, ingkar perintah, cuai, menerima hadiah, pekerjaan luar tanpa kebenaran.",
+       "Hukuman: amaran, denda, lucut hak emolumen, tangguh pergerakan gaji, turun gaji, turun pangkat, buang kerja.",
+       "Peranan penyelia: menjadi contoh, menegur awal dan melaporkan pelanggaran."],
+    t:"Sebut tanggungjawab penyelia; tidak melaporkan pelanggaran staf juga satu kesalahan." },
+
+  { k:"Perkhidmatan Awam & Isu Semasa", s:"Apakah yang anda tahu tentang Sistem Saraan Perkhidmatan Awam (SSPA)?",
+    j:["SSPA menggantikan Sistem Saraan Malaysia (SSM), berkuat kuasa 1 Disember 2024.",
+       "Pelarasan gaji dua fasa: Fasa 1 pada 1 Disember 2024 dan Fasa 2 pada 1 Januari 2026.",
+       "Kumpulan Pelaksana serta Pengurusan dan Profesional: 8% (Fasa 1) dan 7% (Fasa 2); Kumpulan Pengurusan Tertinggi: 4% dan 3%.",
+       "Gred diseragamkan kepada nombor yang lebih ringkas, contohnya JTMP kini bergred U5 hingga U8 dan seterusnya.",
+       "Penekanan kepada prestasi, kompetensi dan pembelajaran berterusan penjawat awam.",
+       "Sebagai balasan, penjawat awam perlu meningkatkan produktiviti dan mutu perkhidmatan."],
+    t:"Semak pekeliling JPA terkini sebelum temuduga kerana butiran boleh dikemas kini." },
+
+  { k:"Perkhidmatan Awam & Isu Semasa", s:"Apakah visi, misi dan budaya korporat Kementerian Kesihatan Malaysia?",
+    j:["Visi: Negara menggembleng tenaga ke arah kesihatan yang lebih baik.",
+       "Misi: menerajui dan bekerjasama membantu rakyat mencapai potensi kesihatan sepenuhnya, serta memastikan sistem kesihatan berkualiti tinggi dan saksama.",
+       "Budaya korporat: Penyayang, Profesionalisme dan Kerja Berpasukan.",
+       "Kaitan dengan makmal: keputusan tepat dan cepat menyokong diagnosis dan rawatan pesakit.",
+       "Beri contoh bagaimana anda mengamalkan tiga nilai itu dalam tugas harian."],
+    t:"Hafal ayat rasmi daripada laman web KKM; panel kadang-kadang minta sebut tepat." },
+
+  { k:"Perkhidmatan Awam & Isu Semasa", s:"Apakah Akta Profesion Kesihatan Bersekutu 2016 (Akta 774) dan kesannya kepada JTMP?",
+    j:["Akta untuk mengawal selia profesion kesihatan bersekutu, termasuk Juruteknologi Makmal Perubatan.",
+       "Pengamal perlu berdaftar dengan Majlis Profesion Kesihatan Bersekutu Malaysia.",
+       "Perlu memiliki perakuan amalan yang sah dan diperbaharui mengikut tempoh ditetapkan.",
+       "Menetapkan kelayakan yang diiktiraf, tatalaku profesional dan tindakan tatatertib profesion.",
+       "Kesan: mengangkat martabat profesion, melindungi orang awam, mendorong CPD.",
+       "Peranan penyelia: pastikan semua staf berdaftar dan perakuan amalan tidak luput."],
+    t:"Pastikan anda tahu status pendaftaran dan tarikh luput perakuan amalan anda sendiri." },
+
+  { k:"Perkhidmatan Awam & Isu Semasa", s:"Bagaimanakah pendigitalan boleh menambah baik perkhidmatan makmal?",
+    j:["Sistem Maklumat Makmal (LIS): permintaan ujian dan keputusan secara elektronik, kurang kesilapan salinan.",
+       "Kod bar dan pengantaramukaan alat mempercepat proses dan menjejak spesimen.",
+       "Keputusan terus ke rekod perubatan elektronik, TAT lebih pendek.",
+       "Papan pemuka data: pantau TAT, beban kerja, kadar penolakan untuk membuat keputusan.",
+       "Cabaran: gangguan sistem, keselamatan data, kemahiran staf; perlu pelan sandaran manual.",
+       "Peranan penyelia: menjadi ejen perubahan dan melatih staf."],
+    t:"Beri contoh sistem yang digunakan di tempat anda dan satu cadangan penambahbaikan." },
+
+  { k:"Perkhidmatan Awam & Isu Semasa", s:"Bagaimanakah anda menjaga kerahsiaan maklumat pesakit di makmal?",
+    j:["Keputusan hanya diberi kepada pihak yang berhak (doktor atau wad yang merawat) melalui saluran rasmi.",
+       "Kawalan capaian LIS: kata laluan sendiri, tidak berkongsi, log keluar selepas guna.",
+       "Tidak membincang atau berkongsi maklumat pesakit di media sosial dan aplikasi mesej.",
+       "Rekod dan borang disimpan dengan selamat dan dilupus mengikut prosedur.",
+       "Staf diingatkan tentang etika, peraturan tatatertib dan arahan keselamatan kerajaan.",
+       "Pelanggaran dilapor dan disiasat."],
+    t:"Contoh isu semasa: mengambil gambar keputusan pesakit dengan telefon peribadi." },
+
+  { k:"Perkhidmatan Awam & Isu Semasa", s:"Apakah cabaran utama perkhidmatan makmal KKM sekarang dan apakah cadangan anda?",
+    j:["Beban kerja meningkat dengan sumber manusia yang terhad.",
+       "Kekangan bajet, kos reagen dan peralatan yang semakin usang.",
+       "Keperluan mengekalkan akreditasi dan kualiti.",
+       "Penyakit baharu dan wabak yang memerlukan kesiapsiagaan.",
+       "Cadangan: guna data untuk mengurus permintaan ujian, automasi, perkongsian sumber antara fasiliti, pembangunan kompetensi staf.",
+       "Kurangkan ujian berulang yang tidak perlu melalui kerjasama dengan klinisian."],
+    t:"Pilih 2-3 cabaran sahaja dan beri cadangan yang praktikal di peringkat anda." },
+
+  /* ---------- F. Peringkat Kementerian ---------- */
+  { k:"Peringkat Kementerian", s:"Terangkan secara ringkas struktur organisasi Kementerian Kesihatan Malaysia.",
+    j:["Diketuai oleh Menteri Kesihatan, dibantu Timbalan Menteri.",
+       "Ketua Setiausaha (KSU) mengetuai pentadbiran, kewangan dan sumber manusia.",
+       "Ketua Pengarah Kesihatan (KPK) mengetuai hal teknikal dan profesional kesihatan.",
+       "Program utama: Perubatan, Kesihatan Awam, Penyelidikan dan Sokongan Teknikal, Kesihatan Pergigian, Perkhidmatan Farmasi, Keselamatan dan Kualiti Makanan, serta Pengurusan.",
+       "Di peringkat negeri: Jabatan Kesihatan Negeri (JKN), kemudian hospital, Pejabat Kesihatan Daerah dan klinik kesihatan.",
+       "Perkhidmatan makmal hospital terletak di bawah Program Perubatan."],
+    t:"Tahu nama terkini Menteri, KSU, KPK dan Pengarah Kesihatan Negeri anda. Semak di laman web KKM sebelum temuduga." },
+
+  { k:"Peringkat Kementerian", s:"Bagaimanakah perkhidmatan patologi dan makmal disusun di seluruh KKM?",
+    j:["Makmal hospital: hospital negeri, hospital pakar dan hospital tanpa pakar, dengan skop ujian yang berbeza.",
+       "Makmal klinik kesihatan untuk ujian asas di peringkat penjagaan primer.",
+       "Makmal Kesihatan Awam untuk pengawasan penyakit, wabak, makanan dan air.",
+       "Pusat rujukan kebangsaan seperti Institut Penyelidikan Perubatan (IMR) dan Makmal Kesihatan Awam Kebangsaan (MKAK).",
+       "Sistem rangkaian dan rujukan: ujian khusus dihantar ke makmal rujukan supaya sumber tidak bertindih.",
+       "Hal ehwal profesion JTMP diselaras di peringkat kementerian oleh bahagian yang menjaga sains kesihatan bersekutu."],
+    t:"Sebut ke mana makmal anda merujuk ujian khusus dan fasiliti mana yang merujuk kepada anda." },
+
+  { k:"Peringkat Kementerian", s:"Apakah yang anda tahu tentang Kertas Putih Kesihatan?",
+    j:["Dokumen hala tuju pembaharuan sistem kesihatan negara untuk tempoh jangka panjang (15 tahun).",
+       "Diluluskan di Parlimen pada tahun 2023.",
+       "Empat tonggak: transformasi penyampaian perkhidmatan kesihatan; promosi kesihatan dan pencegahan penyakit; pembiayaan kesihatan yang mampan dan saksama; pengukuhan asas dan tadbir urus sistem kesihatan.",
+       "Kaitan dengan makmal: pendigitalan dan perkongsian rekod, kerjasama awam-swasta, penggunaan sumber yang lebih cekap.",
+       "Peranan anda: menyokong pelaksanaan di peringkat fasiliti dan menerangkan perubahan kepada staf."],
+    t:"Semak perkembangan terkini pelaksanaannya; panel suka calon yang mengikuti isu semasa kementerian." },
+
+  { k:"Peringkat Kementerian", s:"Kementerian mengeluarkan dasar atau arahan baharu. Bagaimanakah anda melaksanakannya di tempat anda?",
+    j:["Baca dan fahami pekeliling atau garis panduan asal, bukan sekadar dengar daripada orang lain.",
+       "Bincang dengan ketua jabatan tentang kesan kepada makmal: SOP, peralatan, staf, bajet.",
+       "Sediakan pelan pelaksanaan: siapa, bila, apa yang perlu diubah.",
+       "Taklimat dan latihan kepada staf; kemas kini SOP dan dokumen kualiti.",
+       "Pantau pematuhan dan lapor status kepada JKN atau kementerian mengikut format yang diminta.",
+       "Kemuka maklum balas atau kekangan melalui saluran rasmi."],
+    t:"Beri satu contoh arahan sebenar yang pernah anda laksanakan." },
+
+  { k:"Peringkat Kementerian", s:"Bagaimanakah peranan anda sebagai JTMP Gred U8 menyumbang kepada matlamat KKM secara keseluruhan?",
+    j:["Keputusan makmal yang tepat dan cepat menyokong diagnosis, rawatan dan keselamatan pesakit.",
+       "Data makmal menyokong pengawasan penyakit dan tindakan kesihatan awam.",
+       "Pengurusan sumber yang cekap (reagen, alat, staf) menjimatkan perbelanjaan kerajaan.",
+       "Mengekalkan kualiti dan akreditasi meningkatkan keyakinan rakyat terhadap perkhidmatan KKM.",
+       "Membangunkan pelapis dan berkongsi kepakaran dengan fasiliti lain melalui latihan, audit dan jawatankuasa teknikal."],
+    t:"Kaitkan tugas harian dengan gambaran besar; itu beza pemikiran U8 dengan gred bawah." },
+
+  { k:"Peringkat Kementerian", s:"Jika dinaikkan pangkat, anda mungkin ditempatkan di mana-mana fasiliti KKM. Adakah anda bersedia?",
+    j:["Nyatakan kesediaan dengan jelas: penjawat awam tertakluk kepada arahan pertukaran mengikut keperluan perkhidmatan.",
+       "Anda melihatnya sebagai peluang menimba pengalaman dan menyumbang di tempat yang memerlukan.",
+       "Jika ada kekangan sebenar (keluarga, kesihatan), nyatakan secara jujur dan ringkas tanpa menolak.",
+       "Tunjuk anda akan merancang peralihan tugas supaya perkhidmatan di tempat lama tidak terjejas."],
+    t:"Jawapan 'tidak bersedia' biasanya merugikan. Jujur, tetapi tunjuk sikap terbuka." }
+
+  ]
+},
+
+/* =============== JOB 2: Computer Engineering Internship (English) =============== */
+{
+  id: "ce-intern", lang: "en", ikon: "CE",
+  nama: "Computer Engineering Student \u2014 Internship",
+  butiran: "Kulim Hi-Tech Park sites: Intel \u2022 Infineon \u2022 AT&S \u2022 SCHOTT \u2022 Celestica \u2022 Teleflex \u2022 Lam Research",
+  syarikat: ["Intel", "Infineon", "AT&S", "SCHOTT", "Celestica", "Teleflex", "Lam Research"],
+  soalan: [
+
+  /* ---------- A. About you ---------- */
+  { k:"About You", s:"Tell me about yourself.",
+    j:["Name, university, programme (Computer Engineering) and current year or semester.",
+       "Areas you enjoy most, for example embedded systems, digital design, programming or data.",
+       "One or two projects or achievements that show those skills.",
+       "Activities outside class: clubs, competitions, part-time work.",
+       "Close with why you are here: what you want from this internship."],
+    t:"Keep it to about 90 seconds. Present, past, then future. Do not read out your whole resume." },
+
+  { k:"About You", s:"Why did you choose computer engineering?",
+    j:["A real reason or moment that got you interested (a project, a subject, a gadget you took apart).",
+       "What you like about it: it combines hardware and software.",
+       "Which subjects confirmed your interest and why.",
+       "How it links to the industry you are applying to."],
+    t:"A short personal story is more convincing than 'it has good job prospects'." },
+
+  { k:"About You", s:"What are your strengths and weaknesses?",
+    j:["Give 2 strengths that matter for an intern: fast learner, careful, good at debugging, works well in a team.",
+       "Back each strength with a short example from a project or lab.",
+       "Give 1 honest weakness that can be improved, for example public speaking or taking on too much.",
+       "Say what you are doing to improve it."],
+    t:"Avoid fake weaknesses like 'I work too hard'. Avoid weaknesses that are core to the job." },
+
+  { k:"About You", s:"What do you hope to gain from this internship?",
+    j:["See how what you learned in class is used in a real factory or design environment.",
+       "Learn industry tools, standards and ways of working.",
+       "Improve soft skills: communication, reporting, working with engineers and technicians.",
+       "Complete a project that is useful to the team, not just observe.",
+       "Find out which engineering path suits you for your career."],
+    t:"Balance 'what I will learn' with 'what I will contribute'." },
+
+  { k:"About You", s:"Where do you see yourself in five years?",
+    j:["Graduated and working as an engineer in a related field.",
+       "Built depth in one area, for example test engineering, embedded software or automation.",
+       "Taking on more responsibility, such as leading a small project.",
+       "Still learning: certifications or a master's degree if relevant.",
+       "Open to growing with a company that invests in its people."],
+    t:"Show direction, but stay realistic. You do not need a perfect plan." },
+
+  { k:"About You", s:"Why should we choose you over other candidates?",
+    j:["Match your skills to what the internship needs (programming, hardware, data, documentation).",
+       "Proof: a project, a grade, a competition or something you built yourself.",
+       "Attitude: reliable, willing to learn, not afraid to ask, finishes what you start.",
+       "Genuine interest in this company and industry."],
+    t:"Be confident without putting other candidates down." },
+
+  /* ---------- B. Technical ---------- */
+  { k:"Technical", s:"Describe a technical project you have done. What was your role?",
+    j:["Project goal in one sentence.",
+       "Your own role and what you personally built or coded.",
+       "Tools and technology used: language, microcontroller, sensors, software.",
+       "The hardest problem and how you solved it.",
+       "The result, and what you would improve if you did it again."],
+    t:"Say 'I' for your own work and 'we' for team work. Be ready for follow-up questions on every detail." },
+
+  { k:"Technical", s:"What is the difference between a microprocessor and a microcontroller?",
+    j:["Microprocessor: mainly a CPU; needs external memory and peripherals; used in PCs and servers.",
+       "Microcontroller: CPU, memory and peripherals (timers, ADC, GPIO, serial ports) on one chip.",
+       "Microprocessors focus on high performance and run a full operating system.",
+       "Microcontrollers focus on low cost, low power and control tasks in embedded products.",
+       "Examples: Intel Core is a microprocessor; Arduino (AVR), STM32 or ESP32 are microcontrollers."],
+    t:"Mention which microcontroller you have actually used." },
+
+  { k:"Technical", s:"Which programming languages are you comfortable with, and what have you built with them?",
+    j:["Name the languages honestly with your level, for example C/C++, Python, Java, Verilog/VHDL.",
+       "For each main language, one thing you built with it.",
+       "Explain where each fits: C for embedded, Python for scripting, automation and data.",
+       "Mention tools you know: Git, an IDE, Linux command line.",
+       "Show you can pick up a new language when the job needs it."],
+    t:"Never claim a language you cannot answer basic questions on." },
+
+  { k:"Technical", s:"Explain the difference between combinational and sequential logic.",
+    j:["Combinational: output depends only on the current inputs; no memory.",
+       "Examples: adders, multiplexers, decoders, basic gates.",
+       "Sequential: output depends on current inputs and stored state; has memory and usually a clock.",
+       "Examples: flip-flops, registers, counters, state machines.",
+       "A latch is level-sensitive, a flip-flop is edge-triggered."],
+    t:"If you have used an FPGA or Verilog, mention it here." },
+
+  { k:"Technical", s:"What is an interrupt, and how is it different from polling?",
+    j:["Interrupt: a signal that makes the processor pause its current work and run a handler (ISR).",
+       "Polling: the program checks the device again and again in a loop.",
+       "Interrupts are more efficient and respond faster for events that happen rarely.",
+       "Polling is simpler but wastes processor time.",
+       "Keep an ISR short; do the heavy work in the main loop."],
+    t:"Give an example, such as a button press or a timer interrupt in your project." },
+
+  { k:"Technical", s:"Compare UART, SPI and I2C.",
+    j:["UART: asynchronous, 2 wires (TX, RX), no clock, point to point; both sides must agree on baud rate.",
+       "SPI: synchronous, 4 wires (MOSI, MISO, SCK, CS), fast, one chip-select per device.",
+       "I2C: synchronous, 2 wires (SDA, SCL), many devices on one bus using addresses, slower than SPI.",
+       "Choose SPI for speed, I2C for many devices with few pins, UART for simple links and debugging."],
+    t:"Say which one you used and with which sensor or module." },
+
+  { k:"Technical", s:"Explain the main concepts of object-oriented programming.",
+    j:["Encapsulation: keep data and the functions that use it together, hide the internal details.",
+       "Abstraction: show only what the user of the class needs.",
+       "Inheritance: a new class reuses and extends an existing class.",
+       "Polymorphism: the same call behaves differently depending on the object type.",
+       "Benefit: code that is easier to reuse, test and maintain."],
+    t:"A simple example (Shape, Circle, Rectangle) is enough." },
+
+  { k:"Technical", s:"What is the difference between an array and a linked list? When would you use each?",
+    j:["Array: elements stored next to each other; fast access by index.",
+       "Array: inserting or deleting in the middle is slow; size is usually fixed.",
+       "Linked list: nodes linked by pointers; easy to insert and delete.",
+       "Linked list: slow to reach the n-th item; uses extra memory for pointers.",
+       "Use an array when you read by index a lot; a linked list when you insert and remove often."],
+    t:"If asked, be ready to mention stack and queue as well." },
+
+  { k:"Technical", s:"What is the difference between a process and a thread?",
+    j:["Process: a running program with its own memory space.",
+       "Thread: a unit of execution inside a process; threads share the process memory.",
+       "Threads are lighter and faster to create and switch.",
+       "Shared memory means threads need care: race conditions, use of locks or mutexes.",
+       "A crash in one process usually does not affect another; a bad thread can bring down its whole process."],
+    t:"Link to embedded if you can: tasks in an RTOS behave like threads." },
+
+  { k:"Technical", s:"Your code or circuit is not working. How do you debug it?",
+    j:["Reproduce the problem and describe exactly what is wrong.",
+       "Check the simple things first: power, wiring, connections, typing mistakes.",
+       "Divide the problem: test one part at a time to find where it fails.",
+       "Use tools: print statements, debugger and breakpoints, multimeter, oscilloscope or logic analyser.",
+       "Change one thing at a time and record what you tried.",
+       "After the fix, find the root cause and test again so it does not come back."],
+    t:"Tell a real debugging story. Interviewers want to see your method, not luck." },
+
+  { k:"Technical", s:"What is version control and why is it important?",
+    j:["A system (such as Git) that records every change to code over time.",
+       "You can go back to an earlier version if something breaks.",
+       "Several people can work on the same code using branches and merges.",
+       "Shows who changed what and why (commit messages).",
+       "In industry it is the base for code review and automated testing."],
+    t:"Mention your GitHub projects if you have any." },
+
+  { k:"Technical", s:"What do you know about how a semiconductor chip is made?",
+    j:["Design: the circuit is designed and verified with software tools.",
+       "Front-end (wafer fabrication): circuits are built on silicon wafers through steps like lithography, etching and deposition, in a cleanroom.",
+       "Back-end (assembly and test): wafers are cut into dies, packaged, then tested.",
+       "Substrates and PCBs connect the chip to the rest of the product.",
+       "Malaysia, especially Penang and Kulim, is strong in assembly, test and increasingly in fabrication and design."],
+    t:"Know which part of the chain the company you are applying to works in." },
+
+  { k:"Technical", s:"How could programming or data skills be useful in a manufacturing plant?",
+    j:["Automating manual work: scripts to collect, clean and report data.",
+       "Dashboards to monitor output, yield, downtime and quality.",
+       "Test automation: programs that run tests and log results.",
+       "Machine and sensor data (IoT) for early warning of problems.",
+       "Image processing or AI for inspection.",
+       "All of this helps engineers decide faster and reduce waste."],
+    t:"Useful for every company on the list, since all of them run factories." },
+
+  /* ---------- C. Behavioural ---------- */
+  { k:"Behavioural", s:"Tell me about a time you worked in a team. What was your role?",
+    j:["Situation: which project and how many members.",
+       "Your role and tasks.",
+       "How the team communicated and divided the work.",
+       "A challenge the team faced and what you did about it.",
+       "The result and what you learned about teamwork."],
+    t:"Use STAR: Situation, Task, Action, Result." },
+
+  { k:"Behavioural", s:"Tell me about a time a team member was not contributing. What did you do?",
+    j:["Stay factual; do not attack the person.",
+       "You spoke to them privately first to understand the reason.",
+       "You offered help or agreed on a smaller, clear task with a deadline.",
+       "If no change, you raised it with the team leader or lecturer.",
+       "The project was still delivered; say what you learned."],
+    t:"Show you solve problems early and calmly, not by complaining." },
+
+  { k:"Behavioural", s:"Describe a time you failed or made a mistake. What did you learn?",
+    j:["Choose a real but not disastrous example (a failed test, a bug before a demo, a missed deadline).",
+       "Admit your part clearly.",
+       "What you did to fix it.",
+       "What you changed afterwards so it does not happen again."],
+    t:"The lesson is the most important part of this answer." },
+
+  { k:"Behavioural", s:"How do you manage several deadlines at the same time?",
+    j:["List all the tasks and deadlines.",
+       "Prioritise by urgency and importance.",
+       "Break big tasks into small steps and set your own earlier deadlines.",
+       "Use a planner or calendar, and avoid last-minute work.",
+       "If you cannot make it, tell the person early instead of delivering late without notice."],
+    t:"Give an example from a busy semester." },
+
+  { k:"Behavioural", s:"Tell me about a time you had to learn something new quickly.",
+    j:["What you had to learn and why it was urgent.",
+       "How you learned: documentation, tutorials, asking seniors, trial and error.",
+       "How you applied it to finish the task.",
+       "How long it took and the result."],
+    t:"Interns are expected to learn fast. This is one of the most important answers." },
+
+  { k:"Behavioural", s:"Have you held any leadership role or been active outside class?",
+    j:["Name the club, event or competition and your position.",
+       "What you were responsible for.",
+       "A result you can state: number of participants, budget, an award.",
+       "Skills you gained: planning, communication, handling people."],
+    t:"If you have no formal position, talk about a time you took the lead in a group assignment." },
+
+  /* ---------- D. Internship & workplace ---------- */
+  { k:"Internship & Workplace", s:"Your supervisor gives you a task you have never done before. What do you do?",
+    j:["Make sure you understand the goal, the expected output and the deadline.",
+       "Try to find the answer yourself first: documents, past work, online resources.",
+       "Ask specific questions after you have tried, not before.",
+       "Give regular updates so there are no surprises.",
+       "Write down what you learned for next time."],
+    t:"Show a balance: independent, but not afraid to ask." },
+
+  { k:"Internship & Workplace", s:"A factory has strict rules on safety, cleanroom practice and confidentiality. How do you feel about that?",
+    j:["You understand the rules protect people, the product and the customer.",
+       "You will follow all training, PPE and cleanroom procedures.",
+       "You will not take photos, copy files or share company information outside.",
+       "If you are unsure whether something is allowed, you ask first.",
+       "If you see something unsafe, you report it."],
+    t:"Very relevant for semiconductor and medical device companies." },
+
+  { k:"Internship & Workplace", s:"When can you start, how long is your internship, and are you able to work at this location?",
+    j:["State the start and end dates required by your university.",
+       "State the duration in weeks or months.",
+       "Confirm you can travel or stay near the site, and that shift or cleanroom work is acceptable if needed.",
+       "Mention any university requirement: logbook, supervisor visit, final report."],
+    t:"Check these details with your faculty before the interview." },
+
+  { k:"Internship & Workplace", s:"What do you know about Kulim Hi-Tech Park, and why do you want to do your internship in Kulim?",
+    j:["Kulim Hi-Tech Park is in Kulim, Kedah, close to Penang; it opened in 1996 as Malaysia's first high-tech industrial park.",
+       "Many multinational companies are there: semiconductor, electronics, medical device, solar and specialty materials.",
+       "It covers much of the chip supply chain: wafer fabrication, equipment, substrates, assembly and test.",
+       "Why Kulim: many high-tech employers in one place, so good exposure and career options after graduation.",
+       "Practical reason if true for you: you can stay nearby, so travel and attendance are not a problem."],
+    t:"Knowing the neighbours of the company you apply to shows real interest in the industry." },
+
+  { k:"Internship & Workplace", s:"Do you have any questions for us?",
+    j:["Always ask at least one or two questions.",
+       "What kind of project would an intern in this team work on?",
+       "What tools or skills should I prepare before I start?",
+       "What does a successful intern look like to you?",
+       "Is there a chance to convert to a full-time position after graduation?"],
+    t:"Do not ask about allowance first. Ask about the work first." },
+
+  /* ---------- E. Company-specific: Intel ---------- */
+  { c:"Intel", k:"Company-Specific", s:"What do you know about Intel, and why do you want to intern here?",
+    j:["American semiconductor company, headquartered in Santa Clara, California, founded in 1968.",
+       "Known for processors for PCs and data centres, and for manufacturing its own chips.",
+       "Intel Kulim is a long-standing tenant of Kulim Hi-Tech Park; the site is known for assembly and test work.",
+       "Why Intel: processors are at the heart of computer engineering, the subject you study.",
+       "A chance to learn from a large engineering community with strong standards."],
+    t:"Read Intel's latest news before the interview; the company is changing quickly." },
+
+  { c:"Intel", k:"Company-Specific", s:"How could a computer engineering intern contribute at Intel?",
+    j:["Validation and test: writing scripts to run tests and analyse results.",
+       "Automation of engineering tasks using Python or similar.",
+       "Data analysis of test or manufacturing data to spot issues.",
+       "Supporting firmware, software tools or hardware debug in the lab.",
+       "Bringing computer architecture knowledge from class into real products."],
+    t:"Match your answer to the department named in the internship advert." },
+
+  { c:"Intel", k:"Company-Specific", s:"Explain in simple terms what a CPU does and what affects its performance.",
+    j:["A CPU fetches instructions, decodes them and executes them.",
+       "Main parts: control unit, arithmetic logic unit, registers, cache.",
+       "Performance factors: clock speed, number of cores, cache size, architecture design.",
+       "Also the manufacturing process: smaller transistors allow more of them and lower power.",
+       "Heat and power limits are why multi-core designs became common."],
+    t:"Basic computer architecture is fair game at a processor company." },
+
+  /* ---------- Infineon ---------- */
+  { c:"Infineon", k:"Company-Specific", s:"What do you know about Infineon, and why do you want to intern here?",
+    j:["German semiconductor company, headquartered near Munich; it came out of Siemens.",
+       "Strong in power semiconductors, automotive chips, microcontrollers and sensors.",
+       "Products are used in electric vehicles, renewable energy, industrial drives and IoT devices.",
+       "Infineon Kulim is a wafer fabrication site (front-end) in Kulim Hi-Tech Park, where the chips are built on wafers.",
+       "Why Infineon: its chips support energy efficiency and electric mobility, and it uses the embedded skills you are learning."],
+    t:"Check the Infineon Malaysia website for the newest site developments." },
+
+  { c:"Infineon", k:"Company-Specific", s:"How could a computer engineering intern contribute at Infineon?",
+    j:["Test engineering: test programs, data logging and analysis.",
+       "Factory automation and equipment software.",
+       "Data analytics and dashboards for yield and equipment performance.",
+       "Embedded work with microcontrollers if placed in an application or design team.",
+       "Scripts to remove repetitive manual work for engineers."],
+    t:"If you have used any Infineon part or board, mention it." },
+
+  { c:"Infineon", k:"Company-Specific", s:"What is a power semiconductor and where is it used?",
+    j:["A device that switches or controls high voltage and current efficiently.",
+       "Examples: power MOSFET, IGBT, diode.",
+       "Used in chargers, power supplies, motor drives, solar inverters and electric vehicles.",
+       "Newer materials such as silicon carbide (SiC) and gallium nitride (GaN) lose less energy than silicon.",
+       "Less energy loss means smaller, cooler and more efficient products."],
+    t:"You only need the basics, but knowing SiC and GaN shows you did your homework." },
+
+  /* ---------- AT&S ---------- */
+  { c:"AT&S", k:"Company-Specific", s:"What do you know about AT&S, and why do you want to intern here?",
+    j:["Austrian company (Austria Technologie & Systemtechnik), headquartered in Leoben, Austria.",
+       "Makes high-end printed circuit boards (PCBs) and IC substrates.",
+       "An IC substrate connects a chip to the main board; it is essential for high-performance processors.",
+       "AT&S Kulim is a large, new plant in Kulim Hi-Tech Park.",
+       "Why AT&S: a modern, highly automated plant where computer engineering skills are directly useful."],
+    t:"Be able to explain 'IC substrate' in one sentence; many candidates cannot." },
+
+  { c:"AT&S", k:"Company-Specific", s:"How could a computer engineering intern contribute at AT&S?",
+    j:["Automation and equipment integration in a highly automated plant.",
+       "Manufacturing data: collecting, analysing and visualising process and yield data.",
+       "Supporting manufacturing systems (such as MES) and traceability.",
+       "Automated optical inspection and image processing.",
+       "Scripts and small tools that save engineers' time."],
+    t:"Use PCB knowledge from your own projects if you have designed a board." },
+
+  { c:"AT&S", k:"Company-Specific", s:"What is a PCB, and what do you know about how it is made?",
+    j:["A printed circuit board holds components and connects them with copper tracks.",
+       "Made of layers of copper and insulating material; complex boards have many layers.",
+       "Main steps: imaging the circuit pattern, etching copper, laminating layers, drilling and plating holes (vias), surface finish, testing.",
+       "Finer lines and smaller vias allow smaller and faster products.",
+       "Quality is checked by optical inspection and electrical test."],
+    t:"If you have used PCB design software (KiCad, Altium, EasyEDA), say so." },
+
+  /* ---------- SCHOTT ---------- */
+  { c:"SCHOTT", k:"Company-Specific", s:"What do you know about SCHOTT, and why do you want to intern here?",
+    j:["German technology group, headquartered in Mainz, owned by the Carl Zeiss Foundation.",
+       "Makes specialty glass, glass-ceramics and related materials.",
+       "Used in electronics, optics, pharmaceutical packaging, home appliances and more.",
+       "SCHOTT Kulim is a new facility in Kulim Hi-Tech Park, completed in 2024.",
+       "The Kulim site makes advanced optical components, for example for augmented reality (AR) devices.",
+       "Why SCHOTT: precision optical manufacturing in cleanrooms with a lot of automation and process control, a different view from pure electronics."],
+    t:"Read the 'SCHOTT in Kulim' page on the company website before the interview." },
+
+  { c:"SCHOTT", k:"Company-Specific", s:"Your degree is computer engineering. How is it relevant to a glass manufacturer?",
+    j:["Modern glass production is highly automated and controlled by software and sensors.",
+       "Process data can be collected and analysed to improve quality and yield.",
+       "Machine vision is used to inspect glass for defects.",
+       "Production systems, databases and dashboards need people who can code.",
+       "You bring programming, electronics and problem-solving skills, and you are keen to learn the process side."],
+    t:"This question tests whether you thought about the fit. Prepare it well." },
+
+  { c:"SCHOTT", k:"Company-Specific", s:"How would you approach building a system to detect defects on a product automatically?",
+    j:["Understand the defect types and what counts as pass or fail.",
+       "Capture: suitable camera and lighting to make defects visible.",
+       "Process: image processing or a trained model to detect and classify defects.",
+       "Decide: pass, fail or send for manual review; log every result.",
+       "Validate against human inspection before trusting it.",
+       "Keep improving using the wrong calls as new training data."],
+    t:"You are not expected to know everything; show a clear step-by-step way of thinking." },
+
+  /* ---------- Celestica ---------- */
+  { c:"Celestica", k:"Company-Specific", s:"What do you know about Celestica, and why do you want to intern here?",
+    j:["Canadian company, headquartered in Toronto; it began as part of IBM.",
+       "Provides design, manufacturing and supply chain solutions for other brands (electronics manufacturing services).",
+       "Builds products such as servers, networking and storage equipment, and products for industrial, healthcare and aerospace customers.",
+       "Celestica Kulim is a long-standing site in Kulim Hi-Tech Park.",
+       "Why Celestica: exposure to many products and customers, from board level to complete systems."],
+    t:"Know the difference between a brand owner and a contract manufacturer." },
+
+  { c:"Celestica", k:"Company-Specific", s:"How could a computer engineering intern contribute at Celestica?",
+    j:["Test development: test scripts, fixtures and automated test for boards and systems.",
+       "Debugging failed boards together with engineers and technicians.",
+       "Firmware loading, system configuration and functional testing of servers or network products.",
+       "Data analysis of test yield and failure trends.",
+       "Small automation tools for the production line."],
+    t:"Networking and operating system basics are useful to mention here." },
+
+  { c:"Celestica", k:"Company-Specific", s:"What is the difference between ICT and functional test for a circuit board?",
+    j:["In-circuit test (ICT): checks individual components and connections on the board, for example shorts, opens and wrong values.",
+       "ICT usually uses a fixture with probes touching test points.",
+       "Functional test (FCT): powers up the board and checks it works as intended.",
+       "ICT finds manufacturing defects early; functional test confirms the product behaves correctly.",
+       "Both are used together with inspection (AOI, X-ray) to ensure quality."],
+    t:"If you do not know a term in the interview, say so and explain how you would find out." },
+
+  /* ---------- Teleflex ---------- */
+  { c:"Teleflex", k:"Company-Specific", s:"What do you know about Teleflex, and why do you want to intern here?",
+    j:["American medical technology company, headquartered in Pennsylvania.",
+       "Makes medical devices used in hospitals, such as catheters and products for anaesthesia, vascular access, urology and surgery.",
+       "Teleflex Kulim is a manufacturing site in Kulim Hi-Tech Park, linked to its anaesthesia and respiratory products (the LMA brand).",
+       "Why Teleflex: the products directly help patients, and manufacturing is going digital, where your skills fit.",
+       "You want to see how engineering works in a regulated industry."],
+    t:"Read the latest company news before the interview, as the business has been restructuring." },
+
+  { c:"Teleflex", k:"Company-Specific", s:"How could a computer engineering intern contribute at a medical device manufacturer?",
+    j:["Digitalisation: turning paper forms and manual reports into digital forms and dashboards.",
+       "Data analysis of production output, quality and downtime.",
+       "Automation support: sensors, vision inspection, machine data collection.",
+       "Scripts and tools for engineers, for example in Excel, Power BI or Python.",
+       "Good documentation, because every change in this industry must be recorded."],
+    t:"Mention any dashboard, database or automation project you have done." },
+
+  { c:"Teleflex", k:"Company-Specific", s:"Medical devices are highly regulated. Why does that matter for an engineer or an intern?",
+    j:["A defect can harm a patient, so quality comes first.",
+       "Companies follow a quality system (such as ISO 13485) and regulator requirements (such as the US FDA).",
+       "Processes, equipment and software must be validated before use.",
+       "Everything is documented: 'if it is not written down, it did not happen'.",
+       "Changes must be reviewed and approved, not done on your own.",
+       "As an intern: follow procedures exactly, record your work properly and ask when unsure."],
+    t:"You do not need to know the standards in detail; show you respect the discipline." },
+
+  /* ---------- Lam Research ---------- */
+  { c:"Lam Research", k:"Company-Specific", s:"What do you know about Lam Research, and why do you want to intern here?",
+    j:["American company, headquartered in Fremont, California, founded in 1980.",
+       "It does not make chips; it makes the equipment that chipmakers use to build chips on wafers.",
+       "Main areas: etch, deposition and wafer cleaning equipment.",
+       "Customers are the large chip manufacturers (memory, logic and foundry).",
+       "Lam Research has a manufacturing site in Kulim, Kedah, where equipment is assembled and tested.",
+       "Why Lam: its machines combine mechanics, electronics, control and software, which suits computer engineering."],
+    t:"Be clear on the difference between a chipmaker and an equipment maker; it is the first thing they check." },
+
+  { c:"Lam Research", k:"Company-Specific", s:"How could a computer engineering intern contribute at Lam Research?",
+    j:["Equipment software and controls: the machines are run by embedded controllers and software.",
+       "Test and integration: scripts to test modules and complete systems before shipping.",
+       "Data analysis of test results and manufacturing data to find recurring issues.",
+       "Automation of manual checks, reports and engineering tasks.",
+       "Supporting engineers with troubleshooting of electrical and communication problems."],
+    t:"Mention any control, sensor, PLC or embedded project you have done." },
+
+  { c:"Lam Research", k:"Company-Specific", s:"What are etch and deposition in chip manufacturing?",
+    j:["Deposition: adding a very thin layer of material onto the wafer.",
+       "Etch: removing material selectively to form the circuit pattern.",
+       "Lithography defines the pattern; etch transfers it into the layer underneath.",
+       "These steps are repeated many times to build up the transistors and wiring.",
+       "Many of these processes use plasma inside a vacuum chamber, and need very precise control of gas, pressure, power and temperature.",
+       "That precise control is done by sensors, electronics and software."],
+    t:"A simple, correct explanation is enough. Do not try to sound like a process engineer." }
+
+  ]
+}
+/* ,{ id:"new-job", lang:"en", ikon:"XX", nama:"...", butiran:"...", soalan:[ ... ] }  <-- add new job here */
+];
+
+/* =====================================================================
+   APP LOGIC
+   ===================================================================== */
+var $ = function(id){ return document.getElementById(id); };
+
+var state = {
+  job: null,        // selected job
+  company: null,    // selected company (only for jobs with a company list)
+  cat: null,        // selected category (null = all)
+  queue: [], idx: 0,
+  good: 0, skip: 0, again: [],
+  timer: null, secs: 0
+};
+
+/* --- Current language text --- */
+function T(){ return TEXT[state.job ? state.job.lang : "en"]; }
+
+/* --- Apply UI language based on selected job --- */
+function applyText(){
+  var t = T();
+  document.documentElement.lang = state.job ? state.job.lang : "en";
+  $("hTitle").textContent = state.job ? t.title : "Mock Interview / Latihan Temuduga";
+  $("hSub").textContent = state.job ? t.sub : "Pilih jawatan / Select a role";
+  $("lblPicked").textContent = t.picked;  $("lblCompany").textContent = t.company;
+  $("lblCat").textContent = t.cat;        $("btnStart").textContent = t.start;
+  $("btnBack").textContent = t.back;      $("lblPanel").textContent = t.panel;
+  $("qInput").placeholder = t.placeholder; $("qHint").textContent = t.hint;
+  $("btnShow").textContent = t.show;      $("btnSkip").textContent = t.skip;
+  $("lblAns").textContent = t.ans;        $("lblRate").textContent = t.rate;
+  $("btnGood").textContent = t.good;      $("btnAgain").textContent = t.again;
+  $("endTitle").textContent = t.end;      $("lblSGood").textContent = t.sGood;
+  $("lblSAgain").textContent = t.sAgain;  $("lblSSkip").textContent = t.sSkip;
+  $("lblReview").textContent = t.review;  $("btnRetry").textContent = t.retry;
+  $("btnRestart").textContent = t.restart; $("footText").textContent = state.job ? t.foot : "";
+}
+
+/* --- Shuffle (Fisher-Yates) --- */
+function shuffle(arr){
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--){
+    var r = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[r]; a[r] = tmp;
+  }
+  return a;
+}
+
+function show(screen){
+  ["scrMenu","scrSetup","scrQuiz","scrEnd"].forEach(function(s){ $(s).classList.toggle("hidden", s !== screen); });
+  $("btnHome").classList.toggle("hidden", screen === "scrMenu");
+  window.scrollTo(0, 0);
+}
+
+/* --- Screen 0: main menu of jobs --- */
+function renderMenu(){
+  var box = $("jobList"); box.innerHTML = "";
+  JOBS.forEach(function(job){
+    var b = document.createElement("button"); b.className = "job";
+    var ico = document.createElement("span"); ico.className = "ico"; ico.textContent = job.ikon;
+    var txt = document.createElement("span");
+    var n = document.createElement("b"); n.textContent = job.nama;
+    var d = document.createElement("span"); d.className = "d"; d.textContent = job.butiran;
+    var l = document.createElement("span"); l.className = "d";
+    l.textContent = (job.lang === "ms" ? "Bahasa Melayu" : "English") + " \u2022 " + job.soalan.length + TEXT[job.lang].questions;
+    txt.appendChild(n); txt.appendChild(d); txt.appendChild(l);
+    var go = document.createElement("span"); go.className = "go"; go.textContent = "\u203A";
+    b.appendChild(ico); b.appendChild(txt); b.appendChild(go);
+    b.onclick = function(){ selectJob(job); };
+    box.appendChild(b);
+  });
+}
+
+function selectJob(job){
+  state.job = job;
+  state.company = job.syarikat ? job.syarikat[0] : null;
+  state.cat = null;
+  applyText();
+  renderSetup();
+  show("scrSetup");
+}
+
+/* --- Screen 1: company and category --- */
+function renderSetup(){
+  var job = state.job;
+  $("pickedJob").innerHTML = "";
+  $("pickedJob").appendChild(document.createTextNode(job.nama));
+  var sm = document.createElement("small"); sm.textContent = job.butiran; $("pickedJob").appendChild(sm);
+
+  // Company chips (only if the job has a company list)
+  $("companyCard").classList.toggle("hidden", !job.syarikat);
+  var cbox = $("companyList"); cbox.innerHTML = "";
+  (job.syarikat || []).forEach(function(c){
+    var b = document.createElement("button");
+    b.className = "chip" + (c === state.company ? " on" : "");
+    b.textContent = c;
+    b.onclick = function(){ state.company = c; renderSetup(); };
+    cbox.appendChild(b);
+  });
+
+  // Category chips
+  var cats = [];
+  companyQuestions().forEach(function(q){ if (cats.indexOf(q.k) < 0) cats.push(q.k); });
+  var box = $("catList"); box.innerHTML = "";
+  [null].concat(cats).forEach(function(c){
+    var b = document.createElement("button");
+    b.className = "chip" + (c === state.cat ? " on" : "");
+    b.textContent = c === null ? T().all : c;
+    b.onclick = function(){ state.cat = c; renderSetup(); };
+    box.appendChild(b);
+  });
+  $("countInfo").textContent = pickQuestions().length + T().count;
+}
+
+/* Questions for the selected company: general ones + that company's own */
+function companyQuestions(){
+  return state.job.soalan.filter(function(q){ return !q.c || q.c === state.company; });
+}
+function pickQuestions(){
+  return companyQuestions().filter(function(q){ return state.cat === null || q.k === state.cat; });
+}
+
+/* --- Screen 2: question session --- */
+function startSession(list){
+  if (!list.length) return;
+  state.queue = shuffle(list);
+  state.idx = 0; state.good = 0; state.skip = 0; state.again = [];
+  show("scrQuiz");
+  renderQuestion();
+}
+
+function renderQuestion(){
+  var q = state.queue[state.idx];
+  $("qCat").textContent = q.c ? q.k + " \u2022 " + q.c : q.k;
+  $("qNum").textContent = T().qn + (state.idx + 1) + " / " + state.queue.length;
+  $("qBar").style.width = (state.idx / state.queue.length * 100) + "%";
+  $("qText").textContent = q.s;
+  $("qInput").value = "";
+  $("ansBox").classList.add("hidden");
+  $("rowAnswer").classList.remove("hidden");
+  startTimer();
+}
+
+function showAnswer(){
+  var q = state.queue[state.idx];
+  var ul = $("ansList"); ul.innerHTML = "";
+  q.j.forEach(function(p){ var li = document.createElement("li"); li.textContent = p; ul.appendChild(li); });
+  $("ansTip").textContent = T().tip + q.t;
+  $("ansBox").classList.remove("hidden");
+  $("rowAnswer").classList.add("hidden");
+  stopTimer();
+}
+
+function nextQuestion(){
+  state.idx++;
+  if (state.idx >= state.queue.length) { endSession(); } else { renderQuestion(); window.scrollTo(0, 0); }
+}
+
+/* --- Timer (counts up) --- */
+function startTimer(){
+  stopTimer(); state.secs = 0; $("qTime").textContent = "00:00";
+  state.timer = setInterval(function(){
+    state.secs++;
+    var m = Math.floor(state.secs / 60), s = state.secs % 60;
+    $("qTime").textContent = (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+  }, 1000);
+}
+function stopTimer(){ if (state.timer) { clearInterval(state.timer); state.timer = null; } }
+
+/* --- Screen 3: summary --- */
+function endSession(){
+  stopTimer();
+  $("sGood").textContent = state.good;
+  $("sAgain").textContent = state.again.length - state.skip;
+  $("sSkip").textContent = state.skip;
+  var ol = $("reviewList"); ol.innerHTML = "";
+  state.again.forEach(function(q){ var li = document.createElement("li"); li.textContent = q.s; ol.appendChild(li); });
+  var has = state.again.length > 0;
+  $("reviewBox").classList.toggle("hidden", !has);
+  $("btnRetry").classList.toggle("hidden", !has);
+  show("scrEnd");
+}
+
+function goMenu(){ stopTimer(); state.job = null; applyText(); renderMenu(); show("scrMenu"); }
+
+/* --- Buttons --- */
+$("btnStart").onclick   = function(){ startSession(pickQuestions()); };
+$("btnBack").onclick    = goMenu;
+$("btnShow").onclick    = showAnswer;
+$("btnSkip").onclick    = function(){ state.skip++; state.again.push(state.queue[state.idx]); nextQuestion(); };
+$("btnGood").onclick    = function(){ state.good++; nextQuestion(); };
+$("btnAgain").onclick   = function(){ state.again.push(state.queue[state.idx]); nextQuestion(); };
+$("btnRetry").onclick   = function(){ startSession(state.again); };
+$("btnRestart").onclick = goMenu;
+$("btnHome").onclick    = goMenu;
+
+goMenu();
+</script>
+</body>
+</html>
