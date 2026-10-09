@@ -145,6 +145,10 @@
       <p class="label" id="lblPicked"></p>
       <div class="picked" id="pickedJob"></div>
     </div>
+    <div class="card hidden" id="langCard">
+      <p class="label">Bahasa / Language</p>
+      <div class="chips" id="langList"></div>
+    </div>
     <div class="tabs">
       <button class="tab on" id="tabQuiz"></button>
       <button class="tab" id="tabNotes"></button>
@@ -184,7 +188,7 @@
     <div class="card">
       <div class="meta">
         <span class="badge" id="qCat"></span>
-        <span id="qNum"></span>
+        <span style="white-space:nowrap"><button class="chip hidden" id="btnLang" style="padding:3px 10px;margin-right:8px"></button><span id="qNum"></span></span>
       </div>
       <div class="bar"><i id="qBar"></i></div>
       <p class="label" id="lblPanel"></p>
@@ -279,6 +283,7 @@ var TEXT = {
      e  = small icon for the question
      kw = keyword of the question (centre of the mind map)
      m  = mind-map branches: [icon, short keyword] for each key point
+     s_ms, kw_ms, a_ms, t_ms, m_ms = the same in Bahasa Melayu, for jobs with two languages (m_ms holds the branch texts only)
      c  = company (optional, only shown when that company is selected)
    ===================================================================== */
 var JOBS = [
@@ -839,13 +844,24 @@ var JOBS = [
 /* =============== JOB 2: Computer Engineering Internship (English) =============== */
 {
   id: "ce-intern", lang: "en", ikon: "CE",
+  langs: ["ms", "en"],                 // two languages; the first one is the default
   nama: "Computer Engineering Student \u2014 Internship",
-  butiran: "Syahmi Alif (UTP) \u2022 Kulim Hi-Tech Park sites: Intel \u2022 Infineon \u2022 AT&S \u2022 SCHOTT \u2022 Celestica \u2022 Teleflex \u2022 Lam Research",
-  syarikat: ["Intel", "Infineon", "AT&S", "SCHOTT", "Celestica", "Teleflex", "Lam Research"],
+  nama_ms: "Pelajar Kejuruteraan Komputer \u2014 Latihan Industri",
+  butiran: "Syahmi Alif (UTP) \u2022 Kulim Hi-Tech Park sites: Teleflex \u2022 Intel \u2022 Infineon \u2022 AT&S \u2022 SCHOTT \u2022 Celestica \u2022 Lam Research",
+  butiran_ms: "Syahmi Alif (UTP) \u2022 Tapak di Kulim Hi-Tech Park: Teleflex \u2022 Intel \u2022 Infineon \u2022 AT&S \u2022 SCHOTT \u2022 Celestica \u2022 Lam Research",
+  syarikat: ["Teleflex", "Intel", "Infineon", "AT&S", "SCHOTT", "Celestica", "Lam Research"],
+  syarikatLalai: "Teleflex",           // default company
+  kat_ms: { "About You":"Tentang Diri", "Technical":"Teknikal", "Digital & Smart Factory":"Digital & Kilang Pintar", "Behavioural":"Tingkah Laku", "Internship & Workplace":"Latihan Industri & Tempat Kerja", "Company-Specific":"Khusus Syarikat" },
+  foot_ms: "Jawapan ialah panduan sahaja; isi bahagian dalam [kurungan] dengan maklumat sendiri dan semak laman web syarikat untuk fakta terkini.",
   soalan: [
 
   /* ---------- A. About you ---------- */
   { k:"About You", s:"Tell me about yourself.",
+    s_ms:"Ceritakan tentang diri anda.",
+    kw_ms:"Tentang Saya",
+    m_ms:["Syahmi Alif, Kej. Komputer, UTP", "Embedded + perisian", "Kuiz STM32, Algae-X", "Ketua Logistik, Top 6 hackathon", "Latihan industri Jan-Ogos 2027"],
+    a_ms:"Nama saya **Syahmi Alif bin Shaiful Azhar**, pelajar **Kejuruteraan Komputer** di **Universiti Teknologi PETRONAS (UTP)**. Saya minat **sistem embedded dan perisian**, dan pernah mengetuai projek seperti **sistem kuiz elektronik menggunakan STM32** dan **Algae-X**, konsep pemantauan air berasaskan Arduino. Di luar kelas, saya **Ketua Logistik** bagi Tesla Cup 2026. Saya mencari tempat **latihan industri selama 7 bulan, dari Januari hingga Ogos 2027**, untuk menggunakan kemahiran ini dalam industri.",
+    t_ms:"Hadkan kira-kira 90 saat. Sekarang, dahulu, kemudian masa depan. Jangan baca seluruh resume.",
     a:"My name is **Syahmi Alif bin Shaiful Azhar**, a **Computer Engineering** student at **Universiti Teknologi PETRONAS (UTP)**. I enjoy **embedded systems and software**, and I have led projects such as an **electronic quiz system on STM32** and **Algae-X**, an Arduino-based water monitoring concept. Outside class, I was **Head of Logistics** for Tesla Cup 2026. I am looking for a **7-month internship from January to August 2027** to apply these skills in industry.",
     e:"👨‍🎓",
     kw:"About Me",
@@ -858,10 +874,15 @@ var JOBS = [
     t:"Keep it to about 90 seconds. Present, past, then future. Do not read out your whole resume." },
 
   { k:"About You", s:"Why did you choose computer engineering?",
-    a:"I chose computer engineering because **[my real reason or moment]**. What I like most is that it combines **hardware and software**. Building the **STM32 quiz system** and the **Arduino-based Algae-X** concept confirmed that this is the right field for me. It also links directly to the **semiconductor and electronics industry**, which is why I am applying here.",
+    s_ms:"Mengapa anda memilih kejuruteraan komputer?",
+    kw_ms:"Kenapa Kej. Komputer",
+    m_ms:["Sebab sebenar saya", "Perkakasan + perisian", "Projek STM32 & Arduino", "Kaitan dengan industri"],
+    a_ms:"Saya memilih kejuruteraan komputer kerana **[sebab atau detik sebenar saya]**. Perkara yang paling saya suka ialah bidang ini menggabungkan **perkakasan dan perisian**. Pengalaman membina **sistem kuiz STM32** dan konsep **Algae-X berasaskan Arduino** meyakinkan saya bahawa ini bidang yang betul. Bidang ini juga berkait terus dengan **industri pembuatan berteknologi tinggi**, sebab itu saya memohon di sini.",
+    t_ms:"Cerita peribadi yang ringkas lebih meyakinkan daripada 'peluang kerja bagus'.",
+    a:"I chose computer engineering because **[my real reason or moment]**. What I like most is that it combines **hardware and software**. Building the **STM32 quiz system** and the **Arduino-based Algae-X** concept confirmed that this is the right field for me. It also links directly to **high-tech manufacturing**, which is why I am applying here.",
     e:"🔌",
     kw:"Why Comp. Eng.",
-    m:[["✨", "My real reason"], ["🔌", "Hardware + software"], ["🛠️", "STM32 & Arduino projects"], ["🏭", "Link to semiconductor industry"]],
+    m:[["✨", "My real reason"], ["🔌", "Hardware + software"], ["🛠️", "STM32 & Arduino projects"], ["🏭", "Link to high-tech industry"]],
     j:["Give your own real reason or moment that got you interested (a project, a subject, a gadget you took apart).",
        "What I like about it: it combines hardware and software.",
        "What confirmed it: building the STM32 quiz system and the Arduino-based Algae-X concept.",
@@ -869,6 +890,11 @@ var JOBS = [
     t:"A short personal story is more convincing than 'it has good job prospects'." },
 
   { k:"About You", s:"What are your strengths and weaknesses?",
+    s_ms:"Apakah kekuatan dan kelemahan anda?",
+    kw_ms:"Kekuatan & Kelemahan",
+    m_ms:["Mengetuai pasukan projek", "Teratur: Ketua Logistik", "Cepat belajar: hackathon", "1 kelemahan jujur + cara baiki"],
+    a_ms:"Kekuatan pertama saya ialah **mengetuai pasukan**: saya ketua projek bagi Algae-X, sistem kuiz STM32 dan aplikasi web tempahan tiket. Kedua, saya **teratur dan boleh diharap**, seperti yang saya tunjukkan sebagai **Ketua Logistik** Tesla Cup 2026. Saya juga **cepat belajar di bawah tekanan**, contohnya semasa hackathon apabila kami membangunkan MedScan Assistant. Kelemahan saya ialah **[satu kelemahan yang jujur]**, dan saya sedang membaikinya dengan **[apa yang saya lakukan]**.",
+    t_ms:"Elakkan kelemahan palsu seperti 'saya terlalu rajin'. Elakkan kelemahan yang menjadi teras kerja ini.",
     a:"My first strength is **leading a team**: I was project leader for Algae-X, the STM32 quiz system and a ticket booking web application. My second is being **organised and reliable**, which I showed as **Head of Logistics** for Tesla Cup 2026. I also **learn fast under pressure**, as in the hackathon where we developed MedScan Assistant. My weakness is **[one honest weakness]**, and I am improving it by **[what I am doing]**.",
     e:"⚖️",
     kw:"Strengths & Weakness",
@@ -880,6 +906,11 @@ var JOBS = [
     t:"Avoid fake weaknesses like 'I work too hard'. Avoid weaknesses that are core to the job." },
 
   { k:"About You", s:"What do you hope to gain from this internship?",
+    s_ms:"Apakah yang anda harap dapat daripada latihan industri ini?",
+    kw_ms:"Apa Saya Dapat",
+    m_ms:["Teori dalam situasi sebenar", "Alat industri", "Kemahiran insaniah", "Satu projek yang berguna", "Kenal hala tuju saya"],
+    a_ms:"Saya berharap dapat melihat bagaimana apa yang saya belajar di kelas **digunakan dalam persekitaran sebenar**, dan mempelajari **alat serta standard industri**. Saya juga mahu memperbaiki **kemahiran insaniah** seperti komunikasi dan penulisan laporan. Paling penting, saya mahu **menyiapkan satu projek yang berguna** kepada pasukan, dan mengenal pasti **bidang kejuruteraan** yang sesuai dengan saya.",
+    t_ms:"Seimbangkan 'apa yang saya akan belajar' dengan 'apa yang saya akan sumbang'.",
     a:"I hope to see how what I learned in class is **used in a real environment**, and to learn **industry tools and standards**. I also want to improve my **soft skills**, such as communication and reporting. Most of all, I want to **complete a project that is useful** to the team, and to find out **which engineering path** suits me.",
     e:"🌱",
     kw:"What I'll Gain",
@@ -892,6 +923,11 @@ var JOBS = [
     t:"Balance 'what I will learn' with 'what I will contribute'." },
 
   { k:"About You", s:"Where do you see yourself in five years?",
+    s_ms:"Di manakah anda melihat diri anda dalam masa lima tahun?",
+    kw_ms:"5 Tahun Lagi",
+    m_ms:["Jurutera bergraduat", "Mendalam dalam satu bidang", "Lebih tanggungjawab", "Terus belajar", "Berkembang bersama syarikat"],
+    a_ms:"Dalam masa lima tahun, saya melihat diri saya sebagai **jurutera bergraduat** yang bekerja dalam bidang berkaitan, dengan **kepakaran mendalam dalam satu bidang** seperti pembangunan perisian, sistem embedded atau automasi. Saya berharap memikul **lebih tanggungjawab**, contohnya mengetuai projek kecil, sambil **terus belajar** melalui pensijilan. Saya terbuka untuk **berkembang bersama syarikat** yang melabur dalam pekerjanya.",
+    t_ms:"Tunjukkan hala tuju, tetapi kekal realistik. Tidak perlu rancangan yang sempurna.",
     a:"In five years, I see myself as a **graduate engineer** working in a related field, with **depth in one area** such as test engineering, embedded software or automation. I hope to be taking on **more responsibility**, such as leading a small project, while **still learning** through certifications. I am open to **growing with a company** that invests in its people.",
     e:"🔭",
     kw:"In 5 Years",
@@ -904,6 +940,11 @@ var JOBS = [
     t:"Show direction, but stay realistic. You do not need a perfect plan." },
 
   { k:"About You", s:"Why should we choose you over other candidates?",
+    s_ms:"Mengapa kami patut memilih anda berbanding calon lain?",
+    kw_ms:"Kenapa Saya",
+    m_ms:["C, Python, STM32, Arduino", "5 projek diketuai, Top 6 hackathon", "Sijil Python & MATLAB", "Boleh diharap, mahu belajar", "Minat yang sebenar"],
+    a_ms:"Kemahiran saya **sepadan dengan peranan ini**: saya memprogram dalam **C, C++, C# dan Python**, dan pernah menggunakan **STM32 dan Arduino**. Sebagai bukti, saya telah **mengetuai lima projek**, dan projek hackathon saya terpilih antara **6 pasukan terbaik**. Saya juga memiliki **sijil Python dan MATLAB**. Saya **boleh diharap dan sanggup belajar**, dan saya mempunyai **minat yang sebenar** terhadap syarikat serta industri ini.",
+    t_ms:"Yakin tanpa merendahkan calon lain.",
     a:"My skills **match the role**: I program in **C, C++, C# and Python**, and I have worked with **STM32 and Arduino**. As proof, I have **led five projects**, and my hackathon project was selected among the **Top 6 teams**. I also hold **Python and MATLAB certificates**. I am **reliable and willing to learn**, and I have a **genuine interest** in this company and industry.",
     e:"🏅",
     kw:"Why Me",
@@ -917,6 +958,11 @@ var JOBS = [
 
   /* ---------- B. Technical ---------- */
   { k:"Technical", s:"Describe a technical project you have done. What was your role?",
+    s_ms:"Terangkan satu projek teknikal yang pernah anda buat. Apakah peranan anda?",
+    kw_ms:"Projek Saya",
+    m_ms:["Sistem kuiz STM32", "Ketua projek + bahagian saya", "LCD, pemasa 7-segmen, butang, LED", "Masalah paling sukar & penyelesaian", "Hasil & penambahbaikan", "Sandaran: Algae-X (Arduino)"],
+    a_ms:"Projek saya ialah **Electronic Quiz Challenge**, sistem kuiz interaktif menggunakan **STM32 Nucleo-F401RE**. Saya **ketua projek**, dan saya sendiri membuat **[bahagian saya]**. Kami menggabungkan **LCD 20x4, pemasa seven-segment, butang tekan dan LED**. Masalah paling sukar ialah **[masalah sebenar]**, dan saya menyelesaikannya dengan **[cara]**. Akhirnya **[hasil]**, dan jika dibuat semula saya akan menambah baik **[apa]**.",
+    t_ms:"Guna 'saya' untuk kerja sendiri dan 'kami' untuk kerja pasukan. Bersedia untuk soalan susulan tentang setiap butiran.",
     a:"My project was the **Electronic Quiz Challenge**, an interactive quiz system on the **STM32 Nucleo-F401RE**. I was the **project leader**, and I personally worked on **[my own part]**. We integrated a **20x4 LCD, a seven-segment timer, push buttons and LEDs**. The hardest problem was **[the real problem]**, which I solved by **[how]**. In the end **[the result]**, and next time I would improve **[what]**.",
     e:"🛠️",
     kw:"My Project",
@@ -930,6 +976,11 @@ var JOBS = [
     t:"Say 'I' for your own work and 'we' for team work. Be ready for follow-up questions on every detail." },
 
   { k:"Technical", s:"What is the difference between a microprocessor and a microcontroller?",
+    s_ms:"Apakah perbezaan antara mikropemproses dan mikropengawal?",
+    kw_ms:"MPU vs MCU",
+    m_ms:["MPU: CPU sahaja", "MCU: semua dalam satu cip", "MPU: prestasi tinggi, OS", "MCU: kos & kuasa rendah", "Saya guna STM32 & Arduino"],
+    a_ms:"**Mikropemproses (microprocessor)** pada asasnya ialah **CPU** sahaja; ia memerlukan memori dan peranti luaran, dan digunakan dalam PC serta pelayan untuk **prestasi tinggi**. **Mikropengawal (microcontroller)** mempunyai CPU, memori dan peranti **dalam satu cip**, dan direka untuk tugas kawalan yang **kos rendah dan jimat kuasa** dalam produk embedded. Contohnya, Intel Core ialah mikropemproses, manakala **STM32 dan Arduino**, yang saya gunakan dalam projek, ialah mikropengawal.",
+    t_ms:"Kaitkan teori dengan projek STM32 dan Arduino anda sendiri.",
     a:"A **microprocessor** is mainly a **CPU**; it needs external memory and peripherals and is used in PCs and servers for **high performance**. A **microcontroller** has the CPU, memory and peripherals **on one chip**, and is designed for **low-cost, low-power** control tasks in embedded products. For example, Intel Core is a microprocessor, while **STM32 and Arduino**, which I used in my projects, are microcontrollers.",
     e:"🧠",
     kw:"MPU vs MCU",
@@ -943,6 +994,11 @@ var JOBS = [
     t:"Link the theory to your own STM32 and Arduino projects." },
 
   { k:"Technical", s:"Which programming languages are you comfortable with, and what have you built with them?",
+    s_ms:"Bahasa pengaturcaraan apakah yang anda selesa gunakan, dan apa yang pernah anda bina dengannya?",
+    kw_ms:"Bahasa Program",
+    m_ms:["C: permainan Blackjack", "C++ & Python: Digital Twin", "C# + React: tempahan tiket", "Verilog, SQL, MATLAB", "GitHub, Ubuntu", "Tahap sebenar setiap satu"],
+    a_ms:"Saya paling selesa dengan **C, C++, C# dan Python**. Dengan **C**, saya membina permainan Blackjack di Ubuntu. Saya menggunakan **C++ dan Python** untuk meneroka projek Digital Twin, dan **C# dengan ASP.NET Core serta React** untuk sistem tempahan tiket acara. Saya juga tahu **Verilog, SQL dan MATLAB**, dan menggunakan **GitHub**. Saya jujur tentang tahap saya bagi setiap satu, dan saya boleh **mempelajari bahasa baharu** apabila kerja memerlukannya.",
+    t_ms:"Bersedia menyatakan bahasa yang digunakan dalam projek STM32 dan Arduino. Jangan mengaku tahu bahasa yang anda tidak boleh jawab soalan asasnya.",
     a:"I am most comfortable with **C, C++, C# and Python**. In **C** I built a Blackjack game on Ubuntu. I used **C++ and Python** to explore a Digital Twin project, and **C# with ASP.NET Core and React** for an event ticket booking system. I also know **Verilog, SQL and MATLAB**, and I use **GitHub**. I am honest about my level in each, and I can **pick up a new language** when the job needs it.",
     e:"⌨️",
     kw:"Languages",
@@ -956,6 +1012,11 @@ var JOBS = [
     t:"Be ready to say which language you used on the STM32 and Arduino projects. Never claim a language you cannot answer basic questions on." },
 
   { k:"Technical", s:"Explain the difference between combinational and sequential logic.",
+    s_ms:"Terangkan perbezaan antara logik kombinasi dan logik jujukan.",
+    kw_ms:"Kombinasi vs Jujukan",
+    m_ms:["Kombinasi: input sahaja", "Adder, mux, decoder", "Jujukan: keadaan + clock", "Flip-flop, counter, FSM", "Latch aras, FF pinggir"],
+    a_ms:"Dalam **logik kombinasi (combinational)**, output bergantung **hanya pada input semasa**, tanpa memori; contohnya **adder, multiplexer dan decoder**. Dalam **logik jujukan (sequential)**, output juga bergantung pada **keadaan yang disimpan**, biasanya dengan **clock**; contohnya **flip-flop, counter dan state machine**. Latch peka kepada aras (level), manakala flip-flop dipicu oleh pinggir (edge).",
+    t_ms:"Verilog ada dalam resume anda, jadi bersedia menerangkan apa yang anda bina dengannya.",
     a:"In **combinational logic**, the output depends **only on the current inputs**, with no memory; examples are **adders, multiplexers and decoders**. In **sequential logic**, the output also depends on a **stored state**, usually with a **clock**; examples are **flip-flops, counters and state machines**. A latch is level-sensitive, while a flip-flop is edge-triggered.",
     e:"🔀",
     kw:"Comb. vs Seq.",
@@ -968,6 +1029,11 @@ var JOBS = [
     t:"Verilog is on your resume, so be ready to explain what you built with it." },
 
   { k:"Technical", s:"What is an interrupt, and how is it different from polling?",
+    s_ms:"Apakah itu interrupt, dan apakah bezanya dengan polling?",
+    kw_ms:"Interrupt vs Polling",
+    m_ms:["Interrupt: isyarat ke ISR", "Polling: semak dalam gelung", "Interrupt: cekap, pantas", "Polling: mudah, membazir", "ISR mesti pendek"],
+    a_ms:"**Interrupt** ialah isyarat yang membuatkan pemproses berhenti seketika daripada kerja semasa dan menjalankan satu rutin khas yang dipanggil **ISR**. Dengan **polling**, program **menyemak peranti berulang kali** dalam gelung. Interrupt **lebih cekap dan bertindak balas lebih pantas** bagi peristiwa yang jarang berlaku, manakala polling **lebih mudah tetapi membazirkan** masa pemproses. Amalan yang baik ialah **memastikan ISR pendek**.",
+    t_ms:"Beri contoh, seperti tekanan butang atau timer interrupt dalam projek anda.",
     a:"An **interrupt** is a signal that makes the processor pause its current work and run a handler, called an **ISR**. With **polling**, the program **checks the device again and again** in a loop. Interrupts are **more efficient and respond faster** for events that happen rarely, while polling is **simpler but wastes** processor time. A good practice is to **keep the ISR short**.",
     e:"🔔",
     kw:"Interrupt vs Polling",
@@ -980,6 +1046,11 @@ var JOBS = [
     t:"Give an example, such as a button press or a timer interrupt in your project." },
 
   { k:"Technical", s:"Compare UART, SPI and I2C.",
+    s_ms:"Bandingkan UART, SPI dan I2C.",
+    kw_ms:"UART / SPI / I2C",
+    m_ms:["UART: 2 wayar, tiada clock", "SPI: 4 wayar, laju", "I2C: 2 wayar, alamat", "Pilih ikut kelajuan / pin"],
+    a_ms:"**UART** ialah komunikasi tak segerak yang menggunakan **dua wayar tanpa clock**, untuk sambungan titik ke titik. **SPI** ialah komunikasi segerak dengan **empat wayar** dan merupakan yang **paling laju**, dengan satu chip-select bagi setiap peranti. **I2C** juga segerak dengan **dua wayar** dan menyokong banyak peranti pada satu bas menggunakan **alamat**. Saya akan memilih SPI untuk kelajuan, I2C untuk banyak peranti dengan pin yang sedikit, dan UART untuk sambungan mudah serta debugging.",
+    t_ms:"Nyatakan yang mana anda pernah guna dan dengan sensor atau modul apa.",
     a:"**UART** is asynchronous and uses **two wires with no clock**, for point-to-point links. **SPI** is synchronous with **four wires** and is the **fastest**, using one chip-select per device. **I2C** is synchronous with **two wires** and supports many devices on one bus using **addresses**. I would choose SPI for speed, I2C for many devices with few pins, and UART for simple links and debugging.",
     e:"🔗",
     kw:"UART / SPI / I2C",
@@ -991,6 +1062,11 @@ var JOBS = [
     t:"Say which one you used and with which sensor or module." },
 
   { k:"Technical", s:"Explain the main concepts of object-oriented programming.",
+    s_ms:"Terangkan konsep utama pengaturcaraan berorientasikan objek (OOP).",
+    kw_ms:"OOP",
+    m_ms:["Encapsulation", "Abstraction", "Inheritance", "Polymorphism", "Guna semula & mudah selenggara"],
+    a_ms:"OOP mempunyai empat konsep utama. **Encapsulation** menyimpan data bersama fungsinya dan menyembunyikan butiran dalaman. **Abstraction** menunjukkan hanya apa yang diperlukan oleh pengguna sesuatu class. **Inheritance** membolehkan class baharu mengguna semula dan mengembangkan class sedia ada. **Polymorphism** membolehkan panggilan yang sama berkelakuan berbeza mengikut objek. Semua ini menjadikan kod lebih mudah **diguna semula dan diselenggara**.",
+    t_ms:"Guna sistem tempahan tiket acara (C# ASP.NET Core) sebagai contoh; resume anda menyatakan ia menggunakan konsep OOP.",
     a:"Object-oriented programming has four main concepts. **Encapsulation** keeps data and its functions together and hides the internal details. **Abstraction** shows only what the user of a class needs. **Inheritance** lets a new class reuse and extend an existing one. **Polymorphism** lets the same call behave differently depending on the object. Together they make code easier to **reuse and maintain**.",
     e:"🧱",
     kw:"OOP",
@@ -1003,6 +1079,11 @@ var JOBS = [
     t:"Use your event ticket booking system (C# ASP.NET Core) as the example; your resume says it applied OOP concepts." },
 
   { k:"Technical", s:"What is the difference between an array and a linked list? When would you use each?",
+    s_ms:"Apakah perbezaan antara array dan linked list? Bilakah anda menggunakan setiap satu?",
+    kw_ms:"Array vs Linked List",
+    m_ms:["Array: bersebelahan", "Array: laju ikut indeks", "List: nod + pointer", "List: mudah tambah / buang", "Baca: array, ubah: list"],
+    a_ms:"**Array** menyimpan elemen **bersebelahan**, jadi capaian **mengikut indeks adalah laju**, tetapi menambah atau membuang di tengah adalah perlahan. **Linked list** menyimpan **nod yang dihubungkan dengan pointer**, jadi **mudah untuk menambah dan membuang**, tetapi perlahan untuk sampai ke item ke-n dan menggunakan memori tambahan. Saya menggunakan **array apabila banyak membaca mengikut indeks**, dan **linked list apabila kerap menambah dan membuang**.",
+    t_ms:"Jika ditanya, bersedia menyebut stack dan queue juga.",
     a:"An **array** stores elements **next to each other**, so access **by index is fast**, but inserting or deleting in the middle is slow. A **linked list** stores **nodes linked by pointers**, so it is **easy to insert and delete**, but slow to reach the n-th item, and it uses extra memory. I would use an **array when reading by index** a lot, and a **linked list when inserting and removing** often.",
     e:"📚",
     kw:"Array vs Linked List",
@@ -1015,6 +1096,11 @@ var JOBS = [
     t:"If asked, be ready to mention stack and queue as well." },
 
   { k:"Technical", s:"What is the difference between a process and a thread?",
+    s_ms:"Apakah perbezaan antara process dan thread?",
+    kw_ms:"Process vs Thread",
+    m_ms:["Process: memori sendiri", "Thread: kongsi memori", "Thread lebih ringan", "Race: lock / mutex", "Thread rosak, process tumbang"],
+    a_ms:"**Process** ialah program yang sedang berjalan dengan **ruang memori sendiri**. **Thread** ialah unit pelaksanaan di dalam process, dan thread **berkongsi memori process** itu. Thread **lebih ringan dan lebih cepat** dicipta, tetapi memori yang dikongsi boleh menyebabkan **race condition**, jadi **lock atau mutex** diperlukan. Jika satu process ranap, process lain biasanya tidak terjejas, tetapi satu thread yang bermasalah boleh menjatuhkan seluruh process.",
+    t_ms:"Kaitkan dengan embedded jika boleh: task dalam RTOS berkelakuan seperti thread.",
     a:"A **process** is a running program with **its own memory space**. A **thread** is a unit of execution inside a process, and threads **share the process memory**. Threads are **lighter and faster** to create, but shared memory can cause **race conditions**, so **locks or mutexes** are needed. A crash in one process usually does not affect another, but a bad thread can bring down its whole process.",
     e:"🧵",
     kw:"Process vs Thread",
@@ -1027,6 +1113,11 @@ var JOBS = [
     t:"Link to embedded if you can: tasks in an RTOS behave like threads." },
 
   { k:"Technical", s:"Your code or circuit is not working. How do you debug it?",
+    s_ms:"Kod atau litar anda tidak berfungsi. Bagaimana anda mencari puncanya (debug)?",
+    kw_ms:"Debugging",
+    m_ms:["Ulang masalah", "Semak perkara asas", "Bahagi & asingkan", "Debugger, skop, print", "Satu perubahan setiap kali", "Punca sebenar & uji semula"],
+    a_ms:"Mula-mula saya **mengulang masalah itu** dan menerangkan dengan tepat apa yang salah. Kemudian saya **menyemak perkara asas**: bekalan kuasa, pendawaian, sambungan dan kesilapan menaip. Saya **membahagikan masalah** dan menguji satu bahagian pada satu masa, menggunakan alat seperti **print statement, debugger, multimeter atau osiloskop**. Saya **mengubah satu perkara pada satu masa** dan mencatat apa yang telah dicuba. Selepas dibaiki, saya mencari **punca sebenar** dan menguji semula.",
+    t_ms:"Ceritakan pengalaman debugging yang sebenar. Penemu duga mahu melihat kaedah anda, bukan nasib.",
     a:"First I **reproduce the problem** and describe exactly what is wrong. Then I **check the basics**: power, wiring, connections and typing mistakes. I **divide the problem** and test one part at a time, using tools such as **print statements, a debugger, a multimeter or an oscilloscope**. I **change one thing at a time** and record what I tried. After the fix, I look for the **root cause** and test again.",
     e:"🐞",
     kw:"Debugging",
@@ -1040,6 +1131,11 @@ var JOBS = [
     t:"Tell a real debugging story. Interviewers want to see your method, not luck." },
 
   { k:"Technical", s:"What is version control and why is it important?",
+    s_ms:"Apakah itu version control dan mengapa ia penting?",
+    kw_ms:"Version Control",
+    m_ms:["Rekod setiap perubahan", "Boleh undur bila-bila", "Branch & merge", "Siapa ubah apa", "Semakan kod & ujian"],
+    a_ms:"**Version control**, seperti Git, ialah sistem yang **merekod setiap perubahan** pada kod dari semasa ke semasa. Ia membolehkan saya **kembali ke versi terdahulu** jika ada yang rosak, dan membolehkan beberapa orang bekerja pada kod yang sama menggunakan **branch dan merge**. Ia juga menunjukkan **siapa yang mengubah apa dan mengapa**. Dalam industri, ia menjadi asas kepada **semakan kod dan ujian automatik**.",
+    t_ms:"GitHub ada dalam resume anda; bersedia menyatakan cara anda menggunakannya dalam projek berkumpulan.",
     a:"**Version control**, such as Git, is a system that **records every change** to the code over time. It lets me **go back to an earlier version** if something breaks, and lets several people work on the same code using **branches and merges**. It also shows **who changed what and why**. In industry, it is the base for **code review and automated testing**.",
     e:"🌳",
     kw:"Version Control",
@@ -1052,6 +1148,11 @@ var JOBS = [
     t:"GitHub is on your resume; be ready to say how you used it in a team project." },
 
   { k:"Technical", s:"What do you know about how a semiconductor chip is made?",
+    s_ms:"Apakah yang anda tahu tentang cara cip semikonduktor dihasilkan?",
+    kw_ms:"Cara Cip Dibuat",
+    m_ms:["Reka bentuk & pengesahan", "Front-end: fabrikasi wafer", "Back-end: pemasangan & ujian", "Substrat / PCB", "Pulau Pinang & Kulim kukuh"],
+    a_ms:"Cip bermula dengan **reka bentuk**, iaitu litar direka dan disahkan menggunakan perisian. Pada peringkat **front-end**, atau **fabrikasi wafer**, litar dibina di atas wafer silikon di dalam cleanroom melalui langkah seperti litografi, etching dan deposition. Pada peringkat **back-end**, wafer dipotong, **dibungkus dan diuji**. **Substrat dan PCB** kemudian menyambungkan cip kepada produk. Malaysia, terutamanya **Pulau Pinang dan Kulim**, kukuh dalam rantaian ini.",
+    t_ms:"Ketahui bahagian rantaian yang diceburi oleh syarikat yang anda mohon.",
     a:"A chip starts with **design**, where the circuit is designed and verified with software. In the **front-end**, or **wafer fabrication**, the circuits are built on silicon wafers in a cleanroom through steps such as lithography, etching and deposition. In the **back-end**, the wafers are cut, **packaged and tested**. **Substrates and PCBs** then connect the chip to the product. Malaysia, especially **Penang and Kulim**, is strong in this chain.",
     e:"🏭",
     kw:"How Chips Are Made",
@@ -1064,6 +1165,11 @@ var JOBS = [
     t:"Know which part of the chain the company you are applying to works in." },
 
   { k:"Technical", s:"How could programming or data skills be useful in a manufacturing plant?",
+    s_ms:"Bagaimanakah kemahiran pengaturcaraan atau data boleh berguna di kilang pembuatan?",
+    kw_ms:"Kod di Kilang",
+    m_ms:["Automasi kerja manual", "Dashboard", "Automasi ujian", "Data mesin & sensor", "Pemeriksaan visi / AI", "Saya: Python, SQL, Power BI"],
+    a_ms:"Kemahiran pengaturcaraan dan data membantu kilang dengan **mengautomasikan kerja manual**, seperti mengumpul dan melaporkan data. **Dashboard** boleh memantau output, yield dan downtime, dan **automasi ujian** boleh menjalankan ujian serta merekod keputusan. **Data mesin dan sensor** memberi amaran awal tentang masalah, dan **pemprosesan imej atau AI** boleh memeriksa produk. Saya boleh menyumbang dengan **Python, SQL dan Power BI**.",
+    t_ms:"Berguna untuk semua syarikat dalam senarai, kerana semuanya mengendalikan kilang.",
     a:"Programming and data skills help a plant by **automating manual work**, such as collecting and reporting data. **Dashboards** can monitor output, yield and downtime, and **test automation** can run tests and log results. **Machine and sensor data** give early warning of problems, and **image processing or AI** can inspect products. I can contribute with **Python, SQL and Power BI**.",
     e:"📊",
     kw:"Code in a Factory",
@@ -1076,8 +1182,196 @@ var JOBS = [
        "My related skills: Python, SQL, Excel and Power BI, plus Digital Twin exploration with Grafana."],
     t:"Useful for every company on the list, since all of them run factories." },
 
+  /* ---------- Digital & smart factory: general knowledge, not tied to any company ---------- */
+  { k:"Digital & Smart Factory", s:"What digital systems does a typical manufacturing plant use?",
+    s_ms:"Apakah sistem digital yang biasanya digunakan di kilang pembuatan?",
+    kw_ms:"Sistem Kilang",
+    m_ms:["ERP: perniagaan & bahan", "MES: lantai pengeluaran", "QMS: kualiti & dokumen", "Alat pejabat: borang, aliran kerja, laporan", "Pangkalan data & aplikasi web", "Nilai datang daripada integrasi"],
+    a_ms:"Kilang biasanya mempunyai sistem **ERP**, seperti SAP, untuk mengurus pesanan, bahan, inventori dan kewangan. **MES** menjejak pengeluaran di **lantai pengeluaran**, dan **sistem pengurusan kualiti (QMS)** mengawal dokumen, penyimpangan dan latihan. Kerja harian berjalan atas **alat pejabat dan kolaborasi**, contohnya Microsoft 365 dengan Power BI untuk laporan dan Power Apps untuk borang. Terdapat juga **pangkalan data dan aplikasi web** yang dibina untuk keperluan setempat. Nilai sebenar datang apabila semua sistem ini **dihubungkan**, supaya data dimasukkan sekali dan digunakan di semua tempat.",
+    t_ms:"Ini pengetahuan am; jangan meneka apa yang digunakan oleh syarikat. Akhiri dengan bertanya: 'Yang mana satu digunakan di sini?'",
+    a:"A plant usually has an **ERP** system, such as SAP, to manage orders, materials, inventory and finance. An **MES** tracks production on the **shop floor**, and a **quality management system** controls documents, deviations and training. Day-to-day work runs on **office and collaboration tools**, for example Microsoft 365 with Power BI for reports and Power Apps for forms. There are also **databases and web applications** built for local needs. The real value comes when these systems are **connected**, so that data is entered once and used everywhere.",
+    e:"🏭",
+    kw:"Plant Systems",
+    m:[["🏢", "ERP: business & materials"], ["⚙️", "MES: shop floor"], ["📋", "QMS: quality & documents"], ["🪟", "Office tools: forms, workflow, reports"], ["🗄️", "Databases & web apps"], ["🔗", "Value comes from linking them"]],
+    j:["ERP: business & materials", "MES: shop floor", "QMS: quality & documents", "Office tools: forms, workflow, reports", "Databases & web apps", "Value comes from linking them"],
+    t:"This is general knowledge; do not guess what the company uses. End by asking: 'Which of these do you use here?'" },
+
+  { k:"Digital & Smart Factory", s:"What is the difference between an ERP system and an MES?",
+    s_ms:"Apakah perbezaan antara sistem ERP dan MES?",
+    kw_ms:"ERP vs MES",
+    m_ms:["ERP: rancang perniagaan", "Pesanan, bahan, kewangan", "MES: kendali lantai pengeluaran", "Masa nyata: order, mesin, kualiti", "Terbaik jika berintegrasi", "Tidak berhubung: data dua kali"],
+    a_ms:"**ERP** merancang dan merekod **urusan perniagaan**: pesanan pelanggan, bahan, inventori, production order dan kewangan. **MES** mengendalikan **lantai pengeluaran dalam masa nyata**: ia menjejak setiap production order, mesin, operator dan semakan kualiti, serta menyimpan rekod **kebolehkesanan (traceability)**. ERP menentukan **apa yang perlu dibuat dan bila**; MES merekod **bagaimana ia sebenarnya dibuat**. Kedua-duanya paling berkesan apabila **berintegrasi**. Jika tidak berhubung, orang perlu **memasukkan data yang sama dua kali**, yang mengambil masa dan berisiko silap.",
+    t_ms:"Versi satu ayat untuk diingat: ERP untuk perancangan, MES untuk pelaksanaan.",
+    a:"An **ERP** plans and records the **business**: customer orders, materials, inventory, production orders and finance. An **MES** runs the **shop floor in real time**: it tracks each production order, machine, operator and quality check, and keeps the **traceability** records. The ERP says **what to make and when**; the MES records **how it was actually made**. They work best when **integrated**. If they are not linked, people have to **enter the same data twice**, which takes time and risks errors.",
+    e:"⚙️",
+    kw:"ERP vs MES",
+    m:[["🏢", "ERP: plans the business"], ["📦", "Orders, materials, finance"], ["⚙️", "MES: runs the shop floor"], ["⏱️", "Real time: order, machine, quality"], ["🔗", "Best when integrated"], ["⌨️", "Not linked: double entry"]],
+    j:["ERP: plans the business", "Orders, materials, finance", "MES: runs the shop floor", "Real time: order, machine, quality", "Best when integrated", "Not linked: double entry"],
+    t:"A one-line version to remember: ERP is for planning, MES is for execution." },
+
+  { k:"Digital & Smart Factory", s:"What do you understand by a smart factory, or Industry 4.0?",
+    s_ms:"Apakah yang anda faham tentang kilang pintar (smart factory) atau Industri 4.0?",
+    kw_ms:"Kilang Pintar",
+    m_ms:["Mesin & sensor bersambung", "Data masa nyata", "Sistem berintegrasi", "Analitik & AI", "Berautomasi, tanpa kertas", "Matlamat: kualiti, kos, kepantasan"],
+    a_ms:"**Kilang pintar** ialah kilang yang mesin, pekerja dan sistemnya **bersambung dan berkongsi data**. **Sensor dan mesin** menghantar data dalam **masa nyata**, dan sistem dari lantai pengeluaran hingga ke ERP **berintegrasi**. Data itu digunakan untuk **analitik dan AI**, seperti meramal kerosakan mesin atau mengesan kecacatan. Kerja menjadi lebih **berautomasi dan tanpa kertas**. Teknologi bukan matlamatnya; matlamatnya ialah **kualiti lebih baik, kos lebih rendah dan keputusan lebih pantas**. **Industri 4.0** ialah nama bagi peralihan kepada pembuatan yang bersambung dan dipacu data ini.",
+    t_ms:"Kaitkan dengan diri sendiri: penerokaan Digital Twin dan projek sensor anda ialah sebahagian kecil daripada kilang pintar. Dasar negara Malaysia untuk ini dinamakan Industry4WRD.",
+    a:"A **smart factory** is a plant where machines, people and systems are **connected and share data**. **Sensors and machines** send data in **real time**, and the systems, from the shop floor up to the ERP, are **integrated**. That data is used for **analytics and AI**, such as predicting a machine failure or detecting defects. Work becomes more **automated and paperless**. The technology is not the goal; the goal is **better quality, lower cost and faster decisions**. **Industry 4.0** is the name for this move to connected, data-driven manufacturing.",
+    e:"🤖",
+    kw:"Smart Factory",
+    m:[["📡", "Connected machines & sensors"], ["⏱️", "Real-time data"], ["🔗", "Integrated systems"], ["🧠", "Analytics & AI"], ["🦾", "Automated, paperless"], ["🎯", "Goal: quality, cost, speed"]],
+    j:["Connected machines & sensors", "Real-time data", "Integrated systems", "Analytics & AI", "Automated, paperless", "Goal: quality, cost, speed"],
+    t:"Link it to yourself: your Digital Twin exploration and sensor projects are small pieces of a smart factory. Malaysia's national policy for this is called Industry4WRD." },
+
+  { k:"Digital & Smart Factory", s:"What is a digital roadmap, and how would a factory start one?",
+    s_ms:"Apakah itu pelan hala tuju digital (digital roadmap), dan bagaimana sesebuah kilang memulakannya?",
+    kw_ms:"Hala Tuju Digital",
+    m_ms:["Pelan beberapa tahun, ikut matlamat", "Nilai keadaan semasa", "Utamakan: nilai vs usaha", "Asas data dahulu", "Rintis, kemudian kembangkan", "Orang, latihan, tadbir urus"],
+    a_ms:"**Pelan hala tuju digital** ialah rancangan projek digital untuk **beberapa tahun**, yang dikaitkan dengan **matlamat perniagaan** kilang. Saya akan bermula dengan **menilai keadaan semasa**: proses mana yang masih atas kertas, di mana data dimasukkan secara manual, dan sistem mana yang belum berhubung. Kemudian saya **menyusun keutamaan** idea mengikut **nilai berbanding usaha**, bermula dengan kejayaan cepat (quick win). Pelan yang baik membina **asas data** dahulu, kerana dashboard dan AI bergantung pada data yang bersih. Setiap projek dijalankan sebagai **rintis**, kemudian **dikembangkan** jika berjaya. Ia juga memerlukan **orang, latihan dan tadbir urus**, termasuk keselamatan siber.",
+    t_ms:"Sebagai pelatih anda tidak akan menulis pelan itu, tetapi anda mungkin membantu satu langkah, seperti memetakan proses manual. Nyatakan begitu.",
+    a:"A **digital roadmap** is a plan of digital projects over **several years**, tied to the **business goals** of the plant. I would start by **assessing the current state**: which processes are still on paper, where data is entered by hand, and which systems are not connected. Then I would **prioritise** the ideas by **value against effort**, starting with quick wins. A good roadmap builds the **data foundation** first, because dashboards and AI depend on clean data. Each project is run as a **pilot**, then **scaled** if it works. It also needs **people, training and governance**, including cybersecurity.",
+    e:"🧭",
+    kw:"Digital Roadmap",
+    m:[["🗺️", "Multi-year plan tied to goals"], ["🔎", "Assess the current state"], ["🎯", "Prioritise: value vs effort"], ["🧱", "Data foundation first"], ["🧪", "Pilot, then scale"], ["👥", "People, training, governance"]],
+    j:["Multi-year plan tied to goals", "Assess the current state", "Prioritise: value vs effort", "Data foundation first", "Pilot, then scale", "People, training, governance"],
+    t:"As an intern you will not write the roadmap, but you may help with one step, such as mapping manual processes. Say that." },
+
+  { k:"Digital & Smart Factory", s:"How would you collect data from a machine and show it on a dashboard?",
+    s_ms:"Bagaimanakah anda mengumpul data daripada mesin dan memaparkannya pada dashboard?",
+    kw_ms:"Data Mesin (IoT)",
+    m_ms:["Sensor atau pengawal mesin (PLC)", "Gateway & rangkaian", "Protokol: OPC UA, MQTT", "Simpan dalam pangkalan data", "Dashboard & amaran", "Selamat, baca sahaja"],
+    a_ms:"Data bermula daripada **sensor** atau **pengawal mesin (PLC)**. Sebuah **gateway** membacanya dan menghantarnya melalui **rangkaian**, menggunakan protokol industri seperti **OPC UA atau MQTT**. Data disimpan dalam **pangkalan data** bersama cap masa. Dari situ, **dashboard** boleh memaparkan status, trend dan **amaran** apabila sesuatu nilai di luar julat. Saya akan memastikan sambungan itu **selamat dan baca sahaja**, supaya ia tidak mengganggu mesin. Saya pernah membuat versi kecilnya dengan **sensor pada Arduino dan STM32**.",
+    t_ms:"Guna Algae-X sebagai contoh: pengesanan paras air dan kekeruhan dengan Arduino.",
+    a:"The data starts at a **sensor** or at the machine's **controller (PLC)**. A **gateway** reads it and sends it over the **network**, using an industrial protocol such as **OPC UA or MQTT**. The data is stored in a **database** with a time stamp. From there, a **dashboard** can show the status, trends and **alerts** when a value goes out of range. I would make sure the connection is **secure and read-only**, so that it cannot disturb the machine. I have done a small-scale version of this with **sensors on Arduino and STM32**.",
+    e:"📡",
+    kw:"Machine Data (IoT)",
+    m:[["🌡️", "Sensor or machine controller (PLC)"], ["📶", "Gateway & network"], ["📨", "Protocol: OPC UA, MQTT"], ["🗄️", "Store in a database"], ["📊", "Dashboard & alerts"], ["🔒", "Secure, read-only"]],
+    j:["Sensor or machine controller (PLC)", "Gateway & network", "Protocol: OPC UA, MQTT", "Store in a database", "Dashboard & alerts", "Secure, read-only"],
+    t:"Use Algae-X as your example: water-level and turbidity sensing with an Arduino." },
+
+  { k:"Digital & Smart Factory", s:"What is a digital twin?",
+    s_ms:"Apakah itu digital twin?",
+    kw_ms:"Digital Twin",
+    m_ms:["Salinan maya aset sebenar", "Disuap data sebenar", "Pantau", "Simulasi sebelum ubah", "Ramal masalah", "Saya: C++, Python, Grafana, Omniverse"],
+    a_ms:"**Digital twin** ialah **model maya** bagi mesin, barisan atau proses sebenar yang **disuap dengan data sebenar**. Ia membolehkan jurutera **memantau** keadaan sebenar, **mensimulasikan perubahan** sebelum melaksanakannya, dan **meramal masalah** seperti kerosakan. Saya meneroka perkara ini dalam **projek Digital Twin** saya, menggunakan **C++ dan Python**, dengan **Grafana** untuk visualisasi dan **NVIDIA Omniverse** untuk simulasi. Ia satu penerokaan, jadi saya faham konsep dan alatnya pada tahap asas.",
+    t_ms:"Jujur bahawa ia satu penerokaan. Bersedia menyatakan data yang digunakan dan apa yang dipaparkan dalam Grafana.",
+    a:"A **digital twin** is a **virtual model** of a real machine, line or process that is **fed with real data**. It lets engineers **monitor** the real thing, **simulate a change** before doing it for real, and **predict problems** such as a failure. I explored this in my **Digital Twin project**, using **C++ and Python**, with **Grafana** for visualisation and **NVIDIA Omniverse** for simulation. It was an exploration, so I understand the concept and the tools at a basic level.",
+    e:"🧬",
+    kw:"Digital Twin",
+    m:[["🪞", "Virtual copy of a real asset"], ["📡", "Fed by real data"], ["👀", "Monitor"], ["🧪", "Simulate before changing"], ["🔮", "Predict problems"], ["🛠️", "Mine: C++, Python, Grafana, Omniverse"]],
+    j:["Virtual copy of a real asset", "Fed by real data", "Monitor", "Simulate before changing", "Predict problems", "Mine: C++, Python, Grafana, Omniverse"],
+    t:"Be honest that it was an exploration. Be ready to say what data you used and what you displayed in Grafana." },
+
+  { k:"Digital & Smart Factory", s:"How can AI be used in a factory, and what are the risks?",
+    s_ms:"Bagaimanakah AI boleh digunakan di kilang, dan apakah risikonya?",
+    kw_ms:"AI di Kilang",
+    m_ms:["Pemeriksaan visi", "Penyelenggaraan ramalan", "Ramalan permintaan / yield", "Pembantu untuk dokumen", "Risiko: data lemah, jawapan salah", "Data sulit, validasi"],
+    a_ms:"AI boleh digunakan untuk **pemeriksaan visi** bagi mengesan kecacatan, **penyelenggaraan ramalan** bagi memberi amaran sebelum mesin rosak, dan **ramalan** permintaan atau yield. **Pembantu AI** juga boleh membantu staf mencari prosedur dan menulis laporan. Risikonya ialah AI bergantung pada **data yang baik**, dan ia boleh memberi **jawapan yang salah dengan yakin**, jadi manusia mesti menyemak hasilnya. Dalam syarikat yang dikawal selia, **data sulit** tidak boleh dimasukkan ke dalam alat AI awam, dan AI yang digunakan untuk keputusan kualiti mesti **disahkan (validated)**. Saya pernah menggunakan **Gemini AI** dalam hackathon, jadi saya telah melihat kekuatan dan hadnya.",
+    t_ms:"Sebut risikonya tanpa ditanya; ia menunjukkan kematangan.",
+    a:"AI can be used for **vision inspection** to detect defects, for **predictive maintenance** to warn before a machine fails, and for **forecasting** demand or yield. **AI assistants** can also help staff search procedures and write reports. The risks are that AI depends on **good data**, and it can give **wrong answers with confidence**, so a person must check the result. In a regulated company, **confidential data** must not go into public AI tools, and an AI used for quality decisions must be **validated**. I used **Gemini AI** in a hackathon, so I have seen both its strength and its limits.",
+    e:"🧠",
+    kw:"AI in a Factory",
+    m:[["👁️", "Vision inspection"], ["🔧", "Predictive maintenance"], ["📈", "Forecasting"], ["💬", "Assistants for documents"], ["⚠️", "Risk: weak data, wrong answers"], ["🔒", "Confidential data, validation"]],
+    j:["Vision inspection", "Predictive maintenance", "Forecasting", "Assistants for documents", "Risk: weak data, wrong answers", "Confidential data, validation"],
+    t:"Mention the risks without being asked; it shows maturity." },
+
+  { k:"Digital & Smart Factory", s:"What is visual management on a production floor?",
+    s_ms:"Apakah itu pengurusan visual (visual management) di lantai pengeluaran?",
+    kw_ms:"Pengurusan Visual",
+    m_ms:["Status sepintas lalu", "Sasaran vs sebenar", "Warna: hijau, kuning, merah", "Andon: panggil bantuan", "Pasukan bertindak pantas", "Papan atau skrin digital"],
+    a_ms:"**Pengurusan visual** ialah amalan lean yang menjadikan **status pengeluaran kelihatan sepintas lalu**. Papan atau skrin menunjukkan **sasaran berbanding pencapaian sebenar** bagi output, kualiti dan downtime, selalunya menggunakan **warna** seperti hijau, kuning dan merah. Isyarat **andon** membolehkan operator **memanggil bantuan** apabila ada masalah. Tujuannya supaya pasukan **nampak masalah dengan cepat dan bertindak**, tanpa menunggu laporan. Ia boleh berupa papan putih yang ringkas, atau **skrin digital** yang disuap data pengeluaran.",
+    t_ms:"Paparan hanya berguna jika data di belakangnya betul dan terkini.",
+    a:"**Visual management** is a lean practice that makes the **status of production visible at a glance**. Boards or screens show the **target against the actual** output, quality and downtime, often using **colours** such as green, yellow and red. An **andon** signal lets an operator **call for help** when there is a problem. The purpose is for the team to **see a problem quickly and react**, without waiting for a report. It can be a simple whiteboard, or a **digital screen** fed by production data.",
+    e:"📺",
+    kw:"Visual Management",
+    m:[["👀", "Status at a glance"], ["🎯", "Target vs actual"], ["🚦", "Colours: green, yellow, red"], ["🚨", "Andon: call for help"], ["⚡", "Team reacts fast"], ["📺", "Board or digital screen"]],
+    j:["Status at a glance", "Target vs actual", "Colours: green, yellow, red", "Andon: call for help", "Team reacts fast", "Board or digital screen"],
+    t:"A display is only useful if the data behind it is correct and up to date." },
+
+  { k:"Digital & Smart Factory", s:"What experience do you have in building a web application or an online form?",
+    s_ms:"Apakah pengalaman anda membina aplikasi web atau borang dalam talian?",
+    kw_ms:"Pengalaman Aplikasi Web",
+    m_ms:["Tempahan tiket: React + C# ASP.NET", "Borang, sahkan, simpan", "Pangkalan data SQL", "Kelulusan & laporan", "Pelayan menjadi hos", "Ikut standard syarikat"],
+    a_ms:"Saya pernah membina **sistem tempahan tiket acara** dengan **React** untuk front end dan **C# ASP.NET Core** untuk back end, menggunakan **[Visual Studio atau VS Code, nyatakan yang sebenar]**. Saya faham aliran borang dalam talian: pengguna **mengisi borang**, pelayan **mengesahkan data** dan menyimpannya ke **pangkalan data menggunakan SQL**, kemudian ia boleh **dihantar untuk kelulusan** dan dilaporkan. Saya belum pernah memasang aplikasi pada **pelayan** syarikat, tetapi saya faham ia menjadi hos aplikasi dan menghubungkannya dengan pangkalan data. Saya mahu belajar **standard dan templat syarikat**.",
+    t_ms:"Bersedia menerangkan satu halaman sistem tempahan tiket anda dari hujung ke hujung: borang, kod C# di belakangnya, dan jadual pangkalan data.",
+    a:"I built an **event ticket booking system** with **React** for the front end and **C# ASP.NET Core** for the back end, using **[Visual Studio or VS Code, say which one]**. I understand the flow of an online form: the user **fills in the form**, the server **validates the data** and saves it to a **database using SQL**, then it can be **routed for approval** and reported. I have not deployed to a company **server** yet, but I understand that it hosts the application and connects it to the database. I am keen to learn the **company's standards and templates**.",
+    e:"🌐",
+    kw:"Web App Experience",
+    m:[["🎫", "Ticket booking: React + C# ASP.NET"], ["📝", "Form, validate, save"], ["🗄️", "SQL database"], ["✅", "Approval & report"], ["🖥️", "Server hosts the app"], ["📐", "Follow company standards"]],
+    j:["Ticket booking: React + C# ASP.NET", "Form, validate, save", "SQL database", "Approval & report", "Server hosts the app", "Follow company standards"],
+    t:"Be ready to explain one page of your ticket booking system from end to end: the form, the C# code behind it, and the database table." },
+
+  { k:"Digital & Smart Factory", s:"How would you turn a paper form into an online form?",
+    s_ms:"Bagaimanakah anda menukar borang kertas kepada borang dalam talian?",
+    kw_ms:"Borang Kertas ke Dalam Talian",
+    m_ms:["Fahami borang semasa", "Medan & pengesahan", "Aliran kelulusan", "Guna alat yang diluluskan", "Uji, kawalan perubahan", "Latih pengguna, laporkan data"],
+    a_ms:"Saya akan bermula dengan **memahami borang sedia ada**: siapa yang mengisi, siapa yang meluluskan dan di mana ia disimpan. Kemudian saya menetapkan **medan dan peraturan pengesahan**, serta **aliran kelulusan**. Saya membinanya dengan **alat yang diluluskan oleh syarikat**, contohnya Power Apps dengan SharePoint list, atau borang web dengan pangkalan data. Saya akan **mengujinya bersama pengguna sebenar**, mengikut langkah **kawalan perubahan** syarikat, kemudian **melatih pengguna**. Akhir sekali, datanya boleh digunakan untuk **laporan atau dashboard**.",
+    t_ms:"Nyatakan bahawa anda akan menggunakan alat yang diluluskan oleh syarikat; dalam syarikat yang dikawal selia, anda tidak memilih perisian sendiri.",
+    a:"I would start by **understanding the current form**: who fills it in, who approves it and where it is kept. Then I would define the **fields and validation rules**, and the **approval workflow**. I would build it with the **tool the company has approved**, for example Power Apps with a SharePoint list, or a web form with a database. I would **test it with real users**, follow the company's **change control** steps, then **train the users**. Finally, the data can feed a **report or dashboard**.",
+    e:"📝",
+    kw:"Paper to Online Form",
+    m:[["🔎", "Understand the current form"], ["🧾", "Fields & validation"], ["✅", "Approval workflow"], ["🛠️", "Use the approved tool"], ["🧪", "Test, change control"], ["📊", "Train users, report the data"]],
+    j:["Understand the current form", "Fields & validation", "Approval workflow", "Use the approved tool", "Test, change control", "Train users, report the data"],
+    t:"Say that you would use whatever tool the company has approved; in a regulated company you do not pick your own software." },
+
+  { k:"Digital & Smart Factory", s:"How would you build a production dashboard in Power BI?",
+    s_ms:"Bagaimanakah anda membina dashboard pengeluaran dalam Power BI?",
+    kw_ms:"Dashboard Power BI",
+    m_ms:["Setuju KPI dengan pengguna", "Sambung ke sumber data", "Bersihkan dalam Power Query", "Model + jadual kalendar", "Measure DAX", "Sahkan, terbit, refresh"],
+    a_ms:"Mula-mula saya bersetuju dengan pengguna tentang **soalan yang perlu dijawab oleh dashboard** dan KPI-nya, seperti output, yield dan downtime. Kemudian saya **menyambung kepada sumber data**, contohnya data ERP, pangkalan data SQL, Excel atau SharePoint list, dan **membersihkannya dalam Power Query**. Saya membina **model data yang ringkas dengan jadual kalendar**, dan menulis **measure DAX** untuk KPI. Selepas itu saya mereka bentuk **visual yang jelas**, menyemak angka **dengan sumber asal**, kemudian menerbitkannya dengan **refresh berjadual**.",
+    t_ms:"Power BI ada dalam resume anda. Bersedia menerangkan satu laporan yang anda bina: sumber datanya, satu measure dan satu carta.",
+    a:"First I would agree with the users on the **questions the dashboard must answer** and the KPIs, such as output, yield and downtime. Then I would **connect to the data source**, for example ERP data, a SQL database, Excel or a SharePoint list, and **clean it in Power Query**. I would build a simple **data model with a calendar table**, and write **DAX measures** for the KPIs. After that I would design **clear visuals**, check the numbers **against the source**, then publish it with a **scheduled refresh**.",
+    e:"📊",
+    kw:"Power BI Dashboard",
+    m:[["🎯", "Agree KPIs with users"], ["🔌", "Connect to the data"], ["🧹", "Clean in Power Query"], ["📅", "Model + calendar table"], ["🧮", "DAX measures"], ["✅", "Verify, publish, refresh"]],
+    j:["Agree KPIs with users", "Connect to the data", "Clean in Power Query", "Model + calendar table", "DAX measures", "Verify, publish, refresh"],
+    t:"Power BI is on your resume. Be ready to describe one report you built: its data source, one measure and one chart." },
+
+  { k:"Digital & Smart Factory", s:"You notice the same data is being keyed into two systems. What would you do?",
+    s_ms:"Anda mendapati data yang sama ditaip ke dalam dua sistem. Apakah yang anda akan lakukan?",
+    kw_ms:"Data Ditaip Dua Kali",
+    m_ms:["Fahami proses", "Petakan aliran data", "Ukur masa & kesilapan", "Pindah automatik, satu sumber", "Pemilik, IT, kualiti luluskan", "Rintis & dokumenkan"],
+    a_ms:"Mula-mula saya akan **memahami prosesnya**: siapa yang menaip data, berapa kerap, dan mengapa ia dibuat dua kali. Saya akan **memetakan aliran data** antara dua sistem itu dan mengukur **masa yang digunakan serta kesilapan**. Kemudian saya mencadangkan pilihan, seperti **eksport dan import berjadual**, atau alat kecil yang **membaca data sekali daripada sumber**, supaya satu sistem kekal sebagai **satu sumber data yang sahih**. Saya **tidak akan mengubah mana-mana sistem sendiri**; saya akan berbincang dengan **pemilik sistem, IT dan kualiti**, mengujinya sebagai **projek rintis**, dan mendokumenkan hasilnya.",
+    t_ms:"Sampaikan sebagai hasrat untuk membantu, bukan kritikan. Sistem kadangkala diasingkan atas sebab yang baik, seperti validasi atau had lesen.",
+    a:"First I would **understand the process**: who keys in the data, how often, and why it is done twice. I would **map the data flow** between the two systems and measure the **time spent and the errors**. Then I would propose options, such as a **scheduled export and import**, or a small tool that **reads the data once from the source**, so that one system stays the **single source of truth**. I would **not change any system on my own**; I would discuss it with the **system owner, IT and quality**, test it as a **pilot**, and document the result.",
+    e:"⌨️",
+    kw:"Double Data Entry",
+    m:[["🔎", "Understand the process"], ["🗺️", "Map the data flow"], ["⏱️", "Measure time & errors"], ["🔄", "Transfer automatically, one source"], ["🤝", "Owner, IT, quality approve"], ["🧪", "Pilot & document"]],
+    j:["Understand the process", "Map the data flow", "Measure time & errors", "Transfer automatically, one source", "Owner, IT, quality approve", "Pilot & document"],
+    t:"Say it as a wish to help, not as criticism. Systems are sometimes kept separate for good reasons, such as validation or licence limits." },
+
+  { k:"Digital & Smart Factory", s:"How would you work with an older system or database that you have never used before?",
+    s_ms:"Bagaimanakah anda bekerja dengan sistem atau pangkalan data lama yang anda tidak pernah guna?",
+    kw_ms:"Sistem Yang Asing",
+    m_ms:["Baca dokumentasi", "Tanya pemilik sistem", "Baca sahaja dahulu", "Fahami jadual & hubungan", "Uji, bukan production", "Dokumenkan & tanya"],
+    a_ms:"Mula-mula saya akan **membaca dokumentasi yang ada** dan bertanya kepada **pemilik sistem** tentang cara ia digunakan. Saya bermula dengan **capaian baca sahaja**, untuk memahami **jadual dan hubungan datanya**, tanpa mengubah apa-apa. Saya mencuba sesuatu dalam **persekitaran ujian**, bukan dalam production. Saya **mencatat apa yang saya pelajari**, kerana sistem lama selalunya kurang dokumentasi, dan saya **bertanya sebelum membuat sebarang perubahan**.",
+    t_ms:"Anda tidak dijangka tahu setiap sistem; tunjukkan kaedah yang berhati-hati.",
+    a:"I would first **read the available documentation** and ask the **system owner** how it is used. I would start with **read-only access**, to understand the **tables and how the data links**, without changing anything. I would try things in a **test environment**, not in production. I would **write down what I learn**, because older systems often have little documentation, and I would **ask before making any change**.",
+    e:"🗄️",
+    kw:"Unfamiliar System",
+    m:[["📖", "Read the documentation"], ["🙋", "Ask the system owner"], ["👀", "Read-only first"], ["🧬", "Understand tables & links"], ["🧪", "Test, not production"], ["📝", "Document & ask"]],
+    j:["Read the documentation", "Ask the system owner", "Read-only first", "Understand tables & links", "Test, not production", "Document & ask"],
+    t:"You are not expected to know every system; show a careful method." },
+
+  { k:"Digital & Smart Factory", s:"Why do data integrity and cybersecurity matter when a regulated factory goes digital?",
+    s_ms:"Mengapakah integriti data dan keselamatan siber penting apabila kilang yang dikawal selia beralih kepada digital?",
+    kw_ms:"Integriti Data & Keselamatan",
+    m_ms:["Rekod bukti keselamatan produk", "ALCOA", "Login sendiri, capaian ikut peranan", "Jejak audit", "Sandaran & pemulihan", "Rangkaian, kata laluan, phishing"],
+    a_ms:"Dalam kilang yang dikawal selia, rekod ialah **bukti bahawa produk selamat**, jadi ia mesti boleh dipercayai. Panduan yang biasa digunakan ialah **ALCOA**: data mesti **boleh dikaitkan dengan pembuatnya, mudah dibaca, direkod pada masa kejadian, asli dan tepat**. Dari segi amalan, setiap orang menggunakan **login sendiri**, capaian **dikawal mengikut peranan**, dan sistem menyimpan **jejak audit** tentang siapa mengubah apa dan bila. Data mesti **dibuat sandaran** dan boleh dipulihkan. **Keselamatan siber** penting kerana kilang yang bersambung boleh terhenti akibat serangan, jadi rangkaian, kata laluan dan **kewaspadaan terhadap phishing** semuanya penting.",
+    t_ms:"ALCOA berbaloi dihafal untuk mana-mana temu duga peranti perubatan atau farmaseutikal.",
+    a:"In a regulated factory, the records are the **proof that the product is safe**, so they must be trustworthy. A common guide is **ALCOA**: data should be **attributable, legible, contemporaneous, original and accurate**. In practice, everyone uses their **own login**, access is **controlled by role**, and the system keeps an **audit trail** of who changed what and when. Data must be **backed up** and recoverable. **Cybersecurity** matters because a connected factory can be stopped by an attack, so the network, passwords and **phishing awareness** all matter.",
+    e:"🔐",
+    kw:"Data Integrity & Security",
+    m:[["❤️", "Records prove product safety"], ["🧾", "ALCOA"], ["👤", "Own login, access by role"], ["🕵️", "Audit trail"], ["💾", "Backup & recovery"], ["🛡️", "Network, passwords, phishing"]],
+    j:["Records prove product safety", "ALCOA", "Own login, access by role", "Audit trail", "Backup & recovery", "Network, passwords, phishing"],
+    t:"ALCOA is worth memorising for any medical device or pharmaceutical interview." },
+
   /* ---------- C. Behavioural ---------- */
   { k:"Behavioural", s:"Tell me about a time you worked in a team. What was your role?",
+    s_ms:"Ceritakan pengalaman anda bekerja dalam pasukan. Apakah peranan anda?",
+    kw_ms:"Kerja Berpasukan (STAR)",
+    m_ms:["Projek pasukan hackathon", "Saya menyelaras pasukan", "Bahagi tugas, masa terhad", "Cabaran sebenar & tindakan", "Top 6 + pengajaran"],
+    a_ms:"Dalam satu **projek pasukan hackathon**, peranan saya ialah **menyelaras ahli pasukan** sepanjang fasa idea, pembangunan dan pembentangan. Oleh sebab masa terhad, kami **membahagikan tugas** dan berkomunikasi dengan rapat. Cabaran utama kami ialah **[cabaran sebenar]**, dan saya menanganinya dengan **[apa yang saya buat]**. Projek kami terpilih antara **6 pasukan terbaik**, dan saya belajar **[pengajaran tentang kerja berpasukan]**.",
+    t_ms:"Guna STAR: Situasi, Tugas, Tindakan, Hasil.",
     a:"In a **hackathon team project**, my role was to **coordinate the team** through ideation, development and presentation. Because time was limited, we **divided the tasks** and communicated closely. Our main challenge was **[the real challenge]**, and I handled it by **[what I did]**. Our project was selected among the **Top 6 teams**, and I learned **[my lesson about teamwork]**.",
     e:"👥",
     kw:"Teamwork (STAR)",
@@ -1090,6 +1384,11 @@ var JOBS = [
     t:"Use STAR: Situation, Task, Action, Result." },
 
   { k:"Behavioural", s:"Tell me about a time a team member was not contributing. What did you do?",
+    s_ms:"Ceritakan situasi apabila seorang ahli pasukan tidak menyumbang. Apakah yang anda lakukan?",
+    kw_ms:"Ahli Tidak Menyumbang",
+    m_ms:["Berpegang pada fakta", "Bercakap secara tertutup", "Tugas kecil yang jelas", "Rujuk jika tiada perubahan", "Projek tetap siap"],
+    a_ms:"Saya akan **berpegang pada fakta** dan tidak menyerang peribadi. Mula-mula saya **bercakap dengannya secara tertutup** untuk memahami sebabnya. Kemudian saya menawarkan bantuan atau bersetuju tentang **tugas yang lebih kecil dan jelas dengan tarikh akhir**. Jika tiada perubahan, saya **merujuk kepada ketua pasukan atau pensyarah**. Dalam pengalaman saya sendiri, **[contoh sebenar]**, dan projek itu **tetap disiapkan**.",
+    t_ms:"Tunjukkan anda menyelesaikan masalah awal dan dengan tenang, bukan dengan merungut.",
     a:"I would **stay factual** and not attack the person. First I would **talk to them privately** to understand the reason. Then I would offer help or agree on a **smaller, clear task with a deadline**. If nothing changed, I would **raise it with the team leader or lecturer**. In my own experience, **[the real example]**, and the project was **still delivered**.",
     e:"💬",
     kw:"Member Not Contributing",
@@ -1102,6 +1401,11 @@ var JOBS = [
     t:"Show you solve problems early and calmly, not by complaining." },
 
   { k:"Behavioural", s:"Describe a time you failed or made a mistake. What did you learn?",
+    s_ms:"Ceritakan satu kegagalan atau kesilapan anda. Apakah yang anda pelajari?",
+    kw_ms:"Kegagalan",
+    m_ms:["Contoh sebenar", "Akui bahagian saya", "Cara saya baiki", "Apa yang saya ubah"],
+    a_ms:"Satu contoh ialah **[kegagalan sebenar, seperti bug sebelum demo atau terlepas tarikh akhir]**. **Bahagian saya** dalam kesilapan itu ialah [apa yang saya silap]. Saya **membaikinya** dengan [apa yang saya buat]. Sejak itu, saya **mengubah cara saya bekerja**: [apa yang saya buat berbeza sekarang], supaya perkara itu tidak berulang.",
+    t_ms:"Pengajaran ialah bahagian paling penting dalam jawapan ini.",
     a:"One example is **[a real failure, such as a bug before a demo or a missed deadline]**. **My part** in it was [what I did wrong]. I **fixed it** by [what I did]. Since then, I have **changed how I work**: [what I do differently now], so that it does not happen again.",
     e:"💥",
     kw:"Failure",
@@ -1113,6 +1417,11 @@ var JOBS = [
     t:"The lesson is the most important part of this answer." },
 
   { k:"Behavioural", s:"How do you manage several deadlines at the same time?",
+    s_ms:"Bagaimanakah anda menguruskan beberapa tarikh akhir pada masa yang sama?",
+    kw_ms:"Tarikh Akhir",
+    m_ms:["Senaraikan semua", "Tetapkan keutamaan", "Pecahkan kepada langkah", "Jadual, mula awal", "Maklum awal"],
+    a_ms:"Saya **menyenaraikan semua tugas** dan tarikh akhirnya, kemudian **menetapkan keutamaan** mengikut kesegeraan dan kepentingan. Saya **memecahkan tugas besar kepada langkah kecil** dan menetapkan tarikh akhir sendiri yang lebih awal, menggunakan **planner atau kalendar** supaya saya bermula awal. Jika saya tidak dapat menepati tarikh akhir, saya **memaklumkan lebih awal** dan bukannya menghantar lewat tanpa notis.",
+    t_ms:"Beri contoh daripada semester yang sibuk.",
     a:"I **list all the tasks** and their deadlines, then **prioritise** by urgency and importance. I **break big tasks into small steps** and set my own earlier deadlines, using a **planner or calendar** so that I start early. If I cannot meet a deadline, I **tell the person early** instead of delivering late without notice.",
     e:"🗓️",
     kw:"Deadlines",
@@ -1125,6 +1434,11 @@ var JOBS = [
     t:"Give an example from a busy semester." },
 
   { k:"Behavioural", s:"Tell me about a time you had to learn something new quickly.",
+    s_ms:"Ceritakan situasi apabila anda perlu belajar sesuatu yang baharu dengan cepat.",
+    kw_ms:"Cepat Belajar",
+    m_ms:["Gemini AI semasa hackathon", "Masa terhad", "Dokumentasi, tutorial, rakan", "Guna terus, hasil", "Sijil Python & MATLAB"],
+    a_ms:"Semasa hackathon, saya perlu belajar menggunakan **Gemini AI** dengan cepat untuk membangunkan MedScan Assistant, kerana penyelesaian itu mesti disiapkan dalam **masa yang terhad**. Saya belajar melalui **[dokumentasi, tutorial, rakan sepasukan]** serta cuba jaya, kemudian **menggunakannya terus** dalam projek. Saya juga menamatkan sijil **Python Essentials 1 dan MATLAB Onramp**, yang menunjukkan saya boleh belajar sendiri.",
+    t_ms:"Pelatih dijangka cepat belajar. Ini antara jawapan yang paling penting.",
     a:"During a hackathon, I had to learn to use **Gemini AI** quickly to develop MedScan Assistant, because the solution had to be built within a **limited time**. I learned through **[documentation, tutorials, teammates]** and trial and error, then **applied it** directly in the project. I also completed the **Python Essentials 1 and MATLAB Onramp** certificates, which shows that I can learn on my own.",
     e:"🚀",
     kw:"Learn Fast",
@@ -1137,6 +1451,11 @@ var JOBS = [
     t:"Interns are expected to learn fast. This is one of the most important answers." },
 
   { k:"Behavioural", s:"Have you held any leadership role or been active outside class?",
+    s_ms:"Pernahkah anda memegang jawatan kepimpinan atau aktif di luar kelas?",
+    kw_ms:"Kepimpinan",
+    m_ms:["Ketua Logistik, Tesla Cup 2026", "AJK logistik 2025", "Ketua 5 projek", "RECONSA, Convofest, juara sukan", "Merancang & mengurus orang"],
+    a_ms:"Saya ialah **Ketua Logistik Tesla Cup 2026**, acara sukan EE/COE, dan saya mengetuai perancangan logistik serta menyelaras keperluan operasi. Setahun sebelumnya, saya menjadi **ahli jawatankuasa logistik**. Saya juga **ketua projek bagi lima projek akademik**, dan menyertai **RECONSA 2025**, persidangan pelajar serantau. Peranan ini mengajar saya **merancang, berkomunikasi dan mengurus orang**.",
+    t_ms:"Mulakan dengan Ketua Logistik; ia menunjukkan anda naik daripada ahli jawatankuasa kepada ketua dalam masa setahun.",
     a:"I was **Head of Logistics for Tesla Cup 2026**, the EE/COE sports event, where I led logistics planning and coordinated operational requirements. The year before, I served on the **logistics committee**. I have also been **project leader for five academic projects**, and I took part in **RECONSA 2025**, a regional student conference. These roles taught me **planning, communication and handling people**.",
     e:"🧭",
     kw:"Leadership",
@@ -1150,6 +1469,11 @@ var JOBS = [
 
   /* ---------- D. Internship & workplace ---------- */
   { k:"Internship & Workplace", s:"Your supervisor gives you a task you have never done before. What do you do?",
+    s_ms:"Penyelia memberi tugas yang anda tidak pernah buat. Apakah yang anda lakukan?",
+    kw_ms:"Tugas Baharu",
+    m_ms:["Jelaskan matlamat & tarikh akhir", "Cuba sendiri dahulu", "Tanya soalan khusus", "Kemas kini berkala", "Catat apa yang dipelajari"],
+    a_ms:"Mula-mula saya memastikan saya **faham matlamat**, hasil yang dijangka dan tarikh akhir. Kemudian saya **cuba mencari jawapan sendiri** daripada dokumen, kerja terdahulu dan sumber dalam talian. Selepas mencuba, saya **bertanya soalan yang khusus**. Saya memberi **kemas kini secara berkala** supaya tiada kejutan, dan **mencatat apa yang saya pelajari** untuk masa hadapan.",
+    t_ms:"Tunjukkan keseimbangan: berdikari, tetapi tidak takut bertanya.",
     a:"First I would make sure I **understand the goal**, the expected output and the deadline. Then I would **try to find the answer myself** from documents, past work and online resources. After trying, I would **ask specific questions**. I would give **regular updates** so there are no surprises, and **write down what I learned** for next time.",
     e:"❓",
     kw:"New Task",
@@ -1162,6 +1486,11 @@ var JOBS = [
     t:"Show a balance: independent, but not afraid to ask." },
 
   { k:"Internship & Workplace", s:"A factory has strict rules on safety, cleanroom practice and confidentiality. How do you feel about that?",
+    s_ms:"Kilang mempunyai peraturan ketat tentang keselamatan, amalan cleanroom dan kerahsiaan. Apakah pandangan anda?",
+    kw_ms:"Peraturan & Keselamatan",
+    m_ms:["Lindungi orang & produk", "Ikut PPE & cleanroom", "Tiada gambar / salinan", "Tidak pasti: tanya dahulu", "Lapor yang tidak selamat"],
+    a_ms:"Saya faham bahawa peraturan ini **melindungi pekerja, produk dan pelanggan**. Saya akan mematuhi semua latihan serta **prosedur PPE dan cleanroom**. Saya **tidak akan mengambil gambar atau menyalin fail**, dan tidak akan berkongsi maklumat syarikat di luar. Jika saya **tidak pasti** sama ada sesuatu dibenarkan, saya akan **bertanya dahulu**, dan jika saya nampak sesuatu yang tidak selamat, saya akan **melaporkannya**.",
+    t_ms:"Sangat relevan untuk syarikat semikonduktor dan peranti perubatan.",
     a:"I understand that these rules **protect people, the product and the customer**. I will follow all training, **PPE and cleanroom procedures**. I will **not take photos or copy files**, and I will not share company information outside. If I am **unsure** whether something is allowed, I will **ask first**, and if I see something unsafe, I will **report it**.",
     e:"🦺",
     kw:"Rules & Safety",
@@ -1174,6 +1503,11 @@ var JOBS = [
     t:"Very relevant for semiconductor and medical device companies." },
 
   { k:"Internship & Workplace", s:"When can you start, how long is your internship, and are you able to work at this location?",
+    s_ms:"Bilakah anda boleh mula, berapa lama latihan industri anda, dan bolehkah anda bekerja di lokasi ini?",
+    kw_ms:"Tempoh & Lokasi",
+    m_ms:["Januari hingga Ogos 2027", "7 bulan", "Rumah di Kulim", "Keperluan UTP"],
+    a_ms:"Latihan industri saya selama **7 bulan, dari Januari 2027 hingga Ogos 2027**, seperti yang ditetapkan oleh UTP. **Rumah keluarga saya di Kulim**, jadi hadir ke Kulim Hi-Tech Park bukan masalah. [Nyatakan sama ada anda boleh bekerja syif atau di cleanroom.] Universiti saya memerlukan **[buku log, lawatan penyelia, laporan akhir]**, dan saya akan menguruskannya sendiri.",
+    t_ms:"Sahkan tarikh mula dan tamat yang tepat dengan UTP sebelum temu duga.",
     a:"My internship is for **7 months, from January 2027 to August 2027**, as required by UTP. My **family home is in Kulim**, so attending at Kulim Hi-Tech Park is not a problem. [Say whether shift or cleanroom work is acceptable to you.] My university requires **[logbook, supervisor visit, final report]**, which I will manage myself.",
     e:"📅",
     kw:"Availability",
@@ -1185,6 +1519,11 @@ var JOBS = [
     t:"Confirm the exact start and end dates with UTP before the interview." },
 
   { k:"Internship & Workplace", s:"What do you know about Kulim Hi-Tech Park, and why do you want to do your internship in Kulim?",
+    s_ms:"Apakah yang anda tahu tentang Kulim Hi-Tech Park, dan mengapa anda mahu menjalani latihan industri di Kulim?",
+    kw_ms:"Kulim Hi-Tech Park",
+    m_ms:["Kulim, Kedah, dekat Pulau Pinang", "1996, pertama di Malaysia", "Banyak syarikat multinasional", "Semikonduktor, elektronik, perubatan", "Rumah saya di Kulim"],
+    a_ms:"**Kulim Hi-Tech Park** terletak di Kulim, Kedah, berhampiran Pulau Pinang. Ia dibuka pada **1996** sebagai **taman perindustrian berteknologi tinggi yang pertama di Malaysia**. Ia menempatkan **banyak syarikat multinasional** dalam bidang semikonduktor, elektronik dan **peranti perubatan**. Saya mahu menjalani latihan industri di sini kerana pendedahan itu, dan kerana **rumah keluarga saya di Kulim**.",
+    t_ms:"Mengenali jiran syarikat yang anda mohon menunjukkan minat sebenar terhadap industri.",
     a:"**Kulim Hi-Tech Park** is in Kulim, Kedah, close to Penang. It opened in **1996** as **Malaysia's first high-tech industrial park**. It hosts **many multinational companies** in semiconductors, electronics and medical devices, covering much of the **chip supply chain**. I want to intern here because of that exposure, and because **my family home is in Kulim**.",
     e:"📍",
     kw:"Kulim Hi-Tech Park",
@@ -1197,6 +1536,11 @@ var JOBS = [
     t:"Knowing the neighbours of the company you apply to shows real interest in the industry." },
 
   { k:"Internship & Workplace", s:"Do you have any questions for us?",
+    s_ms:"Adakah anda mempunyai soalan untuk kami?",
+    kw_ms:"Soalan Saya",
+    m_ms:["Sentiasa tanya 1-2", "Projek pelatih?", "Apa perlu disediakan?", "Pelatih yang berjaya?", "Peluang jawatan tetap?"],
+    a_ms:"Ya, saya ada beberapa soalan. **Projek jenis apakah** yang akan dibuat oleh pelatih dalam pasukan ini? **Alat atau kemahiran apakah** yang patut saya sediakan sebelum mula? Pada pandangan tuan/puan, **bagaimanakah pelatih yang berjaya**? Dan adakah peluang untuk **diserap ke jawatan tetap** selepas tamat pengajian?",
+    t_ms:"Jangan tanya tentang elaun dahulu. Tanya tentang kerja dahulu.",
     a:"Yes, I have a few questions. **What kind of project** would an intern in this team work on? **What tools or skills** should I prepare before I start? **What does a successful intern** look like to you? And is there a chance to **convert to a full-time position** after graduation?",
     e:"✋",
     kw:"My Questions",
@@ -1210,6 +1554,11 @@ var JOBS = [
 
   /* ---------- E. Company-specific: Intel ---------- */
   { c:"Intel", k:"Company-Specific", s:"What do you know about Intel, and why do you want to intern here?",
+    s_ms:"Apakah yang anda tahu tentang Intel, dan mengapa anda mahu menjalani latihan industri di sini?",
+    kw_ms:"Intel",
+    m_ms:["AS, Santa Clara, 1968", "Pemproses, kilang sendiri", "Kulim: pemasangan & ujian", "Sepadan dengan bidang saya", "Komuniti jurutera yang besar"],
+    a_ms:"**Intel** ialah syarikat semikonduktor Amerika yang ditubuhkan pada **1968** dan beribu pejabat di **Santa Clara**. Ia terkenal dengan **pemproses** untuk PC dan pusat data, dan menghasilkan cipnya sendiri. **Intel Kulim** ialah tapak yang sudah lama beroperasi dan dikenali dengan kerja **pemasangan dan ujian**. Saya mahu berlatih di sini kerana pemproses ialah teras kepada **apa yang saya belajar**, dan saya boleh belajar daripada **komuniti jurutera yang besar**.",
+    t_ms:"Baca berita terkini Intel sebelum temu duga; syarikat ini berubah dengan cepat.",
     a:"**Intel** is an American semiconductor company, founded in **1968** and headquartered in **Santa Clara**. It is known for **processors** for PCs and data centres, and for manufacturing its own chips. **Intel Kulim** is a long-standing site known for **assembly and test**. I want to intern here because processors are at the heart of **what I study**, and I can learn from a **large engineering community**.",
     e:"🖥️",
     kw:"Intel",
@@ -1222,6 +1571,11 @@ var JOBS = [
     t:"Read Intel's latest news before the interview; the company is changing quickly." },
 
   { c:"Intel", k:"Company-Specific", s:"How could a computer engineering intern contribute at Intel?",
+    s_ms:"Bagaimanakah pelatih kejuruteraan komputer boleh menyumbang di Intel?",
+    kw_ms:"Peranan Saya di Intel",
+    m_ms:["Skrip pengesahan & ujian", "Automasi Python", "Analisis data", "Firmware & debug makmal", "Pengetahuan seni bina"],
+    a_ms:"Saya boleh menyumbang dalam **pengesahan dan ujian** dengan menulis skrip untuk menjalankan ujian dan menganalisis keputusan. Saya boleh **mengautomasikan tugas kejuruteraan menggunakan Python**, dan membantu **analisis data** ujian atau pembuatan. Saya juga boleh menyokong **debug firmware dan perkakasan** di makmal, dengan menggunakan **pengetahuan seni bina komputer** dari kelas.",
+    t_ms:"Padankan jawapan dengan jabatan yang disebut dalam iklan latihan industri.",
     a:"I could contribute in **validation and test** by writing scripts to run tests and analyse results. I can **automate engineering tasks using Python**, and help with **data analysis** of test or manufacturing data. I could also support **firmware and hardware debug** in the lab, applying my **computer architecture knowledge** from class.",
     e:"🧪",
     kw:"My Role at Intel",
@@ -1234,6 +1588,11 @@ var JOBS = [
     t:"Match your answer to the department named in the internship advert." },
 
   { c:"Intel", k:"Company-Specific", s:"Explain in simple terms what a CPU does and what affects its performance.",
+    s_ms:"Terangkan secara ringkas apa yang dilakukan oleh CPU dan apa yang mempengaruhi prestasinya.",
+    kw_ms:"CPU",
+    m_ms:["Fetch, decode, execute", "CU, ALU, register, cache", "Clock, teras, cache", "Transistor lebih kecil", "Had haba: berbilang teras"],
+    a_ms:"**CPU mengambil (fetch), menyahkod (decode) dan melaksanakan (execute)** arahan. Bahagian utamanya ialah **unit kawalan, ALU, register dan cache**. Prestasi bergantung pada **kelajuan clock, bilangan teras dan saiz cache**, serta seni binanya. **Proses pembuatan** juga penting, kerana transistor yang lebih kecil membolehkan lebih banyak transistor dengan kuasa yang lebih rendah. **Had haba dan kuasa** ialah sebab reka bentuk berbilang teras menjadi kebiasaan.",
+    t_ms:"Asas seni bina komputer memang wajar ditanya di syarikat pemproses.",
     a:"A **CPU fetches, decodes and executes** instructions. Its main parts are the **control unit, the ALU, registers and cache**. Performance depends on **clock speed, the number of cores and cache size**, as well as the architecture. The **manufacturing process** matters too, because smaller transistors allow more of them at lower power. **Heat and power limits** are why multi-core designs became common.",
     e:"⚙️",
     kw:"CPU",
@@ -1247,6 +1606,11 @@ var JOBS = [
 
   /* ---------- Infineon ---------- */
   { c:"Infineon", k:"Company-Specific", s:"What do you know about Infineon, and why do you want to intern here?",
+    s_ms:"Apakah yang anda tahu tentang Infineon, dan mengapa anda mahu menjalani latihan industri di sini?",
+    kw_ms:"Infineon",
+    m_ms:["Jerman, Munich, asal Siemens", "Kuasa, automotif, MCU, sensor", "EV, solar, pemacu, IoT", "Kulim: fabrikasi wafer", "Kecekapan tenaga"],
+    a_ms:"**Infineon** ialah syarikat semikonduktor **Jerman** yang beribu pejabat berhampiran **Munich**, dan berasal daripada Siemens. Ia kukuh dalam **semikonduktor kuasa, cip automotif, mikropengawal dan sensor**, yang digunakan dalam **kenderaan elektrik, tenaga boleh baharu** dan IoT. **Infineon Kulim** ialah tapak **fabrikasi wafer**. Saya mahu berlatih di sini kerana cipnya menyokong **kecekapan tenaga**, dan ia menggunakan kemahiran embedded yang sedang saya pelajari.",
+    t_ms:"Semak laman web Infineon Malaysia untuk perkembangan tapak yang terbaharu.",
     a:"**Infineon** is a **German** semiconductor company headquartered near **Munich**, which came out of Siemens. It is strong in **power semiconductors, automotive chips, microcontrollers and sensors**, used in **electric vehicles, renewable energy** and IoT. **Infineon Kulim** is a **wafer fabrication** site. I want to intern here because its chips support **energy efficiency**, and it uses the embedded skills I am learning.",
     e:"🚗",
     kw:"Infineon",
@@ -1259,6 +1623,11 @@ var JOBS = [
     t:"Check the Infineon Malaysia website for the newest site developments." },
 
   { c:"Infineon", k:"Company-Specific", s:"How could a computer engineering intern contribute at Infineon?",
+    s_ms:"Bagaimanakah pelatih kejuruteraan komputer boleh menyumbang di Infineon?",
+    kw_ms:"Peranan Saya di Infineon",
+    m_ms:["Program ujian & data", "Automasi kilang", "Dashboard yield", "Kerja embedded / MCU", "Skrip untuk jurutera"],
+    a_ms:"Saya boleh menyumbang dalam **kejuruteraan ujian**, melalui program ujian, perekodan data dan analisis. Saya boleh menyokong **automasi kilang** dan perisian peralatan, serta membina **dashboard untuk yield** dan prestasi peralatan. Jika ditempatkan dalam pasukan aplikasi, saya boleh membuat **kerja embedded dengan mikropengawal**. Saya juga boleh menulis **skrip** yang menghapuskan kerja manual berulang bagi jurutera.",
+    t_ms:"Jika anda pernah menggunakan komponen atau board Infineon, sebutkan.",
     a:"I could contribute in **test engineering**, with test programs, data logging and analysis. I could support **factory automation** and equipment software, and build **dashboards for yield** and equipment performance. If placed in an application team, I could do **embedded work with microcontrollers**. I can also write **scripts** that remove repetitive manual work for engineers.",
     e:"📈",
     kw:"My Role at Infineon",
@@ -1271,6 +1640,11 @@ var JOBS = [
     t:"If you have used any Infineon part or board, mention it." },
 
   { c:"Infineon", k:"Company-Specific", s:"What is a power semiconductor and where is it used?",
+    s_ms:"Apakah itu semikonduktor kuasa dan di manakah ia digunakan?",
+    kw_ms:"Peranti Kuasa",
+    m_ms:["Suis voltan & arus tinggi", "MOSFET, IGBT, diod", "Pengecas, pemacu, EV", "SiC & GaN", "Kurang kehilangan, lebih sejuk"],
+    a_ms:"**Semikonduktor kuasa** ialah peranti yang **mensuis atau mengawal voltan dan arus yang tinggi** dengan cekap. Contohnya **power MOSFET, IGBT dan diod**. Ia digunakan dalam **pengecas, pemacu motor, inverter solar dan kenderaan elektrik**. Bahan baharu seperti **silikon karbida (SiC) dan galium nitrida (GaN)** kehilangan kurang tenaga berbanding silikon, lalu menghasilkan produk yang **lebih kecil, lebih sejuk dan lebih cekap**.",
+    t_ms:"Asas sahaja sudah cukup, tetapi mengetahui SiC dan GaN menunjukkan anda membuat persediaan.",
     a:"A **power semiconductor** is a device that **switches or controls high voltage and current** efficiently. Examples are the **power MOSFET, IGBT and diode**. They are used in **chargers, motor drives, solar inverters and electric vehicles**. Newer materials such as **silicon carbide (SiC) and gallium nitride (GaN)** lose less energy than silicon, giving **smaller, cooler and more efficient** products.",
     e:"⚡",
     kw:"Power Devices",
@@ -1284,6 +1658,11 @@ var JOBS = [
 
   /* ---------- AT&S ---------- */
   { c:"AT&S", k:"Company-Specific", s:"What do you know about AT&S, and why do you want to intern here?",
+    s_ms:"Apakah yang anda tahu tentang AT&S, dan mengapa anda mahu menjalani latihan industri di sini?",
+    kw_ms:"AT&S",
+    m_ms:["Austria, Leoben", "PCB canggih & substrat IC", "Substrat: cip ke papan", "Kilang Kulim besar & baharu", "Sangat berautomasi"],
+    a_ms:"**AT&S** ialah syarikat **Austria** yang beribu pejabat di **Leoben**. Ia menghasilkan **papan litar bercetak (PCB) berteknologi tinggi dan substrat IC**. **Substrat IC** menyambungkan cip kepada papan utama dan sangat penting bagi pemproses berprestasi tinggi. **AT&S Kulim** ialah **kilang yang besar dan baharu** di Kulim Hi-Tech Park. Saya mahu berlatih di sini kerana kilangnya **sangat berautomasi**, jadi kemahiran saya boleh terus digunakan.",
+    t_ms:"Mampu menerangkan 'substrat IC' dalam satu ayat; ramai calon tidak boleh.",
     a:"**AT&S** is an **Austrian** company headquartered in **Leoben**. It makes **high-end printed circuit boards and IC substrates**. An **IC substrate** connects a chip to the main board and is essential for high-performance processors. **AT&S Kulim** is a **large, new plant** in Kulim Hi-Tech Park. I want to intern here because it is **highly automated**, so my skills are directly useful.",
     e:"🟩",
     kw:"AT&S",
@@ -1296,6 +1675,11 @@ var JOBS = [
     t:"Be able to explain 'IC substrate' in one sentence; many candidates cannot." },
 
   { c:"AT&S", k:"Company-Specific", s:"How could a computer engineering intern contribute at AT&S?",
+    s_ms:"Bagaimanakah pelatih kejuruteraan komputer boleh menyumbang di AT&S?",
+    kw_ms:"Peranan Saya di AT&S",
+    m_ms:["Automasi & peralatan", "Data proses & yield", "MES & kebolehkesanan", "Pemeriksaan optik", "Alat penjimat masa"],
+    a_ms:"Saya boleh menyumbang dalam **automasi dan integrasi peralatan** di kilang. Saya boleh membantu mengumpul, menganalisis dan memaparkan **data proses serta yield**, dan menyokong sistem pembuatan seperti **MES dan kebolehkesanan (traceability)**. Saya juga boleh terlibat dalam **pemeriksaan optik automatik**, dan menulis **alat kecil** yang menjimatkan masa jurutera.",
+    t_ms:"Gunakan pengetahuan PCB daripada projek sendiri jika anda pernah mereka bentuk papan litar.",
     a:"I could contribute to **automation and equipment integration** in the plant. I can help collect, analyse and visualise **process and yield data**, and support manufacturing systems such as **MES and traceability**. I could also work on **automated optical inspection**, and write **small tools** that save engineers' time.",
     e:"🤖",
     kw:"My Role at AT&S",
@@ -1308,6 +1692,11 @@ var JOBS = [
     t:"Use PCB knowledge from your own projects if you have designed a board." },
 
   { c:"AT&S", k:"Company-Specific", s:"What is a PCB, and what do you know about how it is made?",
+    s_ms:"Apakah itu PCB, dan apakah yang anda tahu tentang cara ia dibuat?",
+    kw_ms:"PCB",
+    m_ms:["Pegang & sambung komponen", "Lapisan kuprum + penebat", "Imej, etch, laminasi, gerudi, sadur", "Garisan halus: kecil, laju", "AOI & ujian elektrik"],
+    a_ms:"**PCB**, atau papan litar bercetak, **memegang komponen dan menyambungkannya** dengan laluan kuprum. Ia diperbuat daripada **lapisan kuprum dan bahan penebat**. Langkah utamanya ialah **mengimej corak, etching, laminasi, menggerudi dan menyadur** lubang, kemudian kemasan permukaan. **Garisan yang lebih halus** dan via yang lebih kecil membolehkan produk yang lebih kecil dan laju. Kualiti disemak melalui **pemeriksaan optik dan ujian elektrik**.",
+    t_ms:"Jika anda pernah menggunakan perisian reka bentuk PCB (KiCad, Altium, EasyEDA), nyatakan.",
     a:"A **PCB**, or printed circuit board, **holds components and connects them** with copper tracks. It is made of **layers of copper and insulating material**. The main steps are **imaging the pattern, etching, laminating, drilling and plating** the holes, then the surface finish. **Finer lines** and smaller vias allow smaller, faster products. Quality is checked by **optical inspection and electrical test**.",
     e:"🥪",
     kw:"PCB",
@@ -1321,6 +1710,11 @@ var JOBS = [
 
   /* ---------- SCHOTT ---------- */
   { c:"SCHOTT", k:"Company-Specific", s:"What do you know about SCHOTT, and why do you want to intern here?",
+    s_ms:"Apakah yang anda tahu tentang SCHOTT, dan mengapa anda mahu menjalani latihan industri di sini?",
+    kw_ms:"SCHOTT",
+    m_ms:["Jerman, Mainz, Yayasan Carl Zeiss", "Kaca khas", "Elektronik, optik, farmaseutikal", "Kulim: baharu pada 2024", "Komponen optik untuk AR", "Ketepatan cleanroom"],
+    a_ms:"**SCHOTT** ialah kumpulan teknologi **Jerman** yang beribu pejabat di **Mainz**, dimiliki oleh Yayasan Carl Zeiss. Ia menghasilkan **kaca khas** dan seramik kaca untuk elektronik, optik dan pembungkusan farmaseutikal. **SCHOTT Kulim** ialah **kemudahan baharu yang siap pada 2024** dan menghasilkan **komponen optik**, contohnya untuk peranti **realiti terimbuh (AR)**. Saya mahu berlatih di sini untuk merasai **pembuatan berketepatan tinggi** di dalam cleanroom.",
+    t_ms:"Baca halaman 'SCHOTT in Kulim' di laman web syarikat sebelum temu duga.",
     a:"**SCHOTT** is a **German** technology group headquartered in **Mainz**, owned by the Carl Zeiss Foundation. It makes **specialty glass** and glass-ceramics for electronics, optics and pharmaceutical packaging. **SCHOTT Kulim** is a **new facility completed in 2024** that makes **optical components**, for example for **augmented reality** devices. I want to intern here to experience **precision manufacturing** in a cleanroom.",
     e:"🥽",
     kw:"SCHOTT",
@@ -1334,6 +1728,11 @@ var JOBS = [
     t:"Read the 'SCHOTT in Kulim' page on the company website before the interview." },
 
   { c:"SCHOTT", k:"Company-Specific", s:"Your degree is computer engineering. How is it relevant to a glass manufacturer?",
+    s_ms:"Ijazah anda kejuruteraan komputer. Apakah kaitannya dengan pengeluar kaca?",
+    kw_ms:"Kej. Komputer di Kilang Kaca",
+    m_ms:["Pengeluaran berautomasi", "Data proses untuk kualiti", "Machine vision", "Sistem & dashboard", "Kod + mahu belajar"],
+    a_ms:"Ijazah saya relevan kerana pengeluaran kaca moden **sangat berautomasi** dan dikawal oleh perisian serta sensor. **Data proses** boleh dikumpul dan dianalisis untuk meningkatkan kualiti dan yield, dan **machine vision** digunakan untuk memeriksa kecacatan. **Sistem, pangkalan data dan dashboard** pengeluaran memerlukan orang yang boleh menulis kod. Saya membawa **kemahiran pengaturcaraan dan elektronik**, dan saya mahu belajar tentang prosesnya.",
+    t_ms:"Soalan ini menguji sama ada anda telah memikirkan kesesuaian anda. Sediakan dengan baik.",
     a:"My degree is relevant because modern glass production is **highly automated** and controlled by software and sensors. **Process data** can be collected and analysed to improve quality and yield, and **machine vision** is used to inspect for defects. Production **systems, databases and dashboards** need people who can code. I bring **programming and electronics skills**, and I am keen to learn the process side.",
     e:"👁️",
     kw:"Comp. Eng. at a Glass Maker",
@@ -1346,6 +1745,11 @@ var JOBS = [
     t:"This question tests whether you thought about the fit. Prepare it well." },
 
   { c:"SCHOTT", k:"Company-Specific", s:"How would you approach building a system to detect defects on a product automatically?",
+    s_ms:"Bagaimanakah anda akan membina sistem untuk mengesan kecacatan produk secara automatik?",
+    kw_ms:"Pengesanan Kecacatan",
+    m_ms:["Takrif kecacatan", "Kamera + pencahayaan", "Pemprosesan imej / model", "Lulus, gagal, semak, log", "Sahkan dengan manusia", "Terus tambah baik"],
+    a_ms:"Mula-mula saya **mentakrifkan jenis kecacatan** dan apa yang dikira lulus atau gagal. Kemudian saya menyediakan **kamera dan pencahayaan** yang sesuai supaya kecacatan kelihatan. Imej dianalisis melalui **pemprosesan imej atau model terlatih**. Sistem akan **memutuskan lulus, gagal atau semakan manual** dan merekod setiap keputusan. Saya akan **mengesahkannya dengan pemeriksaan manusia**, dan **terus menambah baik** menggunakan keputusan yang salah.",
+    t_ms:"Anda tidak dijangka tahu semuanya; tunjukkan cara berfikir langkah demi langkah yang jelas.",
     a:"First I would **define the defect types** and what counts as pass or fail. Then I would set up a suitable **camera and lighting** so that the defects are visible. The images would be analysed by **image processing or a trained model**. The system would **decide pass, fail or manual review** and log every result. I would **validate it against human inspection**, and **keep improving** it using the wrong calls.",
     e:"📷",
     kw:"Defect Detection",
@@ -1360,6 +1764,11 @@ var JOBS = [
 
   /* ---------- Celestica ---------- */
   { c:"Celestica", k:"Company-Specific", s:"What do you know about Celestica, and why do you want to intern here?",
+    s_ms:"Apakah yang anda tahu tentang Celestica, dan mengapa anda mahu menjalani latihan industri di sini?",
+    kw_ms:"Celestica",
+    m_ms:["Kanada, Toronto, asal IBM", "EMS: bina untuk jenama lain", "Pelayan, rangkaian, storan", "Tapak Kulim sudah lama", "Banyak produk & pelanggan"],
+    a_ms:"**Celestica** ialah syarikat **Kanada** yang beribu pejabat di **Toronto**, dan bermula sebagai sebahagian daripada IBM. Ia syarikat **perkhidmatan pembuatan elektronik (EMS)**: ia mereka bentuk dan membina produk **untuk jenama lain**, seperti peralatan **pelayan, rangkaian dan storan**. **Celestica Kulim** ialah tapak yang sudah lama beroperasi di Kulim Hi-Tech Park. Saya mahu berlatih di sini untuk mendapat pendedahan kepada **banyak produk dan pelanggan**.",
+    t_ms:"Ketahui perbezaan antara pemilik jenama dengan pengilang kontrak.",
     a:"**Celestica** is a **Canadian** company headquartered in **Toronto**, which began as part of IBM. It is an **electronics manufacturing services** company: it designs and builds products **for other brands**, such as **servers, networking and storage** equipment. **Celestica Kulim** is a long-standing site in Kulim Hi-Tech Park. I want to intern here for the exposure to **many products and customers**.",
     e:"🍁",
     kw:"Celestica",
@@ -1372,6 +1781,11 @@ var JOBS = [
     t:"Know the difference between a brand owner and a contract manufacturer." },
 
   { c:"Celestica", k:"Company-Specific", s:"How could a computer engineering intern contribute at Celestica?",
+    s_ms:"Bagaimanakah pelatih kejuruteraan komputer boleh menyumbang di Celestica?",
+    kw_ms:"Peranan Saya di Celestica",
+    m_ms:["Skrip ujian & fixture", "Debug papan gagal", "Firmware & ujian fungsi", "Trend yield & kegagalan", "Alat automasi barisan"],
+    a_ms:"Saya boleh menyumbang dalam **pembangunan ujian**, melalui skrip ujian dan fixture untuk papan litar serta sistem. Saya boleh membantu **debug papan yang gagal** bersama jurutera dan juruteknik, dan menyokong **pemuatan firmware serta ujian fungsi**. Saya juga boleh **menganalisis yield ujian** dan trend kegagalan, serta membina **alat automasi kecil** untuk barisan pengeluaran.",
+    t_ms:"Asas rangkaian dan sistem pengendalian berguna untuk disebut di sini.",
     a:"I could contribute in **test development**, with test scripts and fixtures for boards and systems. I could help **debug failed boards** with engineers and technicians, and support **firmware loading and functional testing**. I can also **analyse test yield** and failure trends, and build **small automation tools** for the production line.",
     e:"🔍",
     kw:"My Role at Celestica",
@@ -1384,6 +1798,11 @@ var JOBS = [
     t:"Networking and operating system basics are useful to mention here." },
 
   { c:"Celestica", k:"Company-Specific", s:"What is the difference between ICT and functional test for a circuit board?",
+    s_ms:"Apakah perbezaan antara ICT dan functional test bagi papan litar?",
+    kw_ms:"ICT vs Functional Test",
+    m_ms:["ICT: komponen & sambungan", "Fixture dengan probe", "FCT: hidupkan, berfungsi atau tidak", "ICT awal, FCT mengesahkan", "Tambah AOI & X-ray"],
+    a_ms:"**In-circuit test (ICT)** memeriksa **komponen dan sambungan secara individu** pada papan, seperti litar pintas, litar terbuka dan nilai yang salah, biasanya dengan **fixture berprobe**. **Functional test (FCT)** **menghidupkan papan** dan memeriksa sama ada ia berfungsi seperti yang dikehendaki. ICT mengesan kecacatan pembuatan **lebih awal**, manakala functional test **mengesahkan** produk berfungsi dengan betul. Kedua-duanya digunakan bersama pemeriksaan **AOI dan X-ray**.",
+    t_ms:"Jika anda tidak tahu sesuatu istilah semasa temu duga, akui dan terangkan cara anda akan mencarinya.",
     a:"**In-circuit test (ICT)** checks **individual components and connections** on the board, such as shorts, opens and wrong values, usually with a **fixture of probes**. **Functional test (FCT)** **powers up the board** and checks that it works as intended. ICT finds manufacturing defects **early**, while functional test **confirms** that the product behaves correctly. Both are used together with **AOI and X-ray** inspection.",
     e:"✅",
     kw:"ICT vs Functional Test",
@@ -1397,6 +1816,11 @@ var JOBS = [
 
   /* ---------- Teleflex ---------- */
   { c:"Teleflex", k:"Company-Specific", s:"What do you know about Teleflex, and why do you want to intern here?",
+    s_ms:"Apakah yang anda tahu tentang Teleflex, dan mengapa anda mahu menjalani latihan industri di sini?",
+    kw_ms:"Teleflex",
+    m_ms:["AS, Pennsylvania", "Kateter, anestesia, pembedahan", "Kulim: produk LMA", "Membantu pesakit", "Industri dikawal selia"],
+    a_ms:"**Teleflex** ialah syarikat **teknologi perubatan Amerika** yang beribu pejabat di **Pennsylvania**. Ia menghasilkan peranti perubatan yang digunakan di hospital, seperti **kateter** serta produk untuk **anestesia** dan pembedahan. **Teleflex Kulim** ialah tapak pembuatan yang berkaitan dengan produk anestesia dan pernafasan jenama **LMA**. Saya mahu berlatih di sini kerana produknya **terus membantu pesakit**, dan saya mahu melihat kerja kejuruteraan serta digital dalam **industri yang dikawal selia**.",
+    t_ms:"Baca berita terkini syarikat sebelum temu duga, kerana perniagaannya sedang distruktur semula.",
     a:"**Teleflex** is an **American medical technology** company headquartered in **Pennsylvania**. It makes medical devices used in hospitals, such as **catheters** and products for **anaesthesia** and surgery. **Teleflex Kulim** is a manufacturing site linked to its **LMA** anaesthesia and respiratory products. I want to intern here because the products **directly help patients**, and I want to see engineering in a **regulated industry**.",
     e:"🏥",
     kw:"Teleflex",
@@ -1409,18 +1833,28 @@ var JOBS = [
     t:"Read the latest company news before the interview, as the business has been restructuring." },
 
   { c:"Teleflex", k:"Company-Specific", s:"How could a computer engineering intern contribute at a medical device manufacturer?",
-    a:"I could help with **digitalisation**, turning paper forms and manual reports into **digital forms and dashboards**. I can **analyse production data** on output, quality and downtime, and support **automation** such as sensors and vision inspection. I can build tools in **Excel, Power BI or Python**, and I understand the need for **good documentation**.",
+    s_ms:"Bagaimanakah pelatih kejuruteraan komputer boleh menyumbang di syarikat pengeluar peranti perubatan?",
+    kw_ms:"Peranan Saya",
+    m_ms:["Borang kertas ke dalam talian", "Aplikasi web C# ASP.NET + SQL", "Laporan Power BI & Excel", "Kurang kemasukan data manual", "Dokumentasi yang baik"],
+    a_ms:"Saya boleh membantu **pendigitalan**: menukar borang kertas dan laporan manual kepada **borang dalam talian dan dashboard**. Saya pernah membina aplikasi web dengan **C# ASP.NET Core** dan tahu **SQL**, jadi saya boleh menyokong **borang berasaskan web dan alat dalaman**. Saya boleh **menganalisis data pengeluaran** dan membina laporan dalam **Power BI serta Excel**, dan menulis skrip untuk **mengurangkan kemasukan data secara manual**. Saya juga faham keperluan **dokumentasi yang baik** dalam industri ini.",
+    t_ms:"Guna sistem tempahan tiket anda sebagai bukti bahawa anda boleh membina borang web dengan pangkalan data.",
+    a:"I could help with **digitalisation**: turning paper forms and manual reports into **online forms and dashboards**. I have built a web application with **C# ASP.NET Core** and I know **SQL**, so I can support **web-based forms and internal tools**. I can **analyse production data** and build reports in **Power BI and Excel**, and write scripts to **reduce manual data entry**. I also understand the need for **good documentation** in this industry.",
     e:"📝",
     kw:"My Role in Medical Devices",
-    m:[["📝", "Paper to digital forms"], ["📊", "Production data"], ["🤖", "Sensors & vision"], ["🐍", "Excel, Power BI, Python"], ["📂", "Good documentation"]],
+    m:[["📝", "Paper to online forms"], ["🌐", "C# ASP.NET + SQL web apps"], ["📊", "Power BI & Excel reports"], ["⌨️", "Less manual data entry"], ["📂", "Good documentation"]],
     j:["Digitalisation: turning paper forms and manual reports into digital forms and dashboards.",
        "Data analysis of production output, quality and downtime.",
        "Automation support: sensors, vision inspection, machine data collection.",
        "Scripts and tools for engineers, for example in Excel, Power BI or Python.",
        "Good documentation, because every change in this industry must be recorded."],
-    t:"Mention any dashboard, database or automation project you have done." },
+    t:"Use your ticket booking system as proof that you can build a web form with a database." },
 
   { c:"Teleflex", k:"Company-Specific", s:"Medical devices are highly regulated. Why does that matter for an engineer or an intern?",
+    s_ms:"Peranti perubatan dikawal selia dengan ketat. Mengapa ini penting bagi jurutera atau pelatih?",
+    kw_ms:"Kawal Selia",
+    m_ms:["Keselamatan pesakit dahulu", "ISO 13485 & FDA", "Sahkan sebelum guna", "Dokumenkan semua", "Perubahan perlu kelulusan", "Ikut & tanya"],
+    a_ms:"Ia penting kerana kecacatan boleh **memudaratkan pesakit**, jadi kualiti diutamakan. Syarikat mengikut sistem kualiti seperti **ISO 13485** dan keperluan pengawal selia seperti **FDA Amerika Syarikat**. Proses, peralatan dan perisian mesti **disahkan (validated) sebelum digunakan**, dan semuanya **didokumenkan**. Sebarang perubahan mesti **disemak dan diluluskan**. Sebagai pelatih, saya akan **mengikut prosedur dengan tepat** dan bertanya jika tidak pasti.",
+    t_ms:"Anda tidak perlu tahu standard secara terperinci; tunjukkan anda menghormati disiplinnya.",
     a:"It matters because a defect can **harm a patient**, so quality comes first. Companies follow a quality system such as **ISO 13485** and regulator requirements such as those of the **US FDA**. Processes, equipment and software must be **validated before use**, and everything is **documented**. Changes must be **reviewed and approved**. As an intern, I would **follow procedures exactly** and ask when unsure.",
     e:"🩺",
     kw:"Regulation",
@@ -1435,6 +1869,11 @@ var JOBS = [
 
   /* ---------- Lam Research ---------- */
   { c:"Lam Research", k:"Company-Specific", s:"What do you know about Lam Research, and why do you want to intern here?",
+    s_ms:"Apakah yang anda tahu tentang Lam Research, dan mengapa anda mahu menjalani latihan industri di sini?",
+    kw_ms:"Lam Research",
+    m_ms:["AS, Fremont, 1980", "Buat peralatan, bukan cip", "Etch, deposition, pembersihan", "Pelanggan: pembuat cip", "Kulim: pasang & uji", "Mekanikal + elektronik + perisian"],
+    a_ms:"**Lam Research** ialah syarikat **Amerika** yang beribu pejabat di **Fremont**, California, ditubuhkan pada **1980**. Ia **tidak membuat cip**; ia membuat **peralatan** yang digunakan oleh pembuat cip, terutamanya untuk **etch, deposition dan pembersihan wafer**. Tapaknya di **Kulim** memasang dan menguji peralatan. Saya mahu berlatih di sini kerana mesinnya menggabungkan **mekanikal, elektronik, kawalan dan perisian**.",
+    t_ms:"Jelas tentang perbezaan antara pembuat cip dengan pembuat peralatan; itu perkara pertama yang mereka semak.",
     a:"**Lam Research** is an **American** company headquartered in **Fremont**, California, founded in **1980**. It **does not make chips**; it makes the **equipment** that chipmakers use, mainly for **etch, deposition and wafer cleaning**. Its **Kulim** site assembles and tests equipment. I want to intern here because its machines combine **mechanics, electronics, control and software**.",
     e:"🏗️",
     kw:"Lam Research",
@@ -1448,6 +1887,11 @@ var JOBS = [
     t:"Be clear on the difference between a chipmaker and an equipment maker; it is the first thing they check." },
 
   { c:"Lam Research", k:"Company-Specific", s:"How could a computer engineering intern contribute at Lam Research?",
+    s_ms:"Bagaimanakah pelatih kejuruteraan komputer boleh menyumbang di Lam Research?",
+    kw_ms:"Peranan Saya di Lam",
+    m_ms:["Perisian & kawalan peralatan", "Skrip ujian & integrasi", "Analisis data ujian", "Automasi semakan", "Sokongan troubleshooting"],
+    a_ms:"Saya boleh menyumbang dalam **perisian dan kawalan peralatan**, kerana mesin dikendalikan oleh pengawal embedded. Saya boleh menulis **skrip untuk menguji modul** dan sistem lengkap sebelum dihantar, serta **menganalisis data ujian** untuk mencari masalah berulang. Saya juga boleh **mengautomasikan semakan manual** dan laporan, dan menyokong jurutera dalam **troubleshooting** masalah elektrik serta komunikasi.",
+    t_ms:"Sebut mana-mana projek kawalan, sensor, PLC atau embedded yang pernah anda buat.",
     a:"I could contribute to **equipment software and controls**, since the machines are run by embedded controllers. I could write **scripts to test modules** and complete systems before shipping, and **analyse test data** to find recurring issues. I can also **automate manual checks** and reports, and support engineers with **troubleshooting** electrical and communication problems.",
     e:"🎛️",
     kw:"My Role at Lam",
@@ -1460,6 +1904,11 @@ var JOBS = [
     t:"Mention any control, sensor, PLC or embedded project you have done." },
 
   { c:"Lam Research", k:"Company-Specific", s:"What are etch and deposition in chip manufacturing?",
+    s_ms:"Apakah itu etch dan deposition dalam pembuatan cip?",
+    kw_ms:"Etch & Deposition",
+    m_ms:["Deposition: tambah lapisan", "Etch: buang bahan", "Litografi tetapkan corak", "Diulang banyak kali", "Plasma dalam vakum", "Kawalan tepat"],
+    a_ms:"**Deposition** bermaksud **menambah lapisan bahan yang sangat nipis** ke atas wafer. **Etch** bermaksud **membuang bahan secara terpilih** untuk membentuk corak litar. **Litografi** menetapkan corak, dan etch memindahkannya ke lapisan di bawah. Langkah ini **diulang banyak kali**. Kebanyakannya menggunakan **plasma di dalam kebuk vakum**, dan memerlukan **kawalan yang sangat tepat** terhadap gas, tekanan, kuasa dan suhu.",
+    t_ms:"Penerangan yang ringkas dan betul sudah cukup. Jangan cuba berbunyi seperti jurutera proses.",
     a:"**Deposition** means **adding a very thin layer** of material onto the wafer. **Etch** means **removing material selectively** to form the circuit pattern. **Lithography** defines the pattern, and etch transfers it into the layer underneath. These steps are **repeated many times**. Many use **plasma inside a vacuum chamber**, and need very **precise control** of gas, pressure, power and temperature.",
     e:"➕",
     kw:"Etch & Deposition",
@@ -1488,16 +1937,26 @@ var state = {
   cat: null,        // selected category (null = all)
   tab: "quiz",      // setup screen tab: "quiz" (A/B practice), "notes" (answers) or "mine" (own notes)
   queue: [], idx: 0,
-  find: ""          // keyword typed in the mind-map search box
+  find: "",         // keyword typed in the mind-map search box
+  lang: "ms",       // language for jobs that have two languages
+  shown: false      // is the answer of the current question showing?
 };
 
 /* --- Current language text --- */
-function T(){ return TEXT[state.job ? state.job.lang : "en"]; }
+function curLang(){ var j = state.job; return j ? (j.langs ? state.lang : j.lang) : "en"; }
+function T(){ return TEXT[curLang()]; }
+/* Text of a question / job in the current language (falls back to the main text) */
+function F(q, f){ var v = curLang() === "ms" ? q[f + "_ms"] : undefined; return v === undefined ? q[f] : v; }
+/* Mind-map branches in the current language: icons are shared, text is translated */
+function MB(q){ var t = curLang() === "ms" ? q.m_ms : null; return q.m.map(function(x, i){ return [x[0], t && t[i] ? t[i] : x[1]]; }); }
+function catLabel(k){ var j = state.job; return (curLang() === "ms" && j.kat_ms && j.kat_ms[k]) || k; }
+function catLine(q){ return catLabel(q.k) + (q.c ? " \u2022 " + q.c : ""); }
+function setLang(l){ state.lang = l; applyText(); }
 
 /* --- Apply UI language based on selected job --- */
 function applyText(){
   var t = T();
-  document.documentElement.lang = state.job ? state.job.lang : "en";
+  document.documentElement.lang = curLang();
   $("hTitle").textContent = state.job ? t.title : "Mock Interview / Latihan Temuduga";
   $("hSub").textContent = state.job ? t.sub : "Pilih jawatan / Select a role";
   $("lblPicked").textContent = t.picked;  $("lblCompany").textContent = t.company;
@@ -1510,7 +1969,7 @@ function applyText(){
   $("btnShow").textContent = t.showAns;   $("lblAns").textContent = t.ans;
   $("btnPrev").textContent = t.prev;      $("endTitle").textContent = t.end;
   $("btnRetry").textContent = t.retry;
-  $("btnRestart").textContent = t.restart; $("footText").textContent = state.job ? t.foot : "";
+  $("btnRestart").textContent = t.restart; $("footText").textContent = state.job ? ((curLang() === "ms" && state.job.foot_ms) || t.foot) : "";
 }
 
 function show(screen){
@@ -1529,7 +1988,7 @@ function renderMenu(){
     var n = document.createElement("b"); n.textContent = job.nama;
     var d = document.createElement("span"); d.className = "d"; d.textContent = job.butiran;
     var l = document.createElement("span"); l.className = "d";
-    l.textContent = (job.lang === "ms" ? "Bahasa Melayu" : "English") + " \u2022 " + job.soalan.length + TEXT[job.lang].questions;
+    l.textContent = (job.langs ? "Bahasa Melayu + English" : (job.lang === "ms" ? "Bahasa Melayu" : "English")) + " \u2022 " + job.soalan.length + TEXT[job.lang].questions;
     txt.appendChild(n); txt.appendChild(d); txt.appendChild(l);
     var go = document.createElement("span"); go.className = "go"; go.textContent = "\u203A";
     b.appendChild(ico); b.appendChild(txt); b.appendChild(go);
@@ -1541,7 +2000,8 @@ function renderMenu(){
 function selectJob(job){
   state.job = job;
   state.find = "";
-  state.company = job.syarikat ? job.syarikat[0] : null;
+  state.company = job.syarikat ? (job.syarikatLalai || job.syarikat[0]) : null;
+  state.lang = job.langs ? job.langs[0] : job.lang;
   state.cat = null;
   state.tab = "quiz";
   applyText();
@@ -1553,8 +2013,19 @@ function selectJob(job){
 function renderSetup(){
   var job = state.job;
   $("pickedJob").innerHTML = "";
-  $("pickedJob").appendChild(document.createTextNode(job.nama));
-  var sm = document.createElement("small"); sm.textContent = job.butiran; $("pickedJob").appendChild(sm);
+  $("pickedJob").appendChild(document.createTextNode(F(job, "nama")));
+  var sm = document.createElement("small"); sm.textContent = F(job, "butiran"); $("pickedJob").appendChild(sm);
+
+  // Language chips (only for jobs with two languages)
+  $("langCard").classList.toggle("hidden", !job.langs);
+  var lbox = $("langList"); lbox.innerHTML = "";
+  (job.langs || []).forEach(function(l){
+    var b = document.createElement("button");
+    b.className = "chip" + (l === state.lang ? " on" : "");
+    b.textContent = l === "ms" ? "Bahasa Melayu" : "English";
+    b.onclick = function(){ setLang(l); renderSetup(); };
+    lbox.appendChild(b);
+  });
 
   // Company chips (only if the job has a company list)
   $("companyCard").classList.toggle("hidden", !job.syarikat);
@@ -1574,7 +2045,7 @@ function renderSetup(){
   [null].concat(cats).forEach(function(c){
     var b = document.createElement("button");
     b.className = "chip" + (c === state.cat ? " on" : "");
-    b.textContent = c === null ? T().all : c;
+    b.textContent = c === null ? T().all : catLabel(c);
     b.onclick = function(){ state.cat = c; renderSetup(); };
     box.appendChild(b);
   });
@@ -1625,12 +2096,12 @@ function renderMineList(){
   var box = $("mineList"); box.innerHTML = "";
   var lastCat = null;
   pickQuestions().forEach(function(q, i){
-    var cat = q.c ? q.k + " \u2022 " + q.c : q.k;
+    var cat = catLine(q);
     if (cat !== lastCat) { var h = document.createElement("p"); h.className = "notehead"; h.textContent = cat; box.appendChild(h); lastCat = cat; }
     var n = document.createElement("div"); n.className = "note";
     var em = document.createElement("span"); em.className = "em"; em.textContent = q.e || "\u2022";
     var body = document.createElement("div"); body.className = "body";
-    var nq = document.createElement("p"); nq.className = "na"; nq.textContent = (i + 1) + ". " + q.s;
+    var nq = document.createElement("p"); nq.className = "na"; nq.textContent = (i + 1) + ". " + F(q, "s");
     var ta = document.createElement("textarea"); ta.className = "qnote"; ta.placeholder = T().qPh; ta.value = qGet(q);
     var st = document.createElement("p"); st.className = "qsaved";
     ta.oninput = function(){ st.textContent = qSet(q, ta.value) ? T().qSaved : T().mineFail; };
@@ -1640,8 +2111,8 @@ function renderMineList(){
 }
 /* Text for copy / backup file: every question that has a note, then the general notes */
 function mineExport(){
-  var out = [state.job.nama, ""], n = 0;
-  state.job.soalan.forEach(function(q){ var v = qGet(q); if (v) { n++; out.push(n + ". " + q.s + (q.c ? " [" + q.c + "]" : ""), v, ""); } });
+  var out = [F(state.job, "nama"), ""], n = 0;
+  state.job.soalan.forEach(function(q){ var v = qGet(q); if (v) { n++; out.push(n + ". " + F(q, "s") + (q.c ? " [" + q.c + "]" : ""), v, ""); } });
   var g = $("mineText").value;
   if (g.trim()) { out.push("--- " + T().lblMine + " ---", g); }
   return out.join("\n");
@@ -1677,9 +2148,9 @@ function buildMM(q){
   var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   var c = document.createElement("div"); c.className = "mmc";
   var ce = document.createElement("span"); ce.className = "e"; ce.textContent = q.e || "";
-  c.appendChild(ce); c.appendChild(document.createTextNode(q.kw));
+  c.appendChild(ce); c.appendChild(document.createTextNode(F(q, "kw")));
   var bs = document.createElement("div"); bs.className = "mmb";
-  q.m.forEach(function(it, i){
+  MB(q).forEach(function(it, i){
     var col = BR[i % BR.length];
     var n = document.createElement("div"); n.className = "mmn";
     n.style.setProperty("--c", col[0]); n.style.setProperty("--b", col[1]);
@@ -1726,22 +2197,22 @@ function renderNoteList(box){
   var lastCat = null, shown = 0;
   pickQuestions().forEach(function(q, i){
     if (f) {
-      var hay = (q.kw + " " + q.s + " " + q.a + " " + q.m.map(function(x){ return x[1]; }).join(" ") + " " + q.j.join(" ")).toLowerCase();
+      var hay = (F(q, "kw") + " " + F(q, "s") + " " + F(q, "a") + " " + MB(q).map(function(x){ return x[1]; }).join(" ")).toLowerCase();
       if (hay.indexOf(f) < 0) return;
     }
     shown++;
-    var cat = q.c ? q.k + " • " + q.c : q.k;
+    var cat = catLine(q);
     if (cat !== lastCat) {
       var h = document.createElement("p"); h.className = "notehead"; h.style.setProperty("--cc", catColor(q));
       h.appendChild(document.createElement("i")); h.appendChild(document.createTextNode(cat));
       box.appendChild(h); lastCat = cat;
     }
     var n = document.createElement("div"); n.className = "mcard"; n.style.setProperty("--cc", catColor(q));
-    var nq = document.createElement("p"); nq.className = "nq"; nq.textContent = (i + 1) + ". " + q.s;
+    var nq = document.createElement("p"); nq.className = "nq"; nq.textContent = (i + 1) + ". " + F(q, "s");
     var my = document.createElement("div"); my.className = "mynote"; fillMyNote(my, q);
     var d = document.createElement("details");
     var sm = document.createElement("summary"); sm.textContent = T().more;
-    var ap = document.createElement("p"); ap.className = "ansp"; ap.style.marginTop = "8px"; rich(ap, q.a);
+    var ap = document.createElement("p"); ap.className = "ansp"; ap.style.marginTop = "8px"; rich(ap, F(q, "a"));
     d.appendChild(sm); d.appendChild(ap);
     n.appendChild(nq); n.appendChild(buildMM(q)); n.appendChild(my); n.appendChild(d);
     box.appendChild(n);
@@ -1779,15 +2250,19 @@ function startSession(list){
 
 function renderQuestion(){
   var q = state.queue[state.idx];
-  $("qCat").textContent = q.c ? q.k + " • " + q.c : q.k;
+  $("qCat").textContent = catLine(q);
   $("qNum").textContent = T().qn + (state.idx + 1) + " / " + state.queue.length;
   $("qBar").style.width = ((state.idx + 1) / state.queue.length * 100) + "%";
-  $("qText").textContent = q.s;
+  $("qText").textContent = F(q, "s");
   var kw = $("qKw"); kw.innerHTML = ""; kw.style.setProperty("--cc", catColor(q));
   kw.appendChild(document.createTextNode(T().kwLabel));
-  var kb = document.createElement("b"); kb.textContent = (q.e ? q.e + " " : "") + q.kw; kw.appendChild(kb);
+  var kb = document.createElement("b"); kb.textContent = (q.e ? q.e + " " : "") + F(q, "kw"); kw.appendChild(kb);
   $("ansBox").classList.add("hidden");
   $("rowShow").classList.remove("hidden");
+  state.shown = false;
+  var bl = $("btnLang");                       // switch language in the middle of a session
+  bl.classList.toggle("hidden", !state.job.langs);
+  bl.textContent = state.lang === "ms" ? "English" : "Bahasa Melayu";
   $("btnPrev").disabled = state.idx === 0;
   $("btnPrev").style.opacity = state.idx === 0 ? ".4" : "1";
   $("btnNext").textContent = state.idx + 1 >= state.queue.length ? T().finish : T().next;
@@ -1796,9 +2271,10 @@ function renderQuestion(){
 /* Show the answer in full sentences (keywords bold), then the mind map below it */
 function showAnswer(){
   var q = state.queue[state.idx];
-  rich($("ansText"), q.a);
+  rich($("ansText"), F(q, "a"));
   var mmBox = $("ansMM"); mmBox.innerHTML = ""; mmBox.appendChild(buildMM(q));
-  $("ansTip").textContent = T().tip + q.t;
+  $("ansTip").textContent = T().tip + F(q, "t");
+  state.shown = true;
   fillMyNote($("ansMine"), q);
   $("rowShow").classList.add("hidden");
   $("ansBox").classList.remove("hidden");
@@ -1831,6 +2307,7 @@ $("mineText").oninput   = saveMine;
 $("btnMineCopy").onclick = copyMine;
 $("btnMineFile").onclick = fileMine;
 $("btnShow").onclick    = showAnswer;
+$("btnLang").onclick    = function(){ var was = state.shown; setLang(state.lang === "ms" ? "en" : "ms"); renderQuestion(); if (was) showAnswer(); };
 $("btnNext").onclick    = nextQuestion;
 $("btnPrev").onclick    = prevQuestion;
 $("btnRetry").onclick   = function(){ startSession(state.queue); };
