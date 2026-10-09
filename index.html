@@ -56,6 +56,8 @@
   .opt.wrong .let{background:var(--bad)}
   .opt.dim{opacity:.55}
 
+  .ansp{margin:0 0 4px;font-size:1.02rem;line-height:1.7}
+  .ansp b{color:var(--main-dark);background:#fff3bf;border-radius:4px;padding:0 3px}
   .verdict{font-weight:700;font-size:1.1rem;margin:16px 0 0}
   .verdict.ok{color:var(--ok)} .verdict.bad{color:var(--bad)}
   .answer{border-left:5px solid var(--main);background:var(--soft);border-radius:0 12px 12px 0;padding:14px 16px;margin-top:10px}
@@ -81,6 +83,28 @@
   .note details{margin-top:6px;font-size:.9rem}
   .note summary{cursor:pointer;color:var(--main);font-size:.82rem}
   .note ul{margin:6px 0 0;padding-left:18px}
+  /* Mind map: keyword in the middle, coloured branches with icons */
+  .mm{position:relative;display:grid;grid-template-columns:minmax(104px,30%) minmax(0,1fr);column-gap:26px;align-items:center;margin:10px 0 6px}
+  .mm svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+  .mmc{position:relative;z-index:1;background:var(--cc,#0f5c63);color:#fff;border-radius:18px;padding:12px 5px;text-align:center;font-weight:700;font-size:.85rem;line-height:1.25;box-shadow:0 2px 6px rgba(0,0,0,.2);overflow-wrap:break-word}
+  .mmc .e{display:block;font-size:1.8rem;line-height:1.2;margin-bottom:3px}
+  .mmb{display:grid;gap:7px;position:relative;z-index:1;min-width:0}
+  .mmn span:last-child{min-width:0;overflow-wrap:anywhere}
+  .mmn{display:flex;gap:8px;align-items:center;background:var(--b);border:1.5px solid var(--c);border-radius:12px;padding:6px 10px;font-size:.88rem;font-weight:600;line-height:1.25}
+  .mmn .e{font-size:1.2rem;flex:0 0 auto}
+  .mcard{background:#fff;border:1px solid var(--line);border-left:6px solid var(--cc,#0f5c63);border-radius:12px;padding:12px;margin-bottom:10px}
+  .mcard .nq{font-size:.84rem;color:var(--muted);margin:0}
+  .mcard details{margin-top:6px;font-size:.9rem}
+  .mcard summary{cursor:pointer;color:var(--main);font-size:.82rem}
+  .mcard ul{margin:6px 0 0;padding-left:18px}
+  .mcard .okline{font-weight:600;margin:6px 0 0}
+  .find{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit;background:#fff;margin-bottom:4px}
+  .find:focus{outline:2px solid var(--main);border-color:transparent}
+  .nohit{color:var(--muted);font-size:.9rem;padding:10px 4px}
+  .kwline{margin:-6px 0 14px;font-size:.88rem;color:var(--muted)}
+  .kwline b{display:inline-block;background:var(--cc,#0f5c63);color:#fff;border-radius:999px;padding:2px 10px;margin-left:4px;font-size:.82rem}
+  .notehead{display:flex;align-items:center;gap:7px}
+  .notehead i{width:12px;height:12px;border-radius:50%;background:var(--cc);display:inline-block}
   textarea.qnote{width:100%;min-height:74px;border:1px solid var(--line);border-radius:10px;padding:9px;font:inherit;font-size:.92rem;resize:vertical;background:#fcfbf8;margin-top:6px}
   textarea.qnote:focus{outline:2px solid var(--main);border-color:transparent}
   .note .body{flex:1;min-width:0}
@@ -155,7 +179,7 @@
     </div>
   </section>
 
-  <!-- ========== SCREEN 2: QUESTION (A or B) ========== -->
+  <!-- ========== SCREEN 2: QUESTION, then answer + mind map ========== -->
   <section id="scrQuiz" class="hidden">
     <div class="card">
       <div class="meta">
@@ -165,44 +189,36 @@
       <div class="bar"><i id="qBar"></i></div>
       <p class="label" id="lblPanel"></p>
       <div class="question" id="qText"></div>
+      <p class="kwline" id="qKw"></p>
 
-      <p class="label" id="lblChoose"></p>
-      <div class="opts">
-        <button class="opt" id="optA"><span class="let">A</span><span id="optAText"></span></button>
-        <button class="opt" id="optB"><span class="let">B</span><span id="optBText"></span></button>
+      <div class="row" id="rowShow">
+        <button class="btn" id="btnShow"></button>
       </div>
 
       <div id="ansBox" class="hidden">
-        <p class="verdict" id="verdict"></p>
         <div class="answer">
           <p class="label" id="lblAns"></p>
-          <p class="short" id="ansShort"></p>
-          <ul id="ansList"></ul>
+          <p class="ansp" id="ansText"></p>
+          <div id="ansMM"></div>
           <div class="tip" id="ansTip"></div>
           <div class="mynote hidden" id="ansMine"></div>
         </div>
-        <div class="row">
-          <button class="btn" id="btnNext"></button>
-        </div>
+      </div>
+
+      <div class="row">
+        <button class="btn ghost" id="btnPrev"></button>
+        <button class="btn" id="btnNext"></button>
       </div>
     </div>
   </section>
 
-  <!-- ========== SCREEN 3: SUMMARY ========== -->
+  <!-- ========== SCREEN 3: END ========== -->
   <section id="scrEnd" class="hidden">
     <div class="card">
       <h2 id="endTitle"></h2>
-      <div class="stats">
-        <div><b id="sGood">0</b><span id="lblSGood"></span></div>
-        <div><b id="sBad">0</b><span id="lblSBad"></span></div>
-        <div><b id="sScore">0%</b><span id="lblSScore"></span></div>
-      </div>
-      <div id="reviewBox" class="hidden">
-        <p class="label" style="margin-top:16px" id="lblReview"></p>
-        <ol class="review" id="reviewList"></ol>
-      </div>
+      <p class="hint" id="endInfo"></p>
       <div class="row">
-        <button class="btn hidden" id="btnRetry"></button>
+        <button class="btn" id="btnRetry"></button>
         <button class="btn ghost" id="btnRestart"></button>
       </div>
     </div>
@@ -218,36 +234,36 @@
    ===================================================================== */
 var TEXT = {
   ms: {
-    title:"Latihan Temuduga", sub:"Soalan ikut turutan \u2022 Pilih A atau B \u2022 Lihat jawapan penuh",
+    title:"Latihan Temuduga", sub:"Soalan ikut turutan \u2022 Jawapan penuh \u2022 Peta minda",
     picked:"Jawatan dipilih", company:"Pilih syarikat", cat:"Pilih kategori soalan", all:"Semua",
     count:" soalan, ditanya mengikut turutan.", start:"Mula Temuduga", back:"Tukar jawatan",
-    tabQuiz:"Latihan A/B", tabNotes:"Nota Jawapan", tabMine:"Nota Saya",
+    tabQuiz:"Latihan", showAns:"Tunjuk Jawapan", prev:"\u2039 Sebelum", endInfo:" soalan telah dilalui.", tabNotes:"Peta Minda", kwLabel:"Kata kunci:", findPh:"\uD83D\uDD0D Cari kata kunci, cth: IQC, TAT, hadiah", noHit:"Tiada padanan. Cuba kata kunci lain.", tabMine:"Nota Saya",
     lblMine:"Nota am (tidak terikat pada soalan)", mineInfo:" soalan \u2022 tulis nota anda di bawah setiap soalan.", qPh:"Nota saya untuk soalan ini...", myTag:"Nota saya", qSaved:"\u2713 Tersimpan", minePh:"Taip atau tampal (paste) nota anda di sini, contohnya daripada ChatGPT...",
     mineHint:"Nota disimpan secara automatik dalam telefon ini sahaja (pelayar ini). Ia tidak dihantar ke internet. Jangan guna mod Private/Incognito, dan nota akan hilang jika data pelayar dipadam. Tekan 'Simpan sebagai fail' untuk salinan sandaran.",
     mineSaved:"\u2713 Tersimpan dalam telefon ini", mineFail:"Tidak dapat simpan dalam pelayar ini. Guna 'Simpan sebagai fail'.",
-    mineCopy:"Salin semua", mineCopied:"\u2713 Disalin", mineFile:"Simpan sebagai fail", notesInfo:" nota \u2022 jawapan betul sahaja.", more:"Isi penuh",
+    mineCopy:"Salin semua", mineCopied:"\u2713 Disalin", mineFile:"Simpan sebagai fail", notesInfo:" peta minda \u2022 jawapan betul sahaja.", more:"Jawapan penuh",
     panel:"Soalan panel", choose:"Pilih jawapan yang betul: A atau B",
-    right:"Betul!", wrong:"Salah. Jawapan betul ialah ", ans:"Jawapan penuh", tip:"Tip: ",
-    next:"Soalan seterusnya", finish:"Lihat keputusan",
+    right:"Betul!", wrong:"Salah. Jawapan betul ialah ", ans:"Jawapan", tip:"Tip: ",
+    next:"Seterusnya \u203A", finish:"Tamat",
     qn:"Soalan ", end:"Sesi tamat", sGood:"Betul", sBad:"Salah", sScore:"Markah",
-    review:"Soalan yang salah", retry:"Ulang soalan yang salah", restart:"Kembali ke menu", questions:" soalan",
-    foot:"Jawapan ialah panduan sahaja. Sesuaikan dengan pengalaman sendiri dan semak pekeliling / SOP terkini jabatan anda."
+    review:"Soalan yang salah", retry:"Ulang dari soalan 1", restart:"Kembali ke menu", questions:" soalan",
+    foot:"Jawapan ialah panduan sahaja; isi bahagian dalam [kurungan] dengan maklumat sendiri. Sesuaikan dengan pengalaman sendiri dan semak pekeliling / SOP terkini jabatan anda."
   },
   en: {
-    title:"Mock Interview", sub:"Questions in order \u2022 Choose A or B \u2022 See the full answer",
+    title:"Mock Interview", sub:"Questions in order \u2022 Full answer \u2022 Mind map",
     picked:"Selected role", company:"Select the company", cat:"Select question category", all:"All",
     count:" questions, asked in order.", start:"Start Interview", back:"Change role",
-    tabQuiz:"Practice A/B", tabNotes:"Answer Notes", tabMine:"My Notes",
+    tabQuiz:"Practice", showAns:"Show Answer", prev:"\u2039 Previous", endInfo:" questions covered.", tabNotes:"Mind Maps", kwLabel:"Keyword:", findPh:"\uD83D\uDD0D Search a keyword, e.g. CPU, PCB, team", noHit:"No match. Try another keyword.", tabMine:"My Notes",
     lblMine:"General notes (not tied to a question)", mineInfo:" questions \u2022 write your note under each question.", qPh:"My note for this question...", myTag:"My note", qSaved:"\u2713 Saved", minePh:"Type or paste your notes here, for example from ChatGPT...",
     mineHint:"Notes are saved automatically on this phone only (this browser). Nothing is sent to the internet. Do not use Private/Incognito mode, and notes are lost if browser data is cleared. Tap 'Save as file' for a backup copy.",
     mineSaved:"\u2713 Saved on this phone", mineFail:"Cannot save in this browser. Use 'Save as file'.",
-    mineCopy:"Copy all", mineCopied:"\u2713 Copied", mineFile:"Save as file", notesInfo:" notes \u2022 correct answers only.", more:"Full points",
+    mineCopy:"Copy all", mineCopied:"\u2713 Copied", mineFile:"Save as file", notesInfo:" mind maps \u2022 correct answers only.", more:"Full answer",
     panel:"Interviewer asks", choose:"Choose the correct answer: A or B",
-    right:"Correct!", wrong:"Wrong. The correct answer is ", ans:"Full answer", tip:"Tip: ",
-    next:"Next question", finish:"See result",
+    right:"Correct!", wrong:"Wrong. The correct answer is ", ans:"Answer", tip:"Tip: ",
+    next:"Next \u203A", finish:"Finish",
     qn:"Question ", end:"Session complete", sGood:"Correct", sBad:"Wrong", sScore:"Score",
-    review:"Questions you got wrong", retry:"Retry wrong questions", restart:"Back to menu", questions:" questions",
-    foot:"Answers are a guide only. Use your own experience and check each company's website for the latest facts."
+    review:"Questions you got wrong", retry:"Start again from question 1", restart:"Back to menu", questions:" questions",
+    foot:"Answers are a guide only; fill the parts in [brackets] with your own details. Use your own experience and check each company's website for the latest facts."
   }
 };
 
@@ -257,11 +273,12 @@ var TEXT = {
    Each question:
      k  = category
      s  = question
-     ok = correct answer, compact (shown as A or B)
-     ng = wrong answer, compact (shown as the other choice)
-     j  = full answer points (shown after the user chooses)
+     a  = the answer in full sentences; **double stars** mark the keywords shown in bold
+     j  = key points (used by the keyword search)
      t  = tip
-     e  = small icon to help remember the answer (shown in the notes tab)
+     e  = small icon for the question
+     kw = keyword of the question (centre of the mind map)
+     m  = mind-map branches: [icon, short keyword] for each key point
      c  = company (optional, only shown when that company is selected)
    ===================================================================== */
 var JOBS = [
@@ -270,25 +287,28 @@ var JOBS = [
 {
   id: "jtmp-u7-u8", lang: "ms", ikon: "U8",
   nama: "Juruteknologi Makmal Perubatan",
-  butiran: "Kenaikan pangkat Gred U7 ke Gred U8 \u2022 Kementerian Kesihatan Malaysia",
+  butiran: "Sharmawati (MKAK Sungai Buloh, Unit TB) \u2022 Kenaikan pangkat Gred U7 ke Gred U8 \u2022 Kementerian Kesihatan Malaysia",
   soalan: [
 
   /* ---------- A. Pengenalan diri & kerjaya ---------- */
   { k:"Pengenalan Diri", s:"Sila perkenalkan diri anda dan latar belakang perkhidmatan anda.",
-    ok:"Ringkas dan tersusun: jawatan semasa, pengalaman, tugas sekarang dan 1-2 pencapaian.",
-    ng:"Ceritakan semua butiran peribadi dan setiap penempatan secara terperinci supaya panel kenal anda.",
-    e:"🙋",
-    j:["Nama, jawatan dan gred semasa, tempat bertugas (hospital / makmal / unit).",
+    a:"Nama saya **Sharmawati binti Samsudin**, Juruteknologi Makmal Perubatan **Gred U7** di **Makmal Kesihatan Awam Kebangsaan (MKAK), Sungai Buloh**. Saya bertugas di **Unit TB**. Saya telah berkhidmat selama **[bilangan] tahun** sejak dilantik pada [tahun], dan berkelulusan **[kelulusan / pos basik]**. Tugas utama saya sekarang ialah **[tugas utama di Unit TB]**. Antara pencapaian saya ialah **[1-2 pencapaian utama]**.",
+    e:"🧕",
+    kw:"Pengenalan Diri",
+    m:[["🪪", "Sharmawati, Gred U7"], ["🏛️", "MKAK Sungai Buloh"], ["🧫", "Unit TB"], ["📆", "Tempoh khidmat"], ["🎓", "Kelulusan & kursus"], ["🏆", "1-2 pencapaian"]],
+    j:["Sharmawati binti Samsudin, Juruteknologi Makmal Perubatan Gred U7.",
+       "Tempat bertugas: Makmal Kesihatan Awam Kebangsaan (MKAK), Sungai Buloh, di Unit TB.",
        "Tempoh perkhidmatan: tahun lantikan, tahun naik ke gred semasa, penempatan terdahulu.",
        "Kelulusan akademik dan kursus kepakaran / pos basik yang berkaitan.",
-       "Bidang tugas utama sekarang (contoh: penyelia unit hematologi, pegawai kualiti, pegawai aset).",
+       "Bidang tugas utama sekarang di Unit TB.",
        "Tutup dengan 1-2 pencapaian utama dan tugas tambahan yang dipegang."],
     t:"Hadkan 1 hingga 2 minit. Susun ikut turutan: siapa saya, pengalaman, tugas sekarang, pencapaian." },
 
   { k:"Pengenalan Diri", s:"Mengapa anda layak dinaikkan pangkat ke Gred U8?",
-    ok:"Beri bukti: prestasi, tugas penyeliaan yang sudah dipikul dan sumbangan yang boleh diukur.",
-    ng:"Tekankan tempoh perkhidmatan yang lama; kekananan sahaja sudah cukup sebagai kelayakan.",
+    a:"Saya layak kerana mempunyai **pengalaman dan kekananan** serta sudah menguasai tugas teknikal dan penyeliaan di Gred U7. **Prestasi** saya konsisten baik tanpa rekod tatatertib. Saya juga sudah **memikul tugas gred lebih tinggi** seperti mengetuai unit, menyelia staf serta mengurus audit dan perolehan. Saya telah memberi **sumbangan nyata** melalui projek kualiti, dan saya **bersedia membimbing** pegawai muda.",
     e:"🏅",
+    kw:"Layak U8",
+    m:[["📆", "Pengalaman & kekananan"], ["📈", "Prestasi cemerlang"], ["👑", "Sudah mengetuai unit"], ["🧩", "Sumbangan nyata"], ["🤲", "Sedia bimbing pelapis"]],
     j:["Pengalaman dan kekananan: sudah menguasai tugas teknikal dan penyeliaan di gred U7.",
        "Bukti prestasi: markah penilaian prestasi yang baik, anugerah, tiada rekod tatatertib.",
        "Sudah memikul tugas seperti gred lebih tinggi: mengetuai unit, menyelia staf, urus jadual, audit, perolehan.",
@@ -297,9 +317,10 @@ var JOBS = [
     t:"Beri bukti, bukan dakwaan. Sebut angka jika ada, contohnya 'TAT turun daripada 90 minit kepada 60 minit'." },
 
   { k:"Pengenalan Diri", s:"Apakah sumbangan terbesar anda sepanjang berada di gred sekarang?",
-    ok:"Pilih satu sumbangan, cerita ikut STAR dan tunjuk data sebelum dan selepas.",
-    ng:"Senaraikan seberapa banyak tugas yang pernah dibuat tanpa perlu menyatakan hasilnya.",
+    a:"Sumbangan terbesar saya ialah **[satu projek]**. **Masalah asalnya** ialah [contoh: kadar penolakan spesimen yang tinggi]. **Tindakan saya** ialah menganalisis punca, melatih staf wad dan memperkenalkan [penyelesaian]. **Hasilnya**, [data sebelum] bertambah baik kepada [data selepas]. Penambahbaikan ini **dikekalkan** dan telah diperluas ke unit lain.",
     e:"⭐",
+    kw:"Sumbangan (STAR)",
+    m:[["1️⃣", "Pilih satu sahaja"], ["🔎", "Situasi / masalah"], ["🛠️", "Tindakan saya"], ["📊", "Hasil berdata"], ["🔁", "Dikekalkan / diperluas"]],
     j:["Pilih SATU sumbangan yang paling memberi kesan dan ceritakan dengan jelas.",
        "Situasi: apa masalah asal (contoh: kadar penolakan spesimen tinggi).",
        "Tindakan: apa yang ANDA sendiri lakukan (analisis punca, latihan wad, borang baharu).",
@@ -308,9 +329,10 @@ var JOBS = [
     t:"Guna kaedah STAR: Situasi, Tugas, Tindakan, Hasil." },
 
   { k:"Pengenalan Diri", s:"Apakah kekuatan dan kelemahan anda?",
-    ok:"2-3 kekuatan dengan contoh, dan satu kelemahan jujur berserta langkah membaikinya.",
-    ng:"Nyatakan kekuatan sahaja dan katakan anda tiada kelemahan yang ketara.",
+    a:"**Kekuatan** saya ialah teliti, tenang ketika tekanan dan suka membimbing; contohnya [satu contoh di tempat kerja]. **Kelemahan** saya ialah [contoh: terlalu terperinci sehingga sukar mengagih tugas]. Saya sedang **membaikinya** dengan [contoh: melatih staf dan mengagih tugas secara berperingkat].",
     e:"⚖️",
+    kw:"Kuat & Lemah",
+    m:[["💪", "2-3 kekuatan"], ["📌", "Contoh di tempat kerja"], ["🪞", "1 kelemahan jujur"], ["🔧", "Langkah membaiki"]],
     j:["Kekuatan: pilih 2-3 yang berkaitan dengan jawatan penyelia, contohnya teliti, tenang ketika tekanan, pandai membimbing.",
        "Sokong setiap kekuatan dengan satu contoh ringkas di tempat kerja.",
        "Kelemahan: pilih yang jujur tetapi boleh dibaiki, contohnya terlalu terperinci atau sukar mengagih tugas.",
@@ -318,9 +340,10 @@ var JOBS = [
     t:"Elakkan kelemahan yang menjejaskan tugas teras (contoh: 'saya selalu lewat')." },
 
   { k:"Pengenalan Diri", s:"Jika dinaikkan pangkat, apakah perancangan anda dalam 6 bulan pertama?",
-    ok:"Fahami data dan KPI unit dahulu, pilih 2-3 keutamaan, laksana, pantau dan lapor.",
-    ng:"Terus ubah jadual dan SOP pada minggu pertama untuk menunjukkan ketegasan.",
+    a:"Dalam enam bulan pertama, saya akan **memahami dahulu** prestasi unit melalui KPI, aduan dan laporan audit. Kemudian saya akan memilih **dua atau tiga keutamaan**, contohnya TAT, kompetensi staf dan stok reagen. Saya akan **memperkemas penyeliaan** melalui jadual tugas dan mesyuarat unit berkala, melaksanakan **satu projek penambahbaikan** yang boleh diukur, dan **melaporkan kemajuan** kepada ketua jabatan.",
     e:"🗓️",
+    kw:"6 Bulan Pertama",
+    m:[["🔎", "Fahami data & KPI"], ["🎯", "2-3 keutamaan"], ["📋", "Perkemas penyeliaan"], ["🚀", "1 projek terukur"], ["📣", "Lapor & maklum balas"]],
     j:["Fahami dahulu: semak prestasi unit, KPI, aduan, laporan audit dan keperluan staf.",
        "Kenal pasti 2-3 keutamaan, contohnya TAT, kompetensi staf, pengurusan stok reagen.",
        "Perkemas penyeliaan: jadual tugas, penilaian kompetensi, mesyuarat unit berkala.",
@@ -329,9 +352,10 @@ var JOBS = [
     t:"Tunjuk anda berfikir sebagai pengurus: rancang, laksana, pantau, lapor." },
 
   { k:"Pengenalan Diri", s:"Apakah perbezaan peranan antara Gred U7 dan Gred U8 pada pandangan anda?",
-    ok:"U8 lebih kepada merancang, menyelaras dan mengurus sumber; U7 lebih kepada penyeliaan operasi harian.",
-    ng:"Tiada beza tugas; U8 hanyalah gred gaji yang lebih tinggi untuk kerja yang sama.",
+    a:"Pada pandangan saya, **Gred U7** lebih kepada penyeliaan **operasi harian** unit dan kerja teknikal lanjutan. **Gred U8** mempunyai skop lebih luas, iaitu **merancang dan menyelaras** beberapa unit atau keseluruhan perkhidmatan makmal. U8 lebih banyak **mengurus sumber** seperti staf, bajet, perolehan dan akreditasi, menjadi **penghubung** antara pengurusan atasan dengan staf, serta **membangunkan pelapis**.",
     e:"🪜",
+    kw:"U7 vs U8",
+    m:[["🔬", "U7: operasi harian"], ["🗺️", "U8: rancang & selaras"], ["💼", "Urus sumber & bajet"], ["🌉", "Penghubung atasan-staf"], ["🌱", "Bina pelapis"]],
     j:["Gred U7: lebih kepada penyeliaan operasi harian unit dan kerja teknikal lanjutan.",
        "Gred U8: skop lebih luas, merancang dan menyelaras beberapa unit atau keseluruhan perkhidmatan makmal.",
        "Lebih banyak tugas pengurusan: sumber manusia, bajet, perolehan, aset, kualiti dan akreditasi.",
@@ -341,9 +365,10 @@ var JOBS = [
 
   /* ---------- B. Teknikal makmal ---------- */
   { k:"Teknikal Makmal", s:"Terangkan perbezaan antara Kawalan Kualiti Dalaman (IQC) dan Penilaian Kualiti Luaran (EQA).",
-    ok:"IQC dibuat oleh makmal sendiri setiap hari; EQA ialah perbandingan dengan makmal lain oleh penganjur luar.",
-    ng:"IQC dijalankan oleh penganjur luar; EQA ialah kawalan harian yang dibuat oleh makmal sendiri.",
+    a:"**IQC** dijalankan oleh **makmal sendiri** setiap hari atau setiap kelompok ujian menggunakan bahan kawalan, untuk memastikan keputusan tepat sebelum dikeluarkan kepada pesakit. **EQA** pula dianjurkan oleh **pihak luar**; makmal menguji sampel yang dihantar dan keputusan **dibandingkan dengan makmal lain**. IQC memantau prestasi harian, manakala EQA mengesan ralat jangka panjang. Kedua-duanya saling melengkapi dan merupakan keperluan **MS ISO 15189**.",
     e:"🎯",
+    kw:"IQC vs EQA",
+    m:[["🏠", "IQC: makmal sendiri"], ["📅", "Setiap hari / kelompok"], ["🌍", "EQA: penganjur luar"], ["⚖️", "Banding makmal lain"], ["📜", "Keperluan ISO 15189"]],
     j:["IQC: dijalankan oleh makmal sendiri setiap hari atau setiap kelompok ujian menggunakan bahan kawalan.",
        "Tujuan IQC: memantau ketepatan dan kejituan harian sebelum keputusan pesakit dikeluarkan.",
        "EQA: sampel dihantar oleh penganjur luar, makmal uji dan hantar keputusan untuk dibandingkan dengan makmal lain.",
@@ -352,9 +377,10 @@ var JOBS = [
     t:"Tambah contoh program EQA yang makmal anda sertai." },
 
   { k:"Teknikal Makmal", s:"Apakah tindakan anda jika keputusan IQC berada di luar had kawalan?",
-    ok:"Tahan keputusan pesakit, cari punca, betulkan, ulang IQC dan nilai semula sampel yang terjejas.",
-    ng:"Ulang IQC sehingga lulus, kemudian teruskan mengeluarkan keputusan pesakit.",
+    a:"Saya akan **menahan keputusan pesakit** bagi ujian tersebut, kemudian **mencari punca** dengan menyemak bahan kawalan, reagen, kalibrasi dan penyelenggaraan alat. Saya merujuk **peraturan Westgard** untuk menentukan sama ada ralat itu rawak atau sistematik. Selepas tindakan pembetulan, saya **mengulang IQC**; jika lulus, saya **menilai semula sampel pesakit** yang diuji sejak IQC terakhir yang lulus. Semua tindakan **direkodkan**.",
     e:"🛑",
+    kw:"IQC Gagal",
+    m:[["✋", "Tahan keputusan"], ["🔎", "Cari punca"], ["📐", "Peraturan Westgard"], ["🔁", "Betulkan, ulang IQC"], ["🧪", "Nilai semula sampel"], ["📝", "Rekod"]],
     j:["Hentikan pengeluaran keputusan pesakit bagi ujian tersebut.",
        "Semak punca mudah: bahan kawalan (luput, cara simpan, cara bancuh), reagen, kalibrasi, penyelenggaraan alat.",
        "Rujuk peraturan Westgard: 1-3s dan R-4s menunjukkan ralat rawak; 2-2s, 4-1s dan 10x menunjukkan ralat sistematik.",
@@ -364,9 +390,10 @@ var JOBS = [
     t:"Tekankan: jangan ulang IQC berkali-kali sehingga lulus tanpa mencari punca." },
 
   { k:"Teknikal Makmal", s:"Terangkan tiga fasa dalam proses ujian makmal. Fasa manakah paling banyak berlaku kesilapan?",
-    ok:"Pra-analitikal, analitikal, pasca-analitikal; kesilapan paling banyak di fasa pra-analitikal.",
-    ng:"Pra-analitikal, analitikal, pasca-analitikal; kesilapan paling banyak di fasa analitikal.",
+    a:"Proses ujian makmal ada tiga fasa. **Pra-analitikal** meliputi permintaan ujian, pengambilan, pelabelan dan penghantaran spesimen. **Analitikal** ialah proses menguji, termasuk IQC dan kalibrasi. **Pasca-analitikal** meliputi pengesahan dan pelaporan keputusan. Kesilapan paling banyak berlaku pada fasa **pra-analitikal** kerana melibatkan ramai pihak di luar makmal, dan ia dikawal melalui **kriteria penolakan** serta **latihan kepada wad**.",
     e:"3️⃣",
+    kw:"3 Fasa Ujian",
+    m:[["📥", "Pra-analitikal"], ["⚙️", "Analitikal"], ["📤", "Pasca-analitikal"], ["⚠️", "Paling banyak silap: PRA"], ["🛡️", "Kawal: kriteria & latihan"]],
     j:["Pra-analitikal: permintaan ujian, pengenalan pesakit, pengambilan, pelabelan, pengangkutan dan penerimaan spesimen.",
        "Analitikal: proses menguji termasuk IQC, kalibrasi dan prestasi alat.",
        "Pasca-analitikal: semakan dan pengesahan keputusan, pelaporan, makluman nilai kritikal, penyimpanan spesimen.",
@@ -375,9 +402,10 @@ var JOBS = [
     t:"Beri contoh kesilapan pra-analitikal di tempat anda dan cara anda mengurangkannya." },
 
   { k:"Teknikal Makmal", s:"Bagaimanakah anda menguruskan keputusan nilai kritikal (critical value)?",
-    ok:"Sahkan keputusan, maklum segera kepada doktor, guna read-back dan rekod.",
-    ng:"Masukkan keputusan dalam sistem seperti biasa; doktor akan melihatnya semasa semakan.",
+    a:"Saya akan **mengesahkan keputusan** dahulu dengan menyemak IQC dan keadaan spesimen. Kemudian saya **memaklumkan segera** kepada doktor atau jururawat yang merawat dalam tempoh yang ditetapkan SOP, menggunakan kaedah **read-back** supaya maklumat diterima dengan betul. Saya **merekod** nama pesakit, keputusan, masa serta nama pemberi dan penerima maklumat, dan **memantau pematuhan** sebagai petunjuk kualiti.",
     e:"📞",
+    kw:"Nilai Kritikal",
+    m:[["✅", "Sahkan dahulu"], ["📞", "Maklum doktor segera"], ["🔁", "Read-back"], ["📝", "Rekod siapa & masa"], ["📊", "Pantau pematuhan"]],
     j:["Sahkan keputusan dahulu: semak IQC, keadaan spesimen (hemolisis, beku), ulang ujian jika perlu.",
        "Maklumkan segera kepada doktor atau jururawat yang merawat dalam tempoh yang ditetapkan dalam SOP.",
        "Guna kaedah baca semula (read-back) untuk memastikan maklumat diterima dengan betul.",
@@ -386,9 +414,10 @@ var JOBS = [
     t:"Sebut contoh ujian, misalnya kalium, glukosa, hemoglobin atau platelet yang sangat rendah." },
 
   { k:"Teknikal Makmal", s:"Apakah kriteria penolakan spesimen dan bagaimana anda mengurangkan kadar penolakan?",
-    ok:"Tolak ikut kriteria (label, bekas, isipadu, hemolisis), maklum wad, analisis data dan latih wad.",
-    ng:"Terima semua spesimen supaya pesakit tidak dicucuk semula, dan catat ulasan pada keputusan.",
+    a:"Spesimen ditolak jika **label** tiada atau tidak sepadan, **bekas** salah, **isipadu** tidak cukup, atau spesimen **hemolisis, beku atau lewat sampai**. Saya akan **memaklumkan wad** segera, merekod penolakan dan meminta spesimen baharu. Untuk mengurangkan kadar penolakan, saya **menganalisis data** mengikut wad dan punca, kemudian memberi maklum balas dan **latihan kepada wad**.",
     e:"🧪",
+    kw:"Tolak Spesimen",
+    m:[["🏷️", "Label / bekas / isipadu"], ["🩸", "Hemolisis, beku, lewat"], ["📞", "Maklum wad & rekod"], ["📊", "Analisis ikut wad"], ["🎓", "Latih wad"]],
     j:["Kriteria biasa: tiada label atau label tidak sepadan dengan borang, bekas salah, isipadu tidak cukup.",
        "Juga: spesimen hemolisis, beku, tumpah, lewat sampai atau suhu pengangkutan tidak betul.",
        "Tindakan: maklum kepada wad dengan segera, rekod penolakan dan minta spesimen baharu.",
@@ -397,9 +426,10 @@ var JOBS = [
     t:"Spesimen yang sukar diulang (contoh CSF) dikendalikan mengikut budi bicara dan SOP, bukan terus ditolak." },
 
   { k:"Teknikal Makmal", s:"Bagaimanakah anda memantau dan menambah baik masa pusingan ujian (TAT)?",
-    ok:"Tetapkan sasaran, pantau melalui LIS, analisis punca kelewatan dan baiki aliran kerja.",
-    ng:"TAT bergantung pada wad dan alat, jadi tidak perlu dipantau oleh makmal.",
+    a:"Saya menetapkan **sasaran TAT** bagi ujian segera dan rutin, dan **memantaunya melalui LIS** setiap bulan. Saya **menganalisis punca kelewatan** seperti penghantaran spesimen, kerosakan alat dan kekurangan staf. Tindakan saya ialah **menyusun semula aliran kerja**, mengagih staf mengikut waktu puncak, menyediakan **alat sandaran**, dan **membentangkan prestasi** TAT dalam mesyuarat jabatan.",
     e:"⏱️",
+    kw:"TAT",
+    m:[["🎯", "Sasaran & pantau LIS"], ["🔎", "Punca kelewatan"], ["🔀", "Susun aliran kerja"], ["🛟", "Alat sandaran"], ["📣", "Bentang prestasi"]],
     j:["Tetapkan sasaran TAT bagi ujian segera dan rutin, dan pantau melalui LIS setiap bulan.",
        "Analisis punca kelewatan: penghantaran spesimen, pendaftaran, kerosakan alat, kekurangan staf, pengesahan lewat.",
        "Tindakan: susun semula aliran kerja, agih staf mengikut waktu puncak, penyelenggaraan berjadual.",
@@ -408,9 +438,10 @@ var JOBS = [
     t:"Jika ada, kongsi data TAT sebenar unit anda." },
 
   { k:"Teknikal Makmal", s:"Apakah MS ISO 15189 dan mengapa ia penting kepada makmal perubatan?",
-    ok:"Piawaian kualiti dan kecekapan makmal perubatan; akreditasi oleh Jabatan Standard Malaysia (SAMM).",
-    ng:"Piawaian pengurusan alam sekitar untuk hospital; pensijilan oleh pihak pembekal alat.",
+    a:"**MS ISO 15189** ialah piawaian antarabangsa khusus untuk **makmal perubatan** yang menetapkan keperluan **kualiti dan kecekapan**, merangkumi aspek **pengurusan dan teknikal**. Di Malaysia, akreditasi diberi oleh **Jabatan Standard Malaysia** melalui skim **SAMM**. Ia penting kerana menjamin **keputusan yang boleh dipercayai** dan keselamatan pesakit. Sebagai penyelia, saya memastikan **SOP dipatuhi**, rekod lengkap dan audit dalaman dijalankan.",
     e:"📜",
+    kw:"MS ISO 15189",
+    m:[["🏥", "Piawaian makmal perubatan"], ["🧩", "Pengurusan + teknikal"], ["🏛️", "Akreditasi JSM (SAMM)"], ["🤝", "Keputusan dipercayai"], ["👀", "Penyelia: SOP & audit"]],
     j:["Piawaian antarabangsa bagi makmal perubatan: keperluan kualiti dan kecekapan (versi terkini ISO 15189:2022).",
        "Merangkumi keperluan pengurusan dan teknikal: personel, peralatan, proses pra-analitikal hingga pasca-analitikal, pengurusan risiko.",
        "Akreditasi di Malaysia diberi oleh Jabatan Standard Malaysia melalui Skim Akreditasi Makmal Malaysia (SAMM).",
@@ -419,9 +450,10 @@ var JOBS = [
     t:"Nyatakan status akreditasi makmal anda dan peranan anda semasa audit." },
 
   { k:"Teknikal Makmal", s:"Bagaimanakah anda menguruskan reagen dan stok bahan guna habis makmal?",
-    ok:"Rekod stok kemas kini, FEFO, paras minimum, verifikasi lot baharu dan rancang perolehan awal.",
-    ng:"Pesan sebanyak mungkin sekali gus dan guna stok yang baru sampai dahulu.",
+    a:"Saya memastikan **rekod stok** sentiasa kemas kini, termasuk nombor lot dan tarikh luput. Saya mengamalkan **FEFO**, iaitu yang luput dahulu diguna dahulu, dan menetapkan **paras stok minimum**. Reagen disimpan mengikut syarat pengeluar dengan **pemantauan suhu** harian, dan setiap **lot baharu diverifikasi** sebelum diguna. Saya **merancang perolehan** lebih awal mengikut tatacara kerajaan dan **mengelak pembaziran** dengan mengagih reagen yang hampir luput.",
     e:"📦",
+    kw:"Stok Reagen",
+    m:[["📒", "Rekod kemas kini"], ["⏳", "FEFO & paras minimum"], ["🌡️", "Simpan & pantau suhu"], ["🧪", "Verifikasi lot baharu"], ["🛒", "Rancang perolehan"], ["♻️", "Elak pembaziran"]],
     j:["Rekod stok yang kemas kini: tarikh terima, nombor lot, tarikh luput, baki.",
        "Amalkan FEFO (yang luput dahulu, guna dahulu) dan tetapkan paras stok minimum.",
        "Simpan mengikut syarat pengeluar dan pantau suhu peti sejuk setiap hari.",
@@ -431,9 +463,10 @@ var JOBS = [
     t:"Kaitkan dengan penjimatan kos. Panel suka jawapan yang menunjukkan kesedaran bajet." },
 
   { k:"Teknikal Makmal", s:"Apakah langkah anda apabila menerima peralatan atau kaedah ujian baharu sebelum digunakan untuk pesakit?",
-    ok:"Pentauliahan, verifikasi kaedah, SOP, latihan dan kompetensi staf sebelum diguna untuk pesakit.",
-    ng:"Terus guna untuk sampel pesakit kerana pembekal sudah menguji alat itu di kilang.",
+    a:"Pertama, saya memastikan **pemasangan dan pentauliahan (T&C)** oleh pembekal lengkap. Kemudian saya menjalankan **verifikasi kaedah**, iaitu kejituan, ketepatan dan perbandingan dengan kaedah sedia ada. Saya menyediakan **SOP** dan tetapan dalam **LIS**, **melatih staf** serta menilai kompetensi mereka. Alat didaftarkan sebagai **aset** dengan jadual penyelenggaraan, dan **pelanggan dimaklumkan** jika julat rujukan berubah.",
     e:"🆕",
+    kw:"Alat / Kaedah Baharu",
+    m:[["📦", "Pentauliahan (T&C)"], ["🔬", "Verifikasi kaedah"], ["📄", "SOP & tetapan LIS"], ["🎓", "Latih & kompetensi"], ["🗓️", "Aset & jadual selenggara"], ["📣", "Maklum pelanggan"]],
     j:["Semak pemasangan dan pentauliahan oleh pembekal (Testing & Commissioning) serta dokumen lengkap.",
        "Jalankan verifikasi kaedah: kejituan, ketepatan, julat pelaporan, perbandingan dengan kaedah sedia ada.",
        "Sediakan atau kemas kini SOP, julat rujukan dan tetapan dalam LIS.",
@@ -443,9 +476,10 @@ var JOBS = [
     t:"Bezakan: verifikasi untuk kaedah yang sudah disahkan pengeluar, validasi untuk kaedah baharu atau diubah suai." },
 
   { k:"Teknikal Makmal", s:"Bagaimanakah anda memastikan peralatan makmal sentiasa berfungsi dengan baik?",
-    ok:"Penyelenggaraan pengguna berjadual, PPM dan kalibrasi, pantau IQC dan rekod kerosakan.",
-    ng:"Panggil jurutera hanya apabila alat rosak; penyelenggaraan berjadual tidak perlu.",
+    a:"Saya memastikan **penyelenggaraan harian, mingguan dan bulanan** dibuat oleh pengguna dan direkodkan. **PPM dan kalibrasi** dijalankan mengikut jadual oleh pembekal atau syarikat konsesi. Prestasi alat dipantau melalui **IQC** dan rekod **downtime**. Saya juga menyemak **sijil kalibrasi** dan label status, serta merancang **penggantian alat usang** dan pelan sandaran.",
     e:"🔧",
+    kw:"Jaga Peralatan",
+    m:[["🧽", "Selenggara harian"], ["🗓️", "PPM & kalibrasi"], ["📉", "Pantau IQC & downtime"], ["🏷️", "Sijil & label status"], ["🔄", "Ganti alat usang"]],
     j:["Penyelenggaraan harian, mingguan dan bulanan oleh pengguna mengikut manual, direkod dalam log.",
        "Penyelenggaraan pencegahan berjadual (PPM) dan kalibrasi oleh pembekal atau syarikat konsesi.",
        "Pantau prestasi melalui IQC dan rekod kerosakan (downtime).",
@@ -455,9 +489,10 @@ var JOBS = [
 
   /* ---------- C. Keselamatan ---------- */
   { k:"Keselamatan & Biosafety", s:"Berlaku tumpahan spesimen darah di lantai makmal. Apakah tindakan anda?",
-    ok:"Hadkan kawasan, pakai PPE, tutup dengan bahan penyerap, disinfektan, buang sebagai sisa klinikal dan lapor.",
-    ng:"Lap segera dengan tisu dan air, kemudian buang ke dalam tong sampah biasa.",
+    a:"Saya akan **memaklumkan staf** berdekatan dan **menghadkan kawasan**. Dengan memakai **PPE**, saya menutup tumpahan dengan **bahan penyerap** dan menuang **disinfektan** dari luar ke dalam, kemudian membiarkannya mengikut **masa sentuhan** dalam SOP. Kaca pecah diambil dengan forsep. Semua bahan dibuang sebagai **sisa klinikal**, tangan dicuci, dan **insiden dilaporkan** serta direkodkan.",
     e:"🩸",
+    kw:"Tumpahan Darah",
+    m:[["🚧", "Maklum & hadkan"], ["🧤", "Pakai PPE"], ["🧴", "Serap + disinfektan"], ["⏲️", "Masa sentuhan, forsep"], ["🟡", "Buang: sisa klinikal"], ["📝", "Lapor insiden"]],
     j:["Maklumkan staf berdekatan dan hadkan kawasan tumpahan.",
        "Pakai PPE yang sesuai: sarung tangan, kot makmal, pelindung muka jika perlu.",
        "Tutup tumpahan dengan bahan penyerap, tuang disinfektan (contoh natrium hipoklorit) dari luar ke dalam.",
@@ -467,9 +502,10 @@ var JOBS = [
     t:"Sebut kit tumpahan (spill kit) dan latihan berkala kepada staf." },
 
   { k:"Keselamatan & Biosafety", s:"Seorang staf anda tercucuk jarum terpakai. Apakah yang perlu dilakukan?",
-    ok:"Basuh dengan sabun dan air mengalir, lapor segera, penilaian risiko, PEP jika perlu, notifikasi dan susulan.",
-    ng:"Picit luka sehingga berdarah, sapu antiseptik dan lapor pada hari bekerja berikutnya.",
+    a:"Staf perlu segera **membasuh luka** dengan sabun dan air mengalir tanpa memicitnya. Kejadian **dilaporkan segera** dan staf dirujuk ke Jabatan Kecemasan untuk penilaian risiko. **Ujian saringan** HIV, Hepatitis B dan Hepatitis C dibuat untuk staf dan sumber pesakit, dan **PEP** dimulakan jika disyorkan doktor. **Borang notifikasi** diisi, diikuti **susulan** ujian darah dan kaunseling, serta siasatan punca.",
     e:"💉",
+    kw:"Tercucuk Jarum",
+    m:[["🚿", "Basuh, jangan picit"], ["🏥", "Lapor & rujuk segera"], ["🔬", "Saring HIV, Hep B, Hep C"], ["💊", "PEP jika perlu"], ["📝", "Borang notifikasi"], ["🔁", "Susulan & kaunseling"]],
     j:["Pertolongan cemas segera: basuh luka dengan sabun dan air mengalir, jangan picit atau hisap luka.",
        "Lapor segera kepada penyelia dan rujuk ke Jabatan Kecemasan atau klinik yang ditetapkan untuk penilaian risiko.",
        "Kenal pasti sumber pesakit jika boleh; ujian saringan HIV, Hepatitis B dan Hepatitis C untuk staf dan sumber.",
@@ -479,9 +515,10 @@ var JOBS = [
     t:"Tunjuk keprihatinan kepada staf, bukan hanya prosedur." },
 
   { k:"Keselamatan & Biosafety", s:"Bagaimanakah sisa makmal diurus dengan betul?",
-    ok:"Asing di punca: sisa klinikal beg kuning, benda tajam bekas khas, sisa am beg hitam.",
-    ng:"Kumpul semua sisa dalam satu beg hitam; syarikat konsesi akan mengasingkannya.",
+    a:"Sisa makmal **diasingkan di punca** mengikut jenis. **Sisa klinikal** dimasukkan ke dalam **beg kuning**, dan **benda tajam** ke dalam bekas khas yang kalis tusukan. Sisa berisiko tinggi seperti **kultur** dinyahcemar dengan **autoklaf** dahulu. **Sisa am** dimasukkan ke dalam **beg hitam**, manakala **sisa kimia** diurus berasingan sebagai buangan terjadual. Bekas tidak diisi melebihi tiga per empat dan dikutip oleh syarikat konsesi.",
     e:"🗑️",
+    kw:"Sisa Makmal",
+    m:[["✂️", "Asing di punca"], ["🟡", "Klinikal: beg kuning"], ["📌", "Tajam: bekas khas"], ["♨️", "Kultur: autoklaf"], ["⚫", "Am: beg hitam"], ["⚗️", "Kimia: buangan terjadual"]],
     j:["Asingkan di punca mengikut jenis sisa.",
        "Sisa klinikal ke dalam beg kuning; benda tajam ke dalam bekas benda tajam yang kalis tusukan.",
        "Sisa berisiko tinggi seperti kultur dinyahcemar (autoklaf) dahulu mengikut SOP.",
@@ -491,22 +528,24 @@ var JOBS = [
     t:"Sebut pemantauan anda sebagai penyelia: audit pengasingan sisa dan latihan staf." },
 
   { k:"Keselamatan & Biosafety", s:"Apakah langkah anda untuk memastikan keselamatan staf di makmal?",
-    ok:"Standard Precautions, PPE, latihan berkala, imunisasi Hepatitis B, penilaian risiko dan lapor insiden.",
-    ng:"Sediakan PPE dan serahkan kepada setiap staf untuk menjaga keselamatan masing-masing.",
+    a:"Saya memastikan **Standard Precautions** diamalkan, iaitu semua spesimen dianggap berpotensi berjangkit. **PPE** mencukupi dan kabinet biokeselamatan diselenggara; di **Unit TB**, kerja kultur dijalankan dengan **kawalan biokeselamatan yang lebih tinggi**, termasuk perlindungan pernafasan. Staf diberi **taklimat dan latihan berkala** tentang tumpahan, kebakaran dan bahan kimia, serta **imunisasi Hepatitis B**. Saya menjalankan **penilaian risiko** dan audit keselamatan serta menggalakkan **pelaporan insiden**, selaras dengan Akta Keselamatan dan Kesihatan Pekerjaan 1994.",
     e:"🦺",
+    kw:"Keselamatan Staf",
+    m:[["🦠", "Standard Precautions"], ["🧤", "PPE & kabinet bio"], ["🧫", "Unit TB: kawalan lebih tinggi"], ["🎓", "Latihan berkala"], ["💉", "Imunisasi Hep B"], ["🔍", "Risiko, audit, insiden"]],
     j:["Amalan Standard Precautions: semua spesimen dianggap berpotensi berjangkit.",
        "PPE mencukupi dan dipakai dengan betul; kabinet biokeselamatan diselenggara dan disahkan.",
        "Taklimat keselamatan untuk staf baharu dan latihan berkala (tumpahan, kebakaran, bahan kimia).",
        "Imunisasi Hepatitis B untuk staf dan rekod status.",
        "Penilaian risiko, audit keselamatan dan pelaporan insiden atau kejadian nyaris.",
        "Lembaran data keselamatan (SDS) bahan kimia mudah dicapai; patuh Akta Keselamatan dan Kesihatan Pekerjaan 1994."],
-    t:"Kebanyakan makmal diagnostik ialah Tahap Biokeselamatan 2 (BSL-2); kultur TB memerlukan kawalan lebih tinggi." },
+    t:"Anda bertugas di Unit TB, jadi beri contoh sebenar amalan biokeselamatan di unit anda (tahap makmal, kabinet, respirator, saringan kesihatan staf)." },
 
   /* ---------- D. Pengurusan & kepimpinan ---------- */
   { k:"Pengurusan & Kepimpinan", s:"Seorang staf di bawah seliaan anda kerap datang lewat dan prestasinya merosot. Bagaimana anda menanganinya?",
-    ok:"Kumpul fakta, jumpa secara tertutup, bimbing dan pantau; tindakan tatatertib jika berterusan.",
-    ng:"Tegur di hadapan staf lain sebagai pengajaran dan terus lapor untuk tindakan tatatertib.",
+    a:"Saya akan **mengumpul fakta** dahulu, seperti rekod kehadiran dan kesan kepada tugas. Kemudian saya **berjumpa staf itu secara tertutup** untuk mendengar masalahnya. Saya memberi **nasihat dan teguran lisan**, menetapkan sasaran pembaikan dan **menawarkan bantuan** seperti kaunseling. Jika berterusan, saya memberi **teguran bertulis** dan melaporkannya kepada ketua jabatan untuk tindakan tatatertib. Semua perbincangan **direkodkan**.",
     e:"⏰",
+    kw:"Staf Bermasalah",
+    m:[["📊", "Kumpul fakta"], ["🚪", "Jumpa tertutup"], ["🎯", "Teguran & sasaran"], ["🤲", "Tawar bantuan"], ["📨", "Bertulis / tatatertib"], ["📝", "Rekod"]],
     j:["Kumpul fakta dahulu: rekod kehadiran, kesan kepada tugas.",
        "Jumpa secara tertutup, dengar masalahnya (kesihatan, keluarga, kewangan).",
        "Beri nasihat dan teguran lisan, tetapkan sasaran pembaikan dan tempoh pemantauan.",
@@ -516,9 +555,10 @@ var JOBS = [
     t:"Tunjuk turutan: siasat, bimbing, pantau, baru tindakan tegas. Jangan terus menghukum." },
 
   { k:"Pengurusan & Kepimpinan", s:"Makmal anda kekurangan staf tetapi beban kerja meningkat. Apakah tindakan anda?",
-    ok:"Analisis beban kerja, susun semula tugas, multi-skilling, permudah proses dan kemuka justifikasi berdata.",
-    ng:"Mohon tambahan staf dan tunggu kelulusan sebelum mengubah apa-apa.",
+    a:"Saya akan **menganalisis beban kerja** dan waktu puncak, kemudian **menyusun semula jadual** serta melatih staf **pelbagai kemahiran** supaya boleh saling mengganti. Saya **mempermudah aliran kerja** melalui automasi dan mengurangkan kerja manual, serta **mengutamakan ujian segera**. Pada masa yang sama, saya mengemukakan **justifikasi berasaskan data** untuk tambahan jawatan, dan **menjaga moral** serta kebajikan staf.",
     e:"👥",
+    kw:"Kurang Staf",
+    m:[["📊", "Analisis beban kerja"], ["🔀", "Susun & multi-skilling"], ["⚡", "Permudah / automasi"], ["🚨", "Utamakan ujian segera"], ["📑", "Justifikasi berdata"], ["💚", "Jaga moral staf"]],
     j:["Analisis beban kerja: bilangan ujian, waktu puncak, tugas yang tidak menambah nilai.",
        "Susun semula jadual dan agihan tugas; latih staf pelbagai kemahiran (multi-skilling) supaya boleh saling ganti.",
        "Permudah aliran kerja: automasi, gabung proses, kurangkan kerja manual dan pendua.",
@@ -528,9 +568,10 @@ var JOBS = [
     t:"Panel mahu lihat penyelesaian anda sendiri dahulu, bukan sekadar 'minta tambah staf'." },
 
   { k:"Pengurusan & Kepimpinan", s:"Dua orang staf anda berkonflik sehingga menjejaskan kerja unit. Bagaimana anda menyelesaikannya?",
-    ok:"Bertindak awal, dengar kedua-dua pihak berasingan, cari punca, bincang bersama dan pantau.",
-    ng:"Biarkan mereka selesaikan sendiri kerana ia urusan peribadi orang dewasa.",
+    a:"Saya akan **bertindak awal** supaya konflik tidak berlarutan. Saya **mendengar kedua-dua pihak secara berasingan** tanpa berat sebelah untuk mengenal pasti **punca sebenar**. Kemudian saya mengadakan **perbincangan bersama** yang berfokus kepada isu kerja, menetapkan peraturan yang jelas dan **memantau** selepas itu. Jika gagal, saya **merujuk** kepada ketua jabatan atau kaunselor.",
     e:"🤝",
+    kw:"Konflik Staf",
+    m:[["⏱️", "Bertindak awal"], ["👂", "Dengar berasingan"], ["🔎", "Cari punca"], ["🤝", "Bincang bersama"], ["👀", "Peraturan & pantau"], ["⬆️", "Rujuk jika gagal"]],
     j:["Bertindak awal, jangan biar berlarutan.",
        "Dengar kedua-dua pihak secara berasingan tanpa berat sebelah.",
        "Kenal pasti punca sebenar: agihan tugas, komunikasi atau hal peribadi.",
@@ -540,9 +581,10 @@ var JOBS = [
     t:"Tekankan sikap adil dan profesional; keutamaan ialah perkhidmatan kepada pesakit tidak terjejas." },
 
   { k:"Pengurusan & Kepimpinan", s:"Seorang doktor mengadu keputusan ujian lewat dan memarahi staf anda. Apakah tindakan anda?",
-    ok:"Dengar dengan tenang, selesaikan keperluan pesakit, siasat punca dan beri maklum balas jujur.",
-    ng:"Pertahankan staf dan jelaskan bahawa kelewatan berpunca daripada wad.",
+    a:"Saya akan **bertenang dan mendengar** aduan itu sepenuhnya serta memohon maaf atas kesulitan. Keutamaan saya ialah **pesakit**, jadi saya menyemak status ujian dan menyegerakan keputusan. Kemudian saya **menyiasat punca** kelewatan dan memberi **maklum balas yang jujur** kepada doktor. Aduan **direkodkan** mengikut prosedur, dan saya **menyokong serta membimbing staf** jika ada kelemahan.",
     e:"👂",
+    kw:"Aduan Doktor",
+    m:[["😌", "Tenang & dengar"], ["🩺", "Pesakit dahulu"], ["🔎", "Siasat punca"], ["💬", "Maklum balas jujur"], ["📝", "Rekod aduan"], ["🛡️", "Sokong & bimbing staf"]],
     j:["Tenang dan dengar aduan sepenuhnya; mohon maaf atas kesulitan.",
        "Selesaikan keperluan pesakit dahulu: semak status ujian dan segerakan keputusan.",
        "Siasat punca kelewatan: spesimen lewat sampai, alat rosak, ujian diulang, kesilapan staf.",
@@ -552,9 +594,10 @@ var JOBS = [
     t:"Tunjuk anda mengutamakan pesakit, menjaga hubungan dengan pelanggan dan melindungi staf secara adil." },
 
   { k:"Pengurusan & Kepimpinan", s:"Anda dapati satu keputusan ujian yang salah telah dikeluarkan kepada wad. Apakah tindakan anda?",
-    ok:"Maklum doktor segera, keluarkan laporan pembetulan, lapor insiden dan buat analisis punca.",
-    ng:"Betulkan dalam sistem secara senyap supaya tidak menimbulkan kekecohan.",
+    a:"Saya akan **menghubungi doktor atau wad dengan segera** supaya rawatan pesakit tidak tersasar. Keputusan ditarik balik dan **laporan pembetulan** dikeluarkan. Saya **menyemak sampel lain** yang mungkin terjejas, **melaporkan insiden** kepada ketua unit atau pakar patologi, dan menjalankan **analisis punca (RCA)**. Pengajaran **dikongsi dengan staf** tanpa mencari salah individu.",
     e:"✏️",
+    kw:"Keputusan Salah",
+    m:[["📞", "Maklum doktor segera"], ["📄", "Laporan pembetulan"], ["🔍", "Semak sampel lain"], ["📝", "Lapor insiden"], ["🌳", "Analisis punca (RCA)"], ["🗣️", "Kongsi pengajaran"]],
     j:["Hubungi doktor atau wad dengan segera untuk memaklumkan kesilapan supaya rawatan tidak tersasar.",
        "Tarik balik keputusan dan keluarkan laporan pembetulan (amended report) dengan rekod yang jelas.",
        "Semak sama ada sampel pesakit lain turut terjejas.",
@@ -564,9 +607,10 @@ var JOBS = [
     t:"Kata kunci: keselamatan pesakit, ketelusan, tidak menyembunyikan kesilapan." },
 
   { k:"Pengurusan & Kepimpinan", s:"Penganalisis utama rosak pada waktu malam dan banyak sampel segera menunggu. Apa tindakan anda?",
-    ok:"Troubleshoot, aktifkan pelan sandaran, utamakan sampel kritikal, maklum wad dan hubungi jurutera.",
-    ng:"Simpan semua sampel dan tunggu jurutera datang pada waktu pejabat.",
+    a:"Saya akan cuba **troubleshoot** mengikut manual, kemudian mengaktifkan **pelan sandaran** seperti alat sandaran, kaedah manual atau makmal rujukan terdekat. **Sampel kritikal diutamakan**, dan **wad serta Jabatan Kecemasan dimaklumkan** tentang kelewatan. Saya **menghubungi jurutera** dan penyelia. Sebelum alat diguna semula, **IQC** dijalankan dan kerosakan direkodkan.",
     e:"🌙",
+    kw:"Alat Rosak",
+    m:[["🔧", "Troubleshoot"], ["🛟", "Pelan sandaran"], ["🚨", "Utamakan kritikal"], ["📞", "Maklum wad & Kecemasan"], ["👷", "Hubungi jurutera"], ["✅", "IQC sebelum guna semula"]],
     j:["Cuba penyelesaian asas mengikut manual (troubleshooting) dan semak mesej ralat.",
        "Aktifkan pelan sandaran: guna alat sandaran, kaedah manual atau hantar ke makmal rujukan terdekat.",
        "Utamakan sampel kecemasan dan kritikal.",
@@ -576,9 +620,10 @@ var JOBS = [
     t:"Sebut 'pelan kesinambungan perkhidmatan' (contingency plan) yang patut wujud secara bertulis." },
 
   { k:"Pengurusan & Kepimpinan", s:"Bagaimanakah anda melatih dan menilai kompetensi staf baharu?",
-    ok:"Orientasi, latihan berstruktur dengan mentor, penilaian kompetensi, baru dibenar bekerja sendiri.",
-    ng:"Beri SOP untuk dibaca dan terus masukkan dalam jadual atas panggilan.",
+    a:"Staf baharu melalui **orientasi** tentang organisasi, keselamatan dan SOP asas. Mereka kemudian dilatih secara **berstruktur dengan mentor** dan senarai semak. **Kompetensi dinilai** melalui pemerhatian, ujian bertulis dan sampel buta. Hanya selepas **disahkan kompeten** barulah mereka dibenarkan bekerja sendiri dan bertugas atas panggilan. **Penilaian semula** dibuat secara berkala dan **CPD** digalakkan.",
     e:"🎓",
+    kw:"Latih Staf Baharu",
+    m:[["🧭", "Orientasi"], ["👥", "Latihan + mentor"], ["✅", "Nilai kompetensi"], ["🔓", "Baru kerja sendiri"], ["🔁", "Nilai semula berkala"], ["📚", "CPD"]],
     j:["Program orientasi: struktur organisasi, keselamatan, kerahsiaan, SOP asas.",
        "Latihan berstruktur mengikut unit dengan mentor dan senarai semak latihan.",
        "Penilaian kompetensi: pemerhatian langsung, ujian bertulis, sampel buta (blind sample).",
@@ -588,9 +633,10 @@ var JOBS = [
     t:"Kaitkan dengan keperluan personel dalam MS ISO 15189." },
 
   { k:"Pengurusan & Kepimpinan", s:"Ceritakan satu inovasi atau projek penambahbaikan kualiti yang anda terlibat.",
-    ok:"Nyatakan masalah, peranan anda, penyelesaian dan hasil yang diukur.",
-    ng:"Terangkan teori KIK dan Lean secara umum tanpa contoh projek sendiri.",
+    a:"Saya terlibat dalam projek **[nama projek]** sebagai **[peranan]**. **Masalah asalnya** ialah [masalah], berdasarkan data [data]. Kami **menganalisis punca** dan melaksanakan [penyelesaian]. **Hasilnya**, [ukuran: masa, kos atau kadar ralat] bertambah baik daripada [sebelum] kepada [selepas]. Projek ini mendapat **[pengiktirafan]** atau telah diperluas ke unit lain.",
     e:"💡",
+    kw:"Inovasi / Projek",
+    m:[["🏷️", "Nama & peranan"], ["📉", "Masalah + data"], ["🛠️", "Punca & penyelesaian"], ["📈", "Hasil diukur"], ["🏆", "Pengiktirafan / perluasan"]],
     j:["Nama projek dan peranan anda (ketua, ahli, fasilitator).",
        "Masalah asal dan data yang menyokong.",
        "Analisis punca dan penyelesaian yang dilaksana.",
@@ -599,9 +645,10 @@ var JOBS = [
     t:"Jika belum pernah mengetuai projek, cerita projek yang anda sertai dan apa yang anda mahu buat seterusnya." },
 
   { k:"Pengurusan & Kepimpinan", s:"Ketua anda memberi arahan yang anda tidak persetujui. Apakah tindakan anda?",
-    ok:"Fahami tujuan, kemuka pandangan secara berhemah; laksana jika arahan sah, bantah bertulis jika menyalahi peraturan.",
-    ng:"Laksana separuh hati dan luahkan rasa tidak puas hati kepada staf bawahan.",
+    a:"Saya akan **memahami dahulu tujuan** arahan itu. Jika masih tidak bersetuju, saya **mengemukakan pandangan** dan cadangan alternatif **secara berhemah** melalui saluran yang betul. Jika keputusan kekal dan arahan itu **sah**, saya **melaksanakannya dengan sepenuh komitmen**. Jika arahan bercanggah dengan peraturan atau keselamatan pesakit, saya menyatakan **bantahan secara bertulis**. Saya tidak akan **memburukkan ketua** di hadapan staf.",
     e:"🗣️",
+    kw:"Tidak Setuju Arahan",
+    m:[["🤔", "Fahami tujuan"], ["🗣️", "Pandangan berhemah"], ["✅", "Sah: laksana penuh"], ["✍️", "Salah: bantah bertulis"], ["🤐", "Jangan burukkan ketua"]],
     j:["Fahami dahulu sebab dan tujuan arahan tersebut.",
        "Kemuka pandangan dan cadangan alternatif secara berhemah, disokong fakta, melalui saluran yang betul.",
        "Jika keputusan kekal dan arahan itu sah, laksanakan dengan sepenuh komitmen.",
@@ -611,9 +658,10 @@ var JOBS = [
 
   /* ---------- E. Perkhidmatan awam & isu semasa ---------- */
   { k:"Perkhidmatan Awam & Isu Semasa", s:"Seorang pembekal menawarkan hadiah kepada anda selepas urusan perolehan. Apakah tindakan anda?",
-    ok:"Tolak dengan baik, rujuk peraturan penerimaan hadiah, lapor kepada ketua jabatan atau SPRM jika perlu.",
-    ng:"Terima kerana urusan perolehan sudah selesai dan hadiah itu tidak mempengaruhi keputusan.",
+    a:"Saya akan **menolak dengan baik** dan menjelaskan bahawa penjawat awam tidak boleh menerima hadiah berkaitan tugas rasmi, selaras dengan **Peraturan-Peraturan Pegawai Awam (Kelakuan dan Tatatertib) 1993**. Jika hadiah sukar ditolak, saya **melaporkannya secara bertulis kepada ketua jabatan**. Jika ada unsur rasuah, saya melaporkannya kepada Unit Integriti atau **SPRM**. Saya memastikan perolehan dibuat secara **telus**.",
     e:"🎁",
+    kw:"Hadiah Pembekal",
+    m:[["🙅", "Tolak dengan baik"], ["📕", "Peraturan 1993"], ["✍️", "Lapor ketua jabatan"], ["🚔", "Rasuah: SPRM"], ["🔍", "Perolehan telus"]],
     j:["Tolak dengan baik dan jelaskan penjawat awam tidak boleh menerima hadiah yang berkaitan tugas rasmi.",
        "Rujuk peraturan penerimaan hadiah dalam Peraturan-Peraturan Pegawai Awam (Kelakuan dan Tatatertib) 1993.",
        "Jika hadiah sukar ditolak atau sudah diterima, lapor secara bertulis kepada ketua jabatan.",
@@ -622,9 +670,10 @@ var JOBS = [
     t:"Semak pekeliling penerimaan hadiah yang terkini di jabatan anda." },
 
   { k:"Perkhidmatan Awam & Isu Semasa", s:"Apakah yang anda faham tentang peraturan tatatertib penjawat awam?",
-    ok:"Peraturan-Peraturan Pegawai Awam (Kelakuan dan Tatatertib) 1993; hukuman daripada amaran hingga buang kerja.",
-    ng:"Akta Kerja 1955; hukuman ditentukan oleh Mahkamah Perusahaan.",
+    a:"Tatatertib penjawat awam berpandukan **Peraturan-Peraturan Pegawai Awam (Kelakuan dan Tatatertib) 1993**. Ia menetapkan tatakelakuan seperti **taat setia, jujur, amanah** dan bertanggungjawab. Contoh pelanggaran ialah **tidak hadir tanpa cuti, ingkar perintah dan cuai**. Hukumannya bermula daripada **amaran** hingga **buang kerja**. Sebagai penyelia, saya perlu menjadi contoh, **menegur awal** dan **melaporkan pelanggaran**.",
     e:"📕",
+    kw:"Tatatertib",
+    m:[["📕", "Peraturan 1993"], ["🤝", "Taat, jujur, amanah"], ["🚫", "Ponteng, ingkar, cuai"], ["⚖️", "Amaran hingga buang kerja"], ["👀", "Penyelia: tegur & lapor"]],
     j:["Rujukan utama: Peraturan-Peraturan Pegawai Awam (Kelakuan dan Tatatertib) 1993.",
        "Menetapkan tatakelakuan: taat setia, tidak mengutamakan kepentingan peribadi, jujur, amanah, bertanggungjawab.",
        "Contoh pelanggaran: tidak hadir bertugas tanpa cuti, ingkar perintah, cuai, menerima hadiah, pekerjaan luar tanpa kebenaran.",
@@ -633,9 +682,10 @@ var JOBS = [
     t:"Sebut tanggungjawab penyelia; tidak melaporkan pelanggaran staf juga satu kesalahan." },
 
   { k:"Perkhidmatan Awam & Isu Semasa", s:"Apakah yang anda tahu tentang Sistem Saraan Perkhidmatan Awam (SSPA)?",
-    ok:"Ganti SSM mulai 1 Disember 2024; pelarasan gaji dua fasa: 1 Disember 2024 dan 1 Januari 2026.",
-    ng:"Ganti SSM mulai 1 Januari 2026; pelarasan gaji sekali sahaja pada tarikh itu.",
+    a:"**SSPA** ialah Sistem Saraan Perkhidmatan Awam yang **menggantikan SSM** mulai **1 Disember 2024**. Pelarasan gaji dibuat dalam dua fasa: **Fasa 1 pada 1 Disember 2024** dan **Fasa 2 pada 1 Januari 2026**, iaitu **8% dan 7%** bagi Kumpulan Pelaksana serta Pengurusan dan Profesional. **Gred diseragamkan**, contohnya JTMP kini U5 hingga U8. Sebagai balasan, penjawat awam perlu meningkatkan **prestasi dan produktiviti**.",
     e:"💰",
+    kw:"SSPA",
+    m:[["🔄", "Ganti SSM, 1 Dis 2024"], ["📆", "Fasa 1: Dis 2024"], ["📆", "Fasa 2: Jan 2026"], ["💹", "8% + 7%"], ["🔢", "Gred baharu U5-U8"], ["📈", "Prestasi & produktiviti"]],
     j:["SSPA menggantikan Sistem Saraan Malaysia (SSM), berkuat kuasa 1 Disember 2024.",
        "Pelarasan gaji dua fasa: Fasa 1 pada 1 Disember 2024 dan Fasa 2 pada 1 Januari 2026.",
        "Kumpulan Pelaksana serta Pengurusan dan Profesional: 8% (Fasa 1) dan 7% (Fasa 2); Kumpulan Pengurusan Tertinggi: 4% dan 3%.",
@@ -645,9 +695,10 @@ var JOBS = [
     t:"Semak pekeliling JPA terkini sebelum temuduga kerana butiran boleh dikemas kini." },
 
   { k:"Perkhidmatan Awam & Isu Semasa", s:"Apakah visi, misi dan budaya korporat Kementerian Kesihatan Malaysia?",
-    ok:"Budaya korporat KKM: Penyayang, Profesionalisme dan Kerja Berpasukan.",
-    ng:"Budaya korporat KKM: Cekap, Pantas dan Mesra.",
+    a:"**Visi** KKM ialah negara menggembleng tenaga ke arah **kesihatan yang lebih baik**. **Misinya** ialah menerajui dan bekerjasama membantu rakyat mencapai potensi kesihatan sepenuhnya serta memastikan sistem kesihatan yang berkualiti tinggi. Budaya korporat KKM ialah **Penyayang, Profesionalisme dan Kerja Berpasukan**. Di makmal, saya mengamalkannya melalui keputusan yang tepat dan cepat untuk pesakit.",
     e:"❤️",
+    kw:"Visi, Misi, Budaya",
+    m:[["🌟", "Visi: kesihatan lebih baik"], ["🧭", "Misi: terajui & bekerjasama"], ["❤️", "Penyayang"], ["🎓", "Profesionalisme"], ["🤝", "Kerja Berpasukan"]],
     j:["Visi: Negara menggembleng tenaga ke arah kesihatan yang lebih baik.",
        "Misi: menerajui dan bekerjasama membantu rakyat mencapai potensi kesihatan sepenuhnya, serta memastikan sistem kesihatan berkualiti tinggi dan saksama.",
        "Budaya korporat: Penyayang, Profesionalisme dan Kerja Berpasukan.",
@@ -656,9 +707,10 @@ var JOBS = [
     t:"Hafal ayat rasmi daripada laman web KKM; panel kadang-kadang minta sebut tepat." },
 
   { k:"Perkhidmatan Awam & Isu Semasa", s:"Apakah Akta Profesion Kesihatan Bersekutu 2016 (Akta 774) dan kesannya kepada JTMP?",
-    ok:"Mengawal selia profesion kesihatan bersekutu; JTMP wajib berdaftar dan memiliki perakuan amalan.",
-    ng:"Mengawal selia makmal swasta sahaja; JTMP kerajaan tidak perlu berdaftar.",
+    a:"**Akta 774** ialah Akta Profesion Kesihatan Bersekutu 2016 yang **mengawal selia** profesion kesihatan bersekutu, termasuk JTMP. Pengamal **wajib berdaftar** dengan Majlis Profesion Kesihatan Bersekutu Malaysia dan memiliki **perakuan amalan** yang sah. Akta ini menetapkan **kelayakan dan tatalaku** profesional, sekali gus **melindungi orang awam**. Sebagai penyelia, saya memastikan semua staf berdaftar dan perakuan amalan **tidak luput**.",
     e:"🪪",
+    kw:"Akta 774",
+    m:[["⚖️", "Kawal selia profesion"], ["📝", "Wajib berdaftar (Majlis)"], ["🪪", "Perakuan amalan sah"], ["🎓", "Kelayakan & tatalaku"], ["🛡️", "Lindung orang awam"], ["👀", "Penyelia: pantau luput"]],
     j:["Akta untuk mengawal selia profesion kesihatan bersekutu, termasuk Juruteknologi Makmal Perubatan.",
        "Pengamal perlu berdaftar dengan Majlis Profesion Kesihatan Bersekutu Malaysia.",
        "Perlu memiliki perakuan amalan yang sah dan diperbaharui mengikut tempoh ditetapkan.",
@@ -668,9 +720,10 @@ var JOBS = [
     t:"Pastikan anda tahu status pendaftaran dan tarikh luput perakuan amalan anda sendiri." },
 
   { k:"Perkhidmatan Awam & Isu Semasa", s:"Bagaimanakah pendigitalan boleh menambah baik perkhidmatan makmal?",
-    ok:"LIS, kod bar dan keputusan elektronik kurangkan kesilapan dan pendekkan TAT; pelan sandaran manual masih perlu.",
-    ng:"Sistem digital menghapuskan semua kesilapan, jadi pelan sandaran manual tidak diperlukan lagi.",
+    a:"Pendigitalan menambah baik perkhidmatan makmal melalui **LIS**, iaitu permintaan ujian dan keputusan secara elektronik yang mengurangkan kesilapan salinan. **Kod bar** dan pengantaramukaan alat mempercepat proses, dan keputusan terus masuk ke rekod elektronik sehingga **TAT lebih pendek**. **Papan pemuka** membantu memantau prestasi. Namun, **pelan sandaran manual** tetap perlu, dan penyelia berperanan sebagai **ejen perubahan**.",
     e:"💻",
+    kw:"Pendigitalan",
+    m:[["💻", "LIS"], ["🏷️", "Kod bar & antara muka"], ["⚡", "Keputusan terus, TAT pendek"], ["📊", "Papan pemuka"], ["🛟", "Sandaran manual"], ["🚀", "Ejen perubahan"]],
     j:["Sistem Maklumat Makmal (LIS): permintaan ujian dan keputusan secara elektronik, kurang kesilapan salinan.",
        "Kod bar dan pengantaramukaan alat mempercepat proses dan menjejak spesimen.",
        "Keputusan terus ke rekod perubatan elektronik, TAT lebih pendek.",
@@ -680,9 +733,10 @@ var JOBS = [
     t:"Beri contoh sistem yang digunakan di tempat anda dan satu cadangan penambahbaikan." },
 
   { k:"Perkhidmatan Awam & Isu Semasa", s:"Bagaimanakah anda menjaga kerahsiaan maklumat pesakit di makmal?",
-    ok:"Beri keputusan kepada pihak yang berhak sahaja, kawal capaian LIS, tidak kongsi di media sosial atau aplikasi mesej.",
-    ng:"Boleh kongsi keputusan dalam kumpulan WhatsApp staf asalkan untuk tujuan kerja.",
+    a:"Keputusan hanya diberikan kepada **pihak yang berhak**, iaitu doktor atau wad yang merawat. Capaian LIS dikawal dengan **kata laluan sendiri** yang tidak dikongsi. Maklumat pesakit **tidak dikongsi di media sosial** atau aplikasi mesej. Rekod **disimpan dan dilupus dengan selamat**. Saya sentiasa **mengingatkan staf** tentang etika, dan sebarang **pelanggaran dilaporkan** serta disiasat.",
     e:"🔒",
+    kw:"Kerahsiaan",
+    m:[["👤", "Pihak berhak sahaja"], ["🔑", "Kata laluan sendiri"], ["📵", "Tiada media sosial"], ["🗄️", "Simpan & lupus selamat"], ["📢", "Ingatkan staf"], ["🚨", "Lapor pelanggaran"]],
     j:["Keputusan hanya diberi kepada pihak yang berhak (doktor atau wad yang merawat) melalui saluran rasmi.",
        "Kawalan capaian LIS: kata laluan sendiri, tidak berkongsi, log keluar selepas guna.",
        "Tidak membincang atau berkongsi maklumat pesakit di media sosial dan aplikasi mesej.",
@@ -692,9 +746,10 @@ var JOBS = [
     t:"Contoh isu semasa: mengambil gambar keputusan pesakit dengan telefon peribadi." },
 
   { k:"Perkhidmatan Awam & Isu Semasa", s:"Apakah cabaran utama perkhidmatan makmal KKM sekarang dan apakah cadangan anda?",
-    ok:"Pilih 2-3 cabaran (beban kerja, bajet, alat usang) dan beri cadangan praktikal di peringkat anda.",
-    ng:"Senaraikan semua masalah dan nyatakan penyelesaiannya terletak pada pihak kementerian.",
+    a:"Cabaran utama ialah **beban kerja yang meningkat** dengan staf yang terhad, **kekangan bajet** dan peralatan usang, serta keperluan **mengekalkan akreditasi**. Makmal juga perlu bersedia menghadapi **wabak baharu**. Cadangan saya ialah menggunakan **data, automasi dan perkongsian sumber** antara fasiliti, serta bekerjasama dengan klinisian untuk **mengurangkan ujian berulang** yang tidak perlu.",
     e:"🧗",
+    kw:"Cabaran Makmal",
+    m:[["👥", "Beban tinggi, staf terhad"], ["💸", "Bajet & alat usang"], ["🏅", "Kekal akreditasi"], ["🦠", "Wabak baharu"], ["💡", "Data, automasi, kongsi sumber"], ["✂️", "Kurang ujian berulang"]],
     j:["Beban kerja meningkat dengan sumber manusia yang terhad.",
        "Kekangan bajet, kos reagen dan peralatan yang semakin usang.",
        "Keperluan mengekalkan akreditasi dan kualiti.",
@@ -705,33 +760,36 @@ var JOBS = [
 
   /* ---------- F. Peringkat Kementerian ---------- */
   { k:"Peringkat Kementerian", s:"Terangkan secara ringkas struktur organisasi Kementerian Kesihatan Malaysia.",
-    ok:"KSU mengetuai pentadbiran; Ketua Pengarah Kesihatan mengetuai hal teknikal dan profesional.",
-    ng:"Ketua Pengarah Kesihatan mengetuai pentadbiran dan kewangan; KSU mengetuai hal klinikal.",
+    a:"KKM diketuai oleh **Menteri Kesihatan** dan dibantu Timbalan Menteri. **Ketua Setiausaha (KSU)** mengetuai pentadbiran, kewangan dan sumber manusia, manakala **Ketua Pengarah Kesihatan (KPK)** mengetuai hal teknikal dan profesional. Di bawahnya terdapat beberapa **program** seperti Perubatan, Kesihatan Awam dan Farmasi. Di peringkat negeri ada **JKN**, diikuti hospital dan pejabat kesihatan daerah. Makmal hospital terletak di bawah Program Perubatan, manakala **MKAK**, tempat saya bertugas, terletak di bawah **Program Kesihatan Awam**.",
     e:"🏛️",
+    kw:"Struktur KKM",
+    m:[["👔", "Menteri & Timbalan"], ["🗂️", "KSU: pentadbiran"], ["🩺", "KPK: teknikal"], ["🧩", "Program-program"], ["🗺️", "JKN, hospital, PKD"], ["🏛️", "MKAK: Program Kesihatan Awam"]],
     j:["Diketuai oleh Menteri Kesihatan, dibantu Timbalan Menteri.",
        "Ketua Setiausaha (KSU) mengetuai pentadbiran, kewangan dan sumber manusia.",
        "Ketua Pengarah Kesihatan (KPK) mengetuai hal teknikal dan profesional kesihatan.",
        "Program utama: Perubatan, Kesihatan Awam, Penyelidikan dan Sokongan Teknikal, Kesihatan Pergigian, Perkhidmatan Farmasi, Keselamatan dan Kualiti Makanan, serta Pengurusan.",
        "Di peringkat negeri: Jabatan Kesihatan Negeri (JKN), kemudian hospital, Pejabat Kesihatan Daerah dan klinik kesihatan.",
-       "Perkhidmatan makmal hospital terletak di bawah Program Perubatan."],
-    t:"Tahu nama terkini Menteri, KSU, KPK dan Pengarah Kesihatan Negeri anda. Semak di laman web KKM sebelum temuduga." },
+       "Makmal hospital di bawah Program Perubatan; MKAK di bawah Program Kesihatan Awam."],
+    t:"Tahu nama terkini Menteri, KSU, KPK dan Pengarah MKAK, serta kepada siapa MKAK melapor. Semak di laman web KKM sebelum temuduga." },
 
   { k:"Peringkat Kementerian", s:"Bagaimanakah perkhidmatan patologi dan makmal disusun di seluruh KKM?",
-    ok:"Makmal hospital, klinik kesihatan dan kesihatan awam, dengan IMR dan MKAK sebagai pusat rujukan.",
-    ng:"Setiap makmal berdiri sendiri dan menjalankan semua ujian tanpa sistem rujukan.",
+    a:"Perkhidmatan makmal KKM terdiri daripada **makmal hospital**, **makmal klinik kesihatan** untuk ujian asas, dan **Makmal Kesihatan Awam** untuk pengawasan penyakit, makanan dan air. Pusat rujukan kebangsaan ialah **IMR dan MKAK**, tempat saya bertugas. Semuanya dihubungkan melalui **sistem rujukan**, iaitu ujian khusus dihantar ke makmal rujukan supaya sumber tidak bertindih. Hal ehwal **profesion JTMP diselaraskan** di peringkat kementerian.",
     e:"🕸️",
+    kw:"Rangkaian Makmal",
+    m:[["🏥", "Makmal hospital"], ["🏠", "Makmal klinik kesihatan"], ["🦠", "Makmal Kesihatan Awam"], ["🏛️", "Rujukan: IMR, MKAK"], ["🔗", "Sistem rujukan"], ["👥", "Profesion diselaras KKM"]],
     j:["Makmal hospital: hospital negeri, hospital pakar dan hospital tanpa pakar, dengan skop ujian yang berbeza.",
        "Makmal klinik kesihatan untuk ujian asas di peringkat penjagaan primer.",
        "Makmal Kesihatan Awam untuk pengawasan penyakit, wabak, makanan dan air.",
        "Pusat rujukan kebangsaan seperti Institut Penyelidikan Perubatan (IMR) dan Makmal Kesihatan Awam Kebangsaan (MKAK).",
        "Sistem rangkaian dan rujukan: ujian khusus dihantar ke makmal rujukan supaya sumber tidak bertindih.",
        "Hal ehwal profesion JTMP diselaras di peringkat kementerian oleh bahagian yang menjaga sains kesihatan bersekutu."],
-    t:"Sebut ke mana makmal anda merujuk ujian khusus dan fasiliti mana yang merujuk kepada anda." },
+    t:"Terangkan dari fasiliti mana Unit TB MKAK menerima spesimen, dan ujian TB apa yang dirujuk kepada unit anda." },
 
   { k:"Peringkat Kementerian", s:"Apakah yang anda tahu tentang Kertas Putih Kesihatan?",
-    ok:"Hala tuju pembaharuan sistem kesihatan 15 tahun dengan empat tonggak, diluluskan Parlimen pada 2023.",
-    ng:"Laporan kewangan tahunan KKM yang dibentangkan setiap kali belanjawan.",
+    a:"**Kertas Putih Kesihatan** ialah dokumen **hala tuju pembaharuan** sistem kesihatan negara untuk tempoh **15 tahun**, yang **diluluskan Parlimen pada 2023**. Ia mempunyai empat tonggak: **transformasi penyampaian perkhidmatan**, **promosi kesihatan dan pencegahan penyakit**, **pembiayaan yang mampan**, serta **pengukuhan asas dan tadbir urus**. Peranan saya ialah menyokong pelaksanaannya di peringkat fasiliti.",
     e:"📄",
+    kw:"Kertas Putih Kesihatan",
+    m:[["🧭", "Hala tuju 15 tahun"], ["🏛️", "Lulus Parlimen 2023"], ["🏥", "T1: Penyampaian perkhidmatan"], ["🥗", "T2: Promosi & pencegahan"], ["💰", "T3: Pembiayaan mampan"], ["🧱", "T4: Asas & tadbir urus"]],
     j:["Dokumen hala tuju pembaharuan sistem kesihatan negara untuk tempoh jangka panjang (15 tahun).",
        "Diluluskan di Parlimen pada tahun 2023.",
        "Empat tonggak: transformasi penyampaian perkhidmatan kesihatan; promosi kesihatan dan pencegahan penyakit; pembiayaan kesihatan yang mampan dan saksama; pengukuhan asas dan tadbir urus sistem kesihatan.",
@@ -740,9 +798,10 @@ var JOBS = [
     t:"Semak perkembangan terkini pelaksanaannya; panel suka calon yang mengikuti isu semasa kementerian." },
 
   { k:"Peringkat Kementerian", s:"Kementerian mengeluarkan dasar atau arahan baharu. Bagaimanakah anda melaksanakannya di tempat anda?",
-    ok:"Baca pekeliling asal, bincang kesan, sediakan pelan, latih staf, kemas kini SOP dan pantau.",
-    ng:"Majukan pekeliling dalam kumpulan WhatsApp dan anggap semua staf sudah maklum.",
+    a:"Saya akan **membaca pekeliling asal** dan memahaminya, kemudian **berbincang dengan ketua jabatan** tentang kesannya kepada makmal. Saya menyediakan **pelan pelaksanaan**, memberi **taklimat kepada staf** dan **mengemas kini SOP**. Selepas itu saya **memantau pematuhan** dan melaporkan status kepada JKN atau kementerian. Sebarang kekangan dikemukakan sebagai **maklum balas melalui saluran rasmi**.",
     e:"📢",
+    kw:"Laksana Dasar",
+    m:[["📖", "Baca pekeliling asal"], ["💬", "Bincang kesan"], ["🗓️", "Pelan pelaksanaan"], ["🎓", "Taklimat & kemas kini SOP"], ["📊", "Pantau & lapor"], ["↩️", "Maklum balas rasmi"]],
     j:["Baca dan fahami pekeliling atau garis panduan asal, bukan sekadar dengar daripada orang lain.",
        "Bincang dengan ketua jabatan tentang kesan kepada makmal: SOP, peralatan, staf, bajet.",
        "Sediakan pelan pelaksanaan: siapa, bila, apa yang perlu diubah.",
@@ -752,9 +811,10 @@ var JOBS = [
     t:"Beri satu contoh arahan sebenar yang pernah anda laksanakan." },
 
   { k:"Peringkat Kementerian", s:"Bagaimanakah peranan anda sebagai JTMP Gred U8 menyumbang kepada matlamat KKM secara keseluruhan?",
-    ok:"Keputusan tepat dan cepat untuk pesakit, guna sumber dengan cekap, jaga kualiti dan bina pelapis.",
-    ng:"Tumpu kepada kerja di bangku makmal sahaja; matlamat kementerian urusan pihak atasan.",
+    a:"Sebagai JTMP Gred U8, saya menyumbang melalui **keputusan makmal yang tepat dan cepat** untuk diagnosis dan rawatan pesakit. Di **Unit TB**, keputusan dan data kami menyokong **pengawasan dan kawalan penyakit tibi**. Saya **mengurus sumber dengan cekap** untuk menjimatkan perbelanjaan kerajaan, **mengekalkan kualiti dan akreditasi** supaya rakyat yakin, serta **membangunkan pelapis** dan berkongsi kepakaran dengan fasiliti lain.",
     e:"🧩",
+    kw:"Sumbangan U8",
+    m:[["🎯", "Keputusan tepat & cepat"], ["🧫", "Data TB: kawalan tibi"], ["💰", "Sumber cekap"], ["🏅", "Kualiti & akreditasi"], ["🌱", "Bina pelapis"]],
     j:["Keputusan makmal yang tepat dan cepat menyokong diagnosis, rawatan dan keselamatan pesakit.",
        "Data makmal menyokong pengawasan penyakit dan tindakan kesihatan awam.",
        "Pengurusan sumber yang cekap (reagen, alat, staf) menjimatkan perbelanjaan kerajaan.",
@@ -763,9 +823,10 @@ var JOBS = [
     t:"Kaitkan tugas harian dengan gambaran besar; itu beza pemikiran U8 dengan gred bawah." },
 
   { k:"Peringkat Kementerian", s:"Jika dinaikkan pangkat, anda mungkin ditempatkan di mana-mana fasiliti KKM. Adakah anda bersedia?",
-    ok:"Nyatakan kesediaan; jika ada kekangan sebenar, sebut secara jujur tanpa menolak.",
-    ng:"Nyatakan anda hanya menerima kenaikan pangkat jika kekal di tempat sekarang.",
+    a:"Ya, saya **bersedia**. Sebagai penjawat awam, saya tertakluk kepada arahan pertukaran mengikut keperluan perkhidmatan, dan saya melihatnya sebagai **peluang menimba pengalaman**. [Jika ada **kekangan** sebenar, nyatakan secara jujur dan ringkas tanpa menolak.] Saya akan **merancang serah tugas** supaya perkhidmatan di tempat sekarang tidak terjejas.",
     e:"🚚",
+    kw:"Sedia Ditempatkan",
+    m:[["✅", "Nyatakan sedia"], ["🌱", "Peluang pengalaman"], ["🗣️", "Kekangan: jujur, ringkas"], ["🔄", "Rancang serah tugas"]],
     j:["Nyatakan kesediaan dengan jelas: penjawat awam tertakluk kepada arahan pertukaran mengikut keperluan perkhidmatan.",
        "Anda melihatnya sebagai peluang menimba pengalaman dan menyumbang di tempat yang memerlukan.",
        "Jika ada kekangan sebenar (keluarga, kesihatan), nyatakan secara jujur dan ringkas tanpa menolak.",
@@ -779,46 +840,50 @@ var JOBS = [
 {
   id: "ce-intern", lang: "en", ikon: "CE",
   nama: "Computer Engineering Student \u2014 Internship",
-  butiran: "Kulim Hi-Tech Park sites: Intel \u2022 Infineon \u2022 AT&S \u2022 SCHOTT \u2022 Celestica \u2022 Teleflex \u2022 Lam Research",
+  butiran: "Syahmi Alif (UTP) \u2022 Kulim Hi-Tech Park sites: Intel \u2022 Infineon \u2022 AT&S \u2022 SCHOTT \u2022 Celestica \u2022 Teleflex \u2022 Lam Research",
   syarikat: ["Intel", "Infineon", "AT&S", "SCHOTT", "Celestica", "Teleflex", "Lam Research"],
   soalan: [
 
   /* ---------- A. About you ---------- */
   { k:"About You", s:"Tell me about yourself.",
-    ok:"Short and structured: programme and year, key interests, one or two projects, why you are here.",
-    ng:"Go through your whole resume and personal history in detail so nothing is missed.",
-    e:"🙋",
-    j:["Name, university, programme (Computer Engineering) and current year or semester.",
-       "Areas you enjoy most, for example embedded systems, digital design, programming or data.",
-       "One or two projects or achievements that show those skills.",
-       "Activities outside class: clubs, competitions, part-time work.",
-       "Close with why you are here: what you want from this internship."],
+    a:"My name is **Syahmi Alif bin Shaiful Azhar**, a **Computer Engineering** student at **Universiti Teknologi PETRONAS (UTP)**. I enjoy **embedded systems and software**, and I have led projects such as an **electronic quiz system on STM32** and **Algae-X**, an Arduino-based water monitoring concept. Outside class, I was **Head of Logistics** for Tesla Cup 2026. I am looking for a **7-month internship from January to August 2027** to apply these skills in industry.",
+    e:"👨‍🎓",
+    kw:"About Me",
+    m:[["🎓", "Syahmi Alif, Comp. Eng., UTP"], ["❤️", "Embedded + software"], ["🛠️", "STM32 quiz, Algae-X"], ["🏅", "Head of Logistics, Top 6 hackathon"], ["🎯", "Internship Jan-Aug 2027"]],
+    j:["I am Syahmi Alif bin Shaiful Azhar, a Computer Engineering degree student at Universiti Teknologi PETRONAS (UTP). I also did my Foundation at UTP, and my family home is in Kulim.",
+       "I enjoy embedded systems and software: microcontrollers, sensors and programming.",
+       "Projects I led: an electronic quiz system on STM32, and Algae-X, an Arduino-based water monitoring concept.",
+       "Outside class: Head of Logistics for Tesla Cup 2026, and my hackathon project was selected among the Top 6 teams.",
+       "I am looking for a 7-month internship from January to August 2027 to apply these skills in industry."],
     t:"Keep it to about 90 seconds. Present, past, then future. Do not read out your whole resume." },
 
   { k:"About You", s:"Why did you choose computer engineering?",
-    ok:"A real reason, what you enjoy about hardware plus software, and how it links to this industry.",
-    ng:"Say it was mainly for the job prospects and because your results fitted the programme.",
+    a:"I chose computer engineering because **[my real reason or moment]**. What I like most is that it combines **hardware and software**. Building the **STM32 quiz system** and the **Arduino-based Algae-X** concept confirmed that this is the right field for me. It also links directly to the **semiconductor and electronics industry**, which is why I am applying here.",
     e:"🔌",
-    j:["A real reason or moment that got you interested (a project, a subject, a gadget you took apart).",
-       "What you like about it: it combines hardware and software.",
-       "Which subjects confirmed your interest and why.",
-       "How it links to the industry you are applying to."],
+    kw:"Why Comp. Eng.",
+    m:[["✨", "My real reason"], ["🔌", "Hardware + software"], ["🛠️", "STM32 & Arduino projects"], ["🏭", "Link to semiconductor industry"]],
+    j:["Give your own real reason or moment that got you interested (a project, a subject, a gadget you took apart).",
+       "What I like about it: it combines hardware and software.",
+       "What confirmed it: building the STM32 quiz system and the Arduino-based Algae-X concept.",
+       "How it links to this industry: semiconductor, electronics and embedded systems."],
     t:"A short personal story is more convincing than 'it has good job prospects'." },
 
   { k:"About You", s:"What are your strengths and weaknesses?",
-    ok:"Two strengths with examples, one honest weakness and what you are doing to improve it.",
-    ng:"List many strengths and say your only weakness is that you work too hard.",
+    a:"My first strength is **leading a team**: I was project leader for Algae-X, the STM32 quiz system and a ticket booking web application. My second is being **organised and reliable**, which I showed as **Head of Logistics** for Tesla Cup 2026. I also **learn fast under pressure**, as in the hackathon where we developed MedScan Assistant. My weakness is **[one honest weakness]**, and I am improving it by **[what I am doing]**.",
     e:"⚖️",
-    j:["Give 2 strengths that matter for an intern: fast learner, careful, good at debugging, works well in a team.",
-       "Back each strength with a short example from a project or lab.",
-       "Give 1 honest weakness that can be improved, for example public speaking or taking on too much.",
-       "Say what you are doing to improve it."],
+    kw:"Strengths & Weakness",
+    m:[["👑", "Leads project teams"], ["📦", "Organised: Head of Logistics"], ["⚡", "Learns fast: hackathon"], ["🪞", "1 honest weakness + fix"]],
+    j:["Strength 1, leading a team: project leader for Algae-X, the STM32 quiz system and the ticket booking web application.",
+       "Strength 2, organised and reliable: Head of Logistics for Tesla Cup 2026, after serving on the logistics committee in 2025.",
+       "Strength 3, learns fast under time pressure: developed MedScan Assistant with Gemini AI during a hackathon.",
+       "Weakness: choose one honest weakness of your own that can be improved, and say what you are doing about it."],
     t:"Avoid fake weaknesses like 'I work too hard'. Avoid weaknesses that are core to the job." },
 
   { k:"About You", s:"What do you hope to gain from this internship?",
-    ok:"Apply what you learned, learn industry tools, and complete something useful for the team.",
-    ng:"Mainly to fulfil the university requirement and collect the internship allowance.",
+    a:"I hope to see how what I learned in class is **used in a real environment**, and to learn **industry tools and standards**. I also want to improve my **soft skills**, such as communication and reporting. Most of all, I want to **complete a project that is useful** to the team, and to find out **which engineering path** suits me.",
     e:"🌱",
+    kw:"What I'll Gain",
+    m:[["🏭", "Theory in real use"], ["🧰", "Industry tools"], ["🗣️", "Soft skills"], ["✅", "A useful project"], ["🧭", "Find my path"]],
     j:["See how what you learned in class is used in a real factory or design environment.",
        "Learn industry tools, standards and ways of working.",
        "Improve soft skills: communication, reporting, working with engineers and technicians.",
@@ -827,9 +892,10 @@ var JOBS = [
     t:"Balance 'what I will learn' with 'what I will contribute'." },
 
   { k:"About You", s:"Where do you see yourself in five years?",
-    ok:"Working as an engineer, deeper in one area, taking more responsibility and still learning.",
-    ng:"No plan yet; you will decide after seeing which job pays the most.",
+    a:"In five years, I see myself as a **graduate engineer** working in a related field, with **depth in one area** such as test engineering, embedded software or automation. I hope to be taking on **more responsibility**, such as leading a small project, while **still learning** through certifications. I am open to **growing with a company** that invests in its people.",
     e:"🔭",
+    kw:"In 5 Years",
+    m:[["🎓", "Graduate engineer"], ["🎯", "Depth in one area"], ["📈", "More responsibility"], ["📚", "Still learning"], ["🌱", "Grow with company"]],
     j:["Graduated and working as an engineer in a related field.",
        "Built depth in one area, for example test engineering, embedded software or automation.",
        "Taking on more responsibility, such as leading a small project.",
@@ -838,64 +904,74 @@ var JOBS = [
     t:"Show direction, but stay realistic. You do not need a perfect plan." },
 
   { k:"About You", s:"Why should we choose you over other candidates?",
-    ok:"Match your skills to the role, give proof, and show a reliable, willing-to-learn attitude.",
-    ng:"Explain that the other candidates are probably weaker than you.",
+    a:"My skills **match the role**: I program in **C, C++, C# and Python**, and I have worked with **STM32 and Arduino**. As proof, I have **led five projects**, and my hackathon project was selected among the **Top 6 teams**. I also hold **Python and MATLAB certificates**. I am **reliable and willing to learn**, and I have a **genuine interest** in this company and industry.",
     e:"🏅",
-    j:["Match your skills to what the internship needs (programming, hardware, data, documentation).",
-       "Proof: a project, a grade, a competition or something you built yourself.",
-       "Attitude: reliable, willing to learn, not afraid to ask, finishes what you start.",
-       "Genuine interest in this company and industry."],
+    kw:"Why Me",
+    m:[["🧩", "C, Python, STM32, Arduino"], ["📂", "5 projects led, Top 6 hackathon"], ["📜", "Python & MATLAB certificates"], ["👍", "Reliable, keen to learn"], ["❤️", "Real interest"]],
+    j:["Skills that match: C, C++, C# and Python; STM32 and Arduino; Verilog; SQL, Excel and Power BI.",
+       "Proof: five projects as project leader, and a hackathon project selected among the Top 6 teams.",
+       "Certificates: Python Essentials 1 (Cisco Networking Academy) and MATLAB Onramp (MathWorks).",
+       "Attitude: reliable, willing to learn, not afraid to ask, finishes what I start.",
+       "Genuine interest in this company and in the semiconductor and electronics industry."],
     t:"Be confident without putting other candidates down." },
 
   /* ---------- B. Technical ---------- */
   { k:"Technical", s:"Describe a technical project you have done. What was your role?",
-    ok:"Goal, your own role, tools used, the hardest problem and how you solved it, then the result.",
-    ng:"Describe what the whole group did without separating your own part.",
+    a:"My project was the **Electronic Quiz Challenge**, an interactive quiz system on the **STM32 Nucleo-F401RE**. I was the **project leader**, and I personally worked on **[my own part]**. We integrated a **20x4 LCD, a seven-segment timer, push buttons and LEDs**. The hardest problem was **[the real problem]**, which I solved by **[how]**. In the end **[the result]**, and next time I would improve **[what]**.",
     e:"🛠️",
-    j:["Project goal in one sentence.",
-       "Your own role and what you personally built or coded.",
-       "Tools and technology used: language, microcontroller, sensors, software.",
-       "The hardest problem and how you solved it.",
-       "The result, and what you would improve if you did it again."],
+    kw:"My Project",
+    m:[["🎯", "STM32 quiz system"], ["👑", "Project leader + my own part"], ["🧰", "LCD, 7-segment timer, buttons, LEDs"], ["🧗", "Hardest problem & fix"], ["📈", "Result & improve"], ["🌊", "Backup: Algae-X (Arduino)"]],
+    j:["Project: Electronic Quiz Challenge, an interactive quiz system on the STM32 Nucleo-F401RE.",
+       "My role: project leader. Say which parts you personally built or coded.",
+       "Hardware: 20x4 LCD display, seven-segment timer, push buttons and LEDs.",
+       "Hardest problem: describe the real one you faced and how you solved it.",
+       "Result, and what you would improve if you did it again.",
+       "Backup project: Algae-X, a solar-powered floating concept with water-level and turbidity sensing, pumps and Arduino control."],
     t:"Say 'I' for your own work and 'we' for team work. Be ready for follow-up questions on every detail." },
 
   { k:"Technical", s:"What is the difference between a microprocessor and a microcontroller?",
-    ok:"A microcontroller has CPU, memory and peripherals on one chip; a microprocessor needs them externally.",
-    ng:"A microprocessor has CPU, memory and peripherals on one chip; a microcontroller needs them externally.",
+    a:"A **microprocessor** is mainly a **CPU**; it needs external memory and peripherals and is used in PCs and servers for **high performance**. A **microcontroller** has the CPU, memory and peripherals **on one chip**, and is designed for **low-cost, low-power** control tasks in embedded products. For example, Intel Core is a microprocessor, while **STM32 and Arduino**, which I used in my projects, are microcontrollers.",
     e:"🧠",
+    kw:"MPU vs MCU",
+    m:[["🧠", "MPU: CPU only"], ["🧩", "MCU: all on one chip"], ["🚀", "MPU: performance, OS"], ["🔋", "MCU: low cost & power"], ["📎", "I used STM32 & Arduino"]],
     j:["Microprocessor: mainly a CPU; needs external memory and peripherals; used in PCs and servers.",
        "Microcontroller: CPU, memory and peripherals (timers, ADC, GPIO, serial ports) on one chip.",
        "Microprocessors focus on high performance and run a full operating system.",
        "Microcontrollers focus on low cost, low power and control tasks in embedded products.",
-       "Examples: Intel Core is a microprocessor; Arduino (AVR), STM32 or ESP32 are microcontrollers."],
-    t:"Mention which microcontroller you have actually used." },
+       "Examples: Intel Core is a microprocessor; Arduino (AVR), STM32 or ESP32 are microcontrollers.",
+       "My experience: STM32 Nucleo-F401RE in the quiz system and Arduino in Algae-X."],
+    t:"Link the theory to your own STM32 and Arduino projects." },
 
   { k:"Technical", s:"Which programming languages are you comfortable with, and what have you built with them?",
-    ok:"Name them honestly with your level and one thing you built with each.",
-    ng:"List every language you have seen in class as if you were fluent in all of them.",
+    a:"I am most comfortable with **C, C++, C# and Python**. In **C** I built a Blackjack game on Ubuntu. I used **C++ and Python** to explore a Digital Twin project, and **C# with ASP.NET Core and React** for an event ticket booking system. I also know **Verilog, SQL and MATLAB**, and I use **GitHub**. I am honest about my level in each, and I can **pick up a new language** when the job needs it.",
     e:"⌨️",
-    j:["Name the languages honestly with your level, for example C/C++, Python, Java, Verilog/VHDL.",
-       "For each main language, one thing you built with it.",
-       "Explain where each fits: C for embedded, Python for scripting, automation and data.",
-       "Mention tools you know: Git, an IDE, Linux command line.",
-       "Show you can pick up a new language when the job needs it."],
-    t:"Never claim a language you cannot answer basic questions on." },
+    kw:"Languages",
+    m:[["🎚️", "C: Blackjack game"], ["🐍", "C++ & Python: Digital Twin"], ["🌐", "C# + React: ticket booking"], ["🔢", "Verilog, SQL, MATLAB"], ["🌳", "GitHub, Ubuntu"], ["📋", "Honest level for each"]],
+    j:["C: Blackjack game on Ubuntu.",
+       "C++ and Python: Digital Twin exploration, with Grafana and NVIDIA Omniverse for visualisation and simulation.",
+       "C# (ASP.NET Core) with React: event ticket booking web application.",
+       "Also: Verilog, SQL, HTML, CSS and MATLAB.",
+       "Tools: GitHub and Ubuntu. Certificate: Python Essentials 1 (Cisco Networking Academy).",
+       "State your honest level for each, and show you can pick up a new language when the job needs it."],
+    t:"Be ready to say which language you used on the STM32 and Arduino projects. Never claim a language you cannot answer basic questions on." },
 
   { k:"Technical", s:"Explain the difference between combinational and sequential logic.",
-    ok:"Combinational depends only on current inputs; sequential also depends on stored state and a clock.",
-    ng:"Sequential depends only on current inputs; combinational has memory and a clock.",
+    a:"In **combinational logic**, the output depends **only on the current inputs**, with no memory; examples are **adders, multiplexers and decoders**. In **sequential logic**, the output also depends on a **stored state**, usually with a **clock**; examples are **flip-flops, counters and state machines**. A latch is level-sensitive, while a flip-flop is edge-triggered.",
     e:"🔀",
+    kw:"Comb. vs Seq.",
+    m:[["➡️", "Comb: inputs only"], ["➕", "Adder, mux, decoder"], ["💾", "Seq: state + clock"], ["🔢", "Flip-flop, counter, FSM"], ["⏱️", "Latch level, FF edge"]],
     j:["Combinational: output depends only on the current inputs; no memory.",
        "Examples: adders, multiplexers, decoders, basic gates.",
        "Sequential: output depends on current inputs and stored state; has memory and usually a clock.",
        "Examples: flip-flops, registers, counters, state machines.",
        "A latch is level-sensitive, a flip-flop is edge-triggered."],
-    t:"If you have used an FPGA or Verilog, mention it here." },
+    t:"Verilog is on your resume, so be ready to explain what you built with it." },
 
   { k:"Technical", s:"What is an interrupt, and how is it different from polling?",
-    ok:"An interrupt signals the CPU when an event happens; polling keeps checking in a loop.",
-    ng:"Polling signals the CPU when an event happens; an interrupt keeps checking in a loop.",
+    a:"An **interrupt** is a signal that makes the processor pause its current work and run a handler, called an **ISR**. With **polling**, the program **checks the device again and again** in a loop. Interrupts are **more efficient and respond faster** for events that happen rarely, while polling is **simpler but wastes** processor time. A good practice is to **keep the ISR short**.",
     e:"🔔",
+    kw:"Interrupt vs Polling",
+    m:[["🔔", "Interrupt: signal to ISR"], ["🔁", "Polling: check in loop"], ["⚡", "Interrupt: efficient, fast"], ["🐢", "Polling: simple, wasteful"], ["✂️", "Keep ISR short"]],
     j:["Interrupt: a signal that makes the processor pause its current work and run a handler (ISR).",
        "Polling: the program checks the device again and again in a loop.",
        "Interrupts are more efficient and respond faster for events that happen rarely.",
@@ -904,9 +980,10 @@ var JOBS = [
     t:"Give an example, such as a button press or a timer interrupt in your project." },
 
   { k:"Technical", s:"Compare UART, SPI and I2C.",
-    ok:"UART: 2 wires, no clock. SPI: 4 wires, fast. I2C: 2 wires, many devices by address.",
-    ng:"UART: 4 wires with a clock. SPI: 2 wires with addresses. I2C: no clock, point to point.",
+    a:"**UART** is asynchronous and uses **two wires with no clock**, for point-to-point links. **SPI** is synchronous with **four wires** and is the **fastest**, using one chip-select per device. **I2C** is synchronous with **two wires** and supports many devices on one bus using **addresses**. I would choose SPI for speed, I2C for many devices with few pins, and UART for simple links and debugging.",
     e:"🔗",
+    kw:"UART / SPI / I2C",
+    m:[["📡", "UART: 2 wires, no clock"], ["🏎️", "SPI: 4 wires, fast"], ["🏠", "I2C: 2 wires, addresses"], ["🎯", "Choose by speed / pins"]],
     j:["UART: asynchronous, 2 wires (TX, RX), no clock, point to point; both sides must agree on baud rate.",
        "SPI: synchronous, 4 wires (MOSI, MISO, SCK, CS), fast, one chip-select per device.",
        "I2C: synchronous, 2 wires (SDA, SCL), many devices on one bus using addresses, slower than SPI.",
@@ -914,20 +991,22 @@ var JOBS = [
     t:"Say which one you used and with which sensor or module." },
 
   { k:"Technical", s:"Explain the main concepts of object-oriented programming.",
-    ok:"Encapsulation, abstraction, inheritance and polymorphism.",
-    ng:"Compilation, iteration, recursion and execution.",
+    a:"Object-oriented programming has four main concepts. **Encapsulation** keeps data and its functions together and hides the internal details. **Abstraction** shows only what the user of a class needs. **Inheritance** lets a new class reuse and extend an existing one. **Polymorphism** lets the same call behave differently depending on the object. Together they make code easier to **reuse and maintain**.",
     e:"🧱",
+    kw:"OOP",
+    m:[["📦", "Encapsulation"], ["🎭", "Abstraction"], ["🧬", "Inheritance"], ["🦎", "Polymorphism"], ["♻️", "Reuse & maintain"]],
     j:["Encapsulation: keep data and the functions that use it together, hide the internal details.",
        "Abstraction: show only what the user of the class needs.",
        "Inheritance: a new class reuses and extends an existing class.",
        "Polymorphism: the same call behaves differently depending on the object type.",
        "Benefit: code that is easier to reuse, test and maintain."],
-    t:"A simple example (Shape, Circle, Rectangle) is enough." },
+    t:"Use your event ticket booking system (C# ASP.NET Core) as the example; your resume says it applied OOP concepts." },
 
   { k:"Technical", s:"What is the difference between an array and a linked list? When would you use each?",
-    ok:"Array: fast access by index. Linked list: easy to insert and delete.",
-    ng:"Array: easy to insert and delete. Linked list: fast access by index.",
+    a:"An **array** stores elements **next to each other**, so access **by index is fast**, but inserting or deleting in the middle is slow. A **linked list** stores **nodes linked by pointers**, so it is **easy to insert and delete**, but slow to reach the n-th item, and it uses extra memory. I would use an **array when reading by index** a lot, and a **linked list when inserting and removing** often.",
     e:"📚",
+    kw:"Array vs Linked List",
+    m:[["📏", "Array: side by side"], ["⚡", "Array: fast by index"], ["🔗", "List: nodes + pointers"], ["✂️", "List: easy insert / delete"], ["🎯", "Read: array, edit: list"]],
     j:["Array: elements stored next to each other; fast access by index.",
        "Array: inserting or deleting in the middle is slow; size is usually fixed.",
        "Linked list: nodes linked by pointers; easy to insert and delete.",
@@ -936,9 +1015,10 @@ var JOBS = [
     t:"If asked, be ready to mention stack and queue as well." },
 
   { k:"Technical", s:"What is the difference between a process and a thread?",
-    ok:"A process has its own memory; threads run inside a process and share its memory.",
-    ng:"A thread has its own memory; processes run inside a thread and share its memory.",
+    a:"A **process** is a running program with **its own memory space**. A **thread** is a unit of execution inside a process, and threads **share the process memory**. Threads are **lighter and faster** to create, but shared memory can cause **race conditions**, so **locks or mutexes** are needed. A crash in one process usually does not affect another, but a bad thread can bring down its whole process.",
     e:"🧵",
+    kw:"Process vs Thread",
+    m:[["🏠", "Process: own memory"], ["🧵", "Thread: shares memory"], ["🪶", "Threads are lighter"], ["🔒", "Races: locks / mutex"], ["💥", "Bad thread kills process"]],
     j:["Process: a running program with its own memory space.",
        "Thread: a unit of execution inside a process; threads share the process memory.",
        "Threads are lighter and faster to create and switch.",
@@ -947,9 +1027,10 @@ var JOBS = [
     t:"Link to embedded if you can: tasks in an RTOS behave like threads." },
 
   { k:"Technical", s:"Your code or circuit is not working. How do you debug it?",
-    ok:"Reproduce it, check the basics, isolate one part at a time, use tools, change one thing at a time.",
-    ng:"Change several things at once until it works, then move on.",
+    a:"First I **reproduce the problem** and describe exactly what is wrong. Then I **check the basics**: power, wiring, connections and typing mistakes. I **divide the problem** and test one part at a time, using tools such as **print statements, a debugger, a multimeter or an oscilloscope**. I **change one thing at a time** and record what I tried. After the fix, I look for the **root cause** and test again.",
     e:"🐞",
+    kw:"Debugging",
+    m:[["🔁", "Reproduce"], ["🔌", "Check the basics"], ["✂️", "Divide & isolate"], ["🧰", "Debugger, scope, prints"], ["1️⃣", "One change at a time"], ["🌳", "Root cause & retest"]],
     j:["Reproduce the problem and describe exactly what is wrong.",
        "Check the simple things first: power, wiring, connections, typing mistakes.",
        "Divide the problem: test one part at a time to find where it fails.",
@@ -959,20 +1040,22 @@ var JOBS = [
     t:"Tell a real debugging story. Interviewers want to see your method, not luck." },
 
   { k:"Technical", s:"What is version control and why is it important?",
-    ok:"It records every change, lets you go back, and lets several people work on the same code.",
-    ng:"It is a backup tool that keeps only the latest copy of your code.",
+    a:"**Version control**, such as Git, is a system that **records every change** to the code over time. It lets me **go back to an earlier version** if something breaks, and lets several people work on the same code using **branches and merges**. It also shows **who changed what and why**. In industry, it is the base for **code review and automated testing**.",
     e:"🌳",
+    kw:"Version Control",
+    m:[["📜", "Records every change"], ["⏪", "Go back anytime"], ["🌿", "Branch & merge"], ["👤", "Who changed what"], ["✅", "Code review & testing"]],
     j:["A system (such as Git) that records every change to code over time.",
        "You can go back to an earlier version if something breaks.",
        "Several people can work on the same code using branches and merges.",
        "Shows who changed what and why (commit messages).",
        "In industry it is the base for code review and automated testing."],
-    t:"Mention your GitHub projects if you have any." },
+    t:"GitHub is on your resume; be ready to say how you used it in a team project." },
 
   { k:"Technical", s:"What do you know about how a semiconductor chip is made?",
-    ok:"Design, then wafer fabrication (front-end), then assembly and test (back-end).",
-    ng:"Assembly and test first, then wafer fabrication, then design.",
+    a:"A chip starts with **design**, where the circuit is designed and verified with software. In the **front-end**, or **wafer fabrication**, the circuits are built on silicon wafers in a cleanroom through steps such as lithography, etching and deposition. In the **back-end**, the wafers are cut, **packaged and tested**. **Substrates and PCBs** then connect the chip to the product. Malaysia, especially **Penang and Kulim**, is strong in this chain.",
     e:"🏭",
+    kw:"How Chips Are Made",
+    m:[["✏️", "Design & verify"], ["🏭", "Front-end: wafer fab"], ["📦", "Back-end: assembly & test"], ["🟩", "Substrate / PCB"], ["📍", "Penang & Kulim strong"]],
     j:["Design: the circuit is designed and verified with software tools.",
        "Front-end (wafer fabrication): circuits are built on silicon wafers through steps like lithography, etching and deposition, in a cleanroom.",
        "Back-end (assembly and test): wafers are cut into dies, packaged, then tested.",
@@ -981,33 +1064,36 @@ var JOBS = [
     t:"Know which part of the chain the company you are applying to works in." },
 
   { k:"Technical", s:"How could programming or data skills be useful in a manufacturing plant?",
-    ok:"Automate manual reports, build dashboards, automate tests and analyse machine data.",
-    ng:"They are not very useful; a factory mainly needs mechanical skills.",
+    a:"Programming and data skills help a plant by **automating manual work**, such as collecting and reporting data. **Dashboards** can monitor output, yield and downtime, and **test automation** can run tests and log results. **Machine and sensor data** give early warning of problems, and **image processing or AI** can inspect products. I can contribute with **Python, SQL and Power BI**.",
     e:"📊",
+    kw:"Code in a Factory",
+    m:[["🤖", "Automate manual work"], ["📊", "Dashboards"], ["🧪", "Test automation"], ["📡", "Machine & sensor data"], ["👁️", "Vision / AI inspection"], ["💼", "Mine: Python, SQL, Power BI"]],
     j:["Automating manual work: scripts to collect, clean and report data.",
        "Dashboards to monitor output, yield, downtime and quality.",
        "Test automation: programs that run tests and log results.",
        "Machine and sensor data (IoT) for early warning of problems.",
        "Image processing or AI for inspection.",
-       "All of this helps engineers decide faster and reduce waste."],
+       "My related skills: Python, SQL, Excel and Power BI, plus Digital Twin exploration with Grafana."],
     t:"Useful for every company on the list, since all of them run factories." },
 
   /* ---------- C. Behavioural ---------- */
   { k:"Behavioural", s:"Tell me about a time you worked in a team. What was your role?",
-    ok:"Use STAR: the situation, your role, what you did, and the result.",
-    ng:"Say the team worked well and that you did most of the work yourself.",
+    a:"In a **hackathon team project**, my role was to **coordinate the team** through ideation, development and presentation. Because time was limited, we **divided the tasks** and communicated closely. Our main challenge was **[the real challenge]**, and I handled it by **[what I did]**. Our project was selected among the **Top 6 teams**, and I learned **[my lesson about teamwork]**.",
     e:"👥",
-    j:["Situation: which project and how many members.",
-       "Your role and tasks.",
-       "How the team communicated and divided the work.",
-       "A challenge the team faced and what you did about it.",
-       "The result and what you learned about teamwork."],
+    kw:"Teamwork (STAR)",
+    m:[["📍", "Hackathon team project"], ["🙋", "I coordinated the team"], ["💬", "Split tasks, limited time"], ["🧗", "Real challenge & action"], ["🏁", "Top 6 + lesson"]],
+    j:["Situation: a hackathon team project, for example MedScan Assistant, an AI-powered assistant concept built with Gemini AI.",
+       "My role: coordinated team members through the ideation, development and presentation phases.",
+       "How we worked: divided the tasks and communicated closely because the time was limited.",
+       "Challenge: describe the real one the team faced and what you did about it.",
+       "Result: in the 2026 hackathon the project was selected among the Top 6 teams. Say what you learned about teamwork."],
     t:"Use STAR: Situation, Task, Action, Result." },
 
   { k:"Behavioural", s:"Tell me about a time a team member was not contributing. What did you do?",
-    ok:"Talk to them privately first, agree a clear task, and escalate only if nothing changes.",
-    ng:"Do their part quietly and complain to the lecturer after the project.",
+    a:"I would **stay factual** and not attack the person. First I would **talk to them privately** to understand the reason. Then I would offer help or agree on a **smaller, clear task with a deadline**. If nothing changed, I would **raise it with the team leader or lecturer**. In my own experience, **[the real example]**, and the project was **still delivered**.",
     e:"💬",
+    kw:"Member Not Contributing",
+    m:[["📋", "Stay factual"], ["🚪", "Talk privately"], ["🎯", "Clear small task"], ["⬆️", "Escalate if no change"], ["🏁", "Still delivered"]],
     j:["Stay factual; do not attack the person.",
        "You spoke to them privately first to understand the reason.",
        "You offered help or agreed on a smaller, clear task with a deadline.",
@@ -1016,9 +1102,10 @@ var JOBS = [
     t:"Show you solve problems early and calmly, not by complaining." },
 
   { k:"Behavioural", s:"Describe a time you failed or made a mistake. What did you learn?",
-    ok:"A real example, own your part, how you fixed it, and what you changed afterwards.",
-    ng:"Say you cannot remember any failure, or blame the circumstances.",
+    a:"One example is **[a real failure, such as a bug before a demo or a missed deadline]**. **My part** in it was [what I did wrong]. I **fixed it** by [what I did]. Since then, I have **changed how I work**: [what I do differently now], so that it does not happen again.",
     e:"💥",
+    kw:"Failure",
+    m:[["📌", "Real example"], ["🙋", "Own my part"], ["🔧", "How I fixed it"], ["🔄", "What I changed"]],
     j:["Choose a real but not disastrous example (a failed test, a bug before a demo, a missed deadline).",
        "Admit your part clearly.",
        "What you did to fix it.",
@@ -1026,9 +1113,10 @@ var JOBS = [
     t:"The lesson is the most important part of this answer." },
 
   { k:"Behavioural", s:"How do you manage several deadlines at the same time?",
-    ok:"List the tasks, prioritise, break them down, and warn early if you cannot make a deadline.",
-    ng:"Work on whichever is most interesting and catch up the night before.",
+    a:"I **list all the tasks** and their deadlines, then **prioritise** by urgency and importance. I **break big tasks into small steps** and set my own earlier deadlines, using a **planner or calendar** so that I start early. If I cannot meet a deadline, I **tell the person early** instead of delivering late without notice.",
     e:"🗓️",
+    kw:"Deadlines",
+    m:[["📋", "List everything"], ["🚦", "Prioritise"], ["✂️", "Break into steps"], ["🗓️", "Planner, start early"], ["📣", "Warn early"]],
     j:["List all the tasks and deadlines.",
        "Prioritise by urgency and importance.",
        "Break big tasks into small steps and set your own earlier deadlines.",
@@ -1037,30 +1125,35 @@ var JOBS = [
     t:"Give an example from a busy semester." },
 
   { k:"Behavioural", s:"Tell me about a time you had to learn something new quickly.",
-    ok:"What you had to learn, how you learned it, how you applied it, and the result.",
-    ng:"Say you are a fast learner in general without giving an example.",
+    a:"During a hackathon, I had to learn to use **Gemini AI** quickly to develop MedScan Assistant, because the solution had to be built within a **limited time**. I learned through **[documentation, tutorials, teammates]** and trial and error, then **applied it** directly in the project. I also completed the **Python Essentials 1 and MATLAB Onramp** certificates, which shows that I can learn on my own.",
     e:"🚀",
-    j:["What you had to learn and why it was urgent.",
-       "How you learned: documentation, tutorials, asking seniors, trial and error.",
-       "How you applied it to finish the task.",
-       "How long it took and the result."],
+    kw:"Learn Fast",
+    m:[["🤖", "Gemini AI at a hackathon"], ["⏱️", "Limited time"], ["📚", "Docs, tutorials, teammates"], ["🛠️", "Applied it, result"], ["📜", "Python & MATLAB certificates"]],
+    j:["Example: learning to use Gemini AI during a hackathon to develop MedScan Assistant.",
+       "Why urgent: the solution had to be designed and developed within the hackathon time limit.",
+       "How I learned: say what you really used (documentation, tutorials, trial and error, teammates).",
+       "How I applied it, and what worked in the end.",
+       "Other proof of self-learning: Python Essentials 1 (Cisco) and MATLAB Onramp (MathWorks) certificates."],
     t:"Interns are expected to learn fast. This is one of the most important answers." },
 
   { k:"Behavioural", s:"Have you held any leadership role or been active outside class?",
-    ok:"Name the role, your responsibility, a result, and the skills you gained.",
-    ng:"Say you focused only on your studies, so you have nothing to share.",
+    a:"I was **Head of Logistics for Tesla Cup 2026**, the EE/COE sports event, where I led logistics planning and coordinated operational requirements. The year before, I served on the **logistics committee**. I have also been **project leader for five academic projects**, and I took part in **RECONSA 2025**, a regional student conference. These roles taught me **planning, communication and handling people**.",
     e:"🧭",
-    j:["Name the club, event or competition and your position.",
-       "What you were responsible for.",
-       "A result you can state: number of participants, budget, an award.",
-       "Skills you gained: planning, communication, handling people."],
-    t:"If you have no formal position, talk about a time you took the lead in a group assignment." },
+    kw:"Leadership",
+    m:[["👑", "Head of Logistics, Tesla Cup 2026"], ["📦", "Logistics committee 2025"], ["🛠️", "Leader of 5 projects"], ["🌏", "RECONSA, Convofest, sports champion"], ["🧠", "Planning & people skills"]],
+    j:["Head of Logistics, Tesla Cup 2026 (EE/COE sports event): led logistics planning and coordinated operational requirements.",
+       "Before that, Committee of Logistics for Tesla Cup 2025: equipment preparation, transportation and venue setup.",
+       "Project leader for five academic projects.",
+       "Other activities: RECONSA 2025 (regional student conference with Malaysia, Thailand, Indonesia and the Philippines), Convofest volunteer, champion in tug of war (2025) and E-Football (2024).",
+       "Give one result in numbers if you can, and the skills gained: planning, communication, handling people."],
+    t:"Lead with Head of Logistics; it shows you moved up from committee member to head in one year." },
 
   /* ---------- D. Internship & workplace ---------- */
   { k:"Internship & Workplace", s:"Your supervisor gives you a task you have never done before. What do you do?",
-    ok:"Clarify the goal, try first, then ask specific questions and give regular updates.",
-    ng:"Work quietly on your own until the deadline so you do not disturb anyone.",
+    a:"First I would make sure I **understand the goal**, the expected output and the deadline. Then I would **try to find the answer myself** from documents, past work and online resources. After trying, I would **ask specific questions**. I would give **regular updates** so there are no surprises, and **write down what I learned** for next time.",
     e:"❓",
+    kw:"New Task",
+    m:[["🎯", "Clarify goal & deadline"], ["🔎", "Try myself first"], ["❓", "Ask specific questions"], ["📣", "Regular updates"], ["📝", "Note what I learned"]],
     j:["Make sure you understand the goal, the expected output and the deadline.",
        "Try to find the answer yourself first: documents, past work, online resources.",
        "Ask specific questions after you have tried, not before.",
@@ -1069,9 +1162,10 @@ var JOBS = [
     t:"Show a balance: independent, but not afraid to ask." },
 
   { k:"Internship & Workplace", s:"A factory has strict rules on safety, cleanroom practice and confidentiality. How do you feel about that?",
-    ok:"Follow them fully, ask when unsure, and never copy or photograph company information.",
-    ng:"Follow them when someone is watching; small shortcuts are fine if they save time.",
+    a:"I understand that these rules **protect people, the product and the customer**. I will follow all training, **PPE and cleanroom procedures**. I will **not take photos or copy files**, and I will not share company information outside. If I am **unsure** whether something is allowed, I will **ask first**, and if I see something unsafe, I will **report it**.",
     e:"🦺",
+    kw:"Rules & Safety",
+    m:[["🛡️", "Protect people & product"], ["🥽", "Follow PPE & cleanroom"], ["📵", "No photos / copying"], ["❓", "Unsure: ask first"], ["🚨", "Report unsafe"]],
     j:["You understand the rules protect people, the product and the customer.",
        "You will follow all training, PPE and cleanroom procedures.",
        "You will not take photos, copy files or share company information outside.",
@@ -1080,30 +1174,33 @@ var JOBS = [
     t:"Very relevant for semiconductor and medical device companies." },
 
   { k:"Internship & Workplace", s:"When can you start, how long is your internship, and are you able to work at this location?",
-    ok:"Give exact dates and duration, and confirm you can attend at the Kulim site.",
-    ng:"Say you are flexible on everything without knowing your university's dates.",
+    a:"My internship is for **7 months, from January 2027 to August 2027**, as required by UTP. My **family home is in Kulim**, so attending at Kulim Hi-Tech Park is not a problem. [Say whether shift or cleanroom work is acceptable to you.] My university requires **[logbook, supervisor visit, final report]**, which I will manage myself.",
     e:"📅",
-    j:["State the start and end dates required by your university.",
-       "State the duration in weeks or months.",
-       "Confirm you can travel or stay near the site, and that shift or cleanroom work is acceptable if needed.",
-       "Mention any university requirement: logbook, supervisor visit, final report."],
-    t:"Check these details with your faculty before the interview." },
+    kw:"Availability",
+    m:[["📅", "January to August 2027"], ["⏳", "7 months"], ["🏠", "Home in Kulim"], ["🎓", "UTP requirements"]],
+    j:["Internship period: January 2027 to August 2027, a 7-month internship under UTP.",
+       "Location: my family home is in Kulim, so attending at Kulim Hi-Tech Park is not a problem.",
+       "Say whether shift or cleanroom work is acceptable to you if needed.",
+       "UTP requirements: mention the logbook, supervisor visit and final report if they apply."],
+    t:"Confirm the exact start and end dates with UTP before the interview." },
 
   { k:"Internship & Workplace", s:"What do you know about Kulim Hi-Tech Park, and why do you want to do your internship in Kulim?",
-    ok:"Malaysia's first high-tech industrial park, opened in 1996 in Kedah, home to many multinationals.",
-    ng:"A new industrial park in Penang, opened in 2020, mainly for local small businesses.",
+    a:"**Kulim Hi-Tech Park** is in Kulim, Kedah, close to Penang. It opened in **1996** as **Malaysia's first high-tech industrial park**. It hosts **many multinational companies** in semiconductors, electronics and medical devices, covering much of the **chip supply chain**. I want to intern here because of that exposure, and because **my family home is in Kulim**.",
     e:"📍",
+    kw:"Kulim Hi-Tech Park",
+    m:[["📍", "Kulim, Kedah, near Penang"], ["🥇", "1996, Malaysia's first"], ["🌐", "Many multinationals"], ["🔗", "Covers chip supply chain"], ["🏠", "My home is in Kulim"]],
     j:["Kulim Hi-Tech Park is in Kulim, Kedah, close to Penang; it opened in 1996 as Malaysia's first high-tech industrial park.",
        "Many multinational companies are there: semiconductor, electronics, medical device, solar and specialty materials.",
        "It covers much of the chip supply chain: wafer fabrication, equipment, substrates, assembly and test.",
        "Why Kulim: many high-tech employers in one place, so good exposure and career options after graduation.",
-       "Practical reason if true for you: you can stay nearby, so travel and attendance are not a problem."],
+       "Practical reason: my family home is in Kulim, so travel and attendance are not a problem."],
     t:"Knowing the neighbours of the company you apply to shows real interest in the industry." },
 
   { k:"Internship & Workplace", s:"Do you have any questions for us?",
-    ok:"Yes: ask about the project, the tools to prepare and what makes an intern successful.",
-    ng:"No questions; or ask first about the allowance and leave it there.",
+    a:"Yes, I have a few questions. **What kind of project** would an intern in this team work on? **What tools or skills** should I prepare before I start? **What does a successful intern** look like to you? And is there a chance to **convert to a full-time position** after graduation?",
     e:"✋",
+    kw:"My Questions",
+    m:[["☝️", "Always ask 1-2"], ["🛠️", "Intern project?"], ["🧰", "What to prepare?"], ["⭐", "Successful intern?"], ["🚪", "Full-time chance?"]],
     j:["Always ask at least one or two questions.",
        "What kind of project would an intern in this team work on?",
        "What tools or skills should I prepare before I start?",
@@ -1113,9 +1210,10 @@ var JOBS = [
 
   /* ---------- E. Company-specific: Intel ---------- */
   { c:"Intel", k:"Company-Specific", s:"What do you know about Intel, and why do you want to intern here?",
-    ok:"US chipmaker known for processors; Intel Kulim is known for assembly and test work.",
-    ng:"A Korean memory-chip maker; its Kulim site is a wafer fabrication plant.",
+    a:"**Intel** is an American semiconductor company, founded in **1968** and headquartered in **Santa Clara**. It is known for **processors** for PCs and data centres, and for manufacturing its own chips. **Intel Kulim** is a long-standing site known for **assembly and test**. I want to intern here because processors are at the heart of **what I study**, and I can learn from a **large engineering community**.",
     e:"🖥️",
+    kw:"Intel",
+    m:[["🌎", "USA, Santa Clara, 1968"], ["🧠", "Processors, own factories"], ["📍", "Kulim: assembly & test"], ["🎓", "Fits what I study"], ["👥", "Big engineering community"]],
     j:["American semiconductor company, headquartered in Santa Clara, California, founded in 1968.",
        "Known for processors for PCs and data centres, and for manufacturing its own chips.",
        "Intel Kulim is a long-standing tenant of Kulim Hi-Tech Park; the site is known for assembly and test work.",
@@ -1124,9 +1222,10 @@ var JOBS = [
     t:"Read Intel's latest news before the interview; the company is changing quickly." },
 
   { c:"Intel", k:"Company-Specific", s:"How could a computer engineering intern contribute at Intel?",
-    ok:"Test and validation scripts, automation, data analysis and lab debug support.",
-    ng:"Mainly designing new processors on your own from the first week.",
+    a:"I could contribute in **validation and test** by writing scripts to run tests and analyse results. I can **automate engineering tasks using Python**, and help with **data analysis** of test or manufacturing data. I could also support **firmware and hardware debug** in the lab, applying my **computer architecture knowledge** from class.",
     e:"🧪",
+    kw:"My Role at Intel",
+    m:[["🧪", "Validation & test scripts"], ["🐍", "Python automation"], ["📊", "Data analysis"], ["🔧", "Firmware & lab debug"], ["🧠", "Architecture knowledge"]],
     j:["Validation and test: writing scripts to run tests and analyse results.",
        "Automation of engineering tasks using Python or similar.",
        "Data analysis of test or manufacturing data to spot issues.",
@@ -1135,9 +1234,10 @@ var JOBS = [
     t:"Match your answer to the department named in the internship advert." },
 
   { c:"Intel", k:"Company-Specific", s:"Explain in simple terms what a CPU does and what affects its performance.",
-    ok:"It fetches, decodes and executes instructions; clock speed, cores and cache affect performance.",
-    ng:"It stores files permanently; performance depends mainly on hard disk size.",
+    a:"A **CPU fetches, decodes and executes** instructions. Its main parts are the **control unit, the ALU, registers and cache**. Performance depends on **clock speed, the number of cores and cache size**, as well as the architecture. The **manufacturing process** matters too, because smaller transistors allow more of them at lower power. **Heat and power limits** are why multi-core designs became common.",
     e:"⚙️",
+    kw:"CPU",
+    m:[["🔄", "Fetch, decode, execute"], ["🧩", "CU, ALU, registers, cache"], ["⏱️", "Clock, cores, cache"], ["🔬", "Smaller transistors"], ["🌡️", "Heat limit: multi-core"]],
     j:["A CPU fetches instructions, decodes them and executes them.",
        "Main parts: control unit, arithmetic logic unit, registers, cache.",
        "Performance factors: clock speed, number of cores, cache size, architecture design.",
@@ -1147,9 +1247,10 @@ var JOBS = [
 
   /* ---------- Infineon ---------- */
   { c:"Infineon", k:"Company-Specific", s:"What do you know about Infineon, and why do you want to intern here?",
-    ok:"German company strong in power semiconductors and automotive chips; Kulim is a wafer fab.",
-    ng:"American company known for PC processors; Kulim only does packaging and shipping.",
+    a:"**Infineon** is a **German** semiconductor company headquartered near **Munich**, which came out of Siemens. It is strong in **power semiconductors, automotive chips, microcontrollers and sensors**, used in **electric vehicles, renewable energy** and IoT. **Infineon Kulim** is a **wafer fabrication** site. I want to intern here because its chips support **energy efficiency**, and it uses the embedded skills I am learning.",
     e:"🚗",
+    kw:"Infineon",
+    m:[["🌍", "Germany, Munich, ex-Siemens"], ["⚡", "Power, automotive, MCU, sensors"], ["🚗", "EVs, solar, drives, IoT"], ["📍", "Kulim: wafer fab"], ["🌱", "Energy efficiency"]],
     j:["German semiconductor company, headquartered near Munich; it came out of Siemens.",
        "Strong in power semiconductors, automotive chips, microcontrollers and sensors.",
        "Products are used in electric vehicles, renewable energy, industrial drives and IoT devices.",
@@ -1158,9 +1259,10 @@ var JOBS = [
     t:"Check the Infineon Malaysia website for the newest site developments." },
 
   { c:"Infineon", k:"Company-Specific", s:"How could a computer engineering intern contribute at Infineon?",
-    ok:"Test programs, equipment automation, yield dashboards and scripts for engineers.",
-    ng:"Mainly sales visits and presentations to automotive customers.",
+    a:"I could contribute in **test engineering**, with test programs, data logging and analysis. I could support **factory automation** and equipment software, and build **dashboards for yield** and equipment performance. If placed in an application team, I could do **embedded work with microcontrollers**. I can also write **scripts** that remove repetitive manual work for engineers.",
     e:"📈",
+    kw:"My Role at Infineon",
+    m:[["🧪", "Test programs & data"], ["🤖", "Factory automation"], ["📊", "Yield dashboards"], ["🎛️", "Embedded / MCU work"], ["🐍", "Scripts for engineers"]],
     j:["Test engineering: test programs, data logging and analysis.",
        "Factory automation and equipment software.",
        "Data analytics and dashboards for yield and equipment performance.",
@@ -1169,9 +1271,10 @@ var JOBS = [
     t:"If you have used any Infineon part or board, mention it." },
 
   { c:"Infineon", k:"Company-Specific", s:"What is a power semiconductor and where is it used?",
-    ok:"A device that switches high voltage and current efficiently, e.g. MOSFET and IGBT in EVs and chargers.",
-    ng:"A chip that stores data at high speed, e.g. RAM in computers.",
+    a:"A **power semiconductor** is a device that **switches or controls high voltage and current** efficiently. Examples are the **power MOSFET, IGBT and diode**. They are used in **chargers, motor drives, solar inverters and electric vehicles**. Newer materials such as **silicon carbide (SiC) and gallium nitride (GaN)** lose less energy than silicon, giving **smaller, cooler and more efficient** products.",
     e:"⚡",
+    kw:"Power Devices",
+    m:[["🔀", "Switches high V & I"], ["🧱", "MOSFET, IGBT, diode"], ["🔌", "Chargers, drives, EVs"], ["💎", "SiC & GaN"], ["❄️", "Less loss, cooler"]],
     j:["A device that switches or controls high voltage and current efficiently.",
        "Examples: power MOSFET, IGBT, diode.",
        "Used in chargers, power supplies, motor drives, solar inverters and electric vehicles.",
@@ -1181,9 +1284,10 @@ var JOBS = [
 
   /* ---------- AT&S ---------- */
   { c:"AT&S", k:"Company-Specific", s:"What do you know about AT&S, and why do you want to intern here?",
-    ok:"Austrian maker of high-end PCBs and IC substrates, with a large plant in Kulim.",
-    ng:"Japanese maker of memory chips, with a small design office in Kulim.",
+    a:"**AT&S** is an **Austrian** company headquartered in **Leoben**. It makes **high-end printed circuit boards and IC substrates**. An **IC substrate** connects a chip to the main board and is essential for high-performance processors. **AT&S Kulim** is a **large, new plant** in Kulim Hi-Tech Park. I want to intern here because it is **highly automated**, so my skills are directly useful.",
     e:"🟩",
+    kw:"AT&S",
+    m:[["🌍", "Austria, Leoben"], ["🟩", "High-end PCBs & IC substrates"], ["🔗", "Substrate: chip to board"], ["📍", "Large new Kulim plant"], ["🤖", "Highly automated"]],
     j:["Austrian company (Austria Technologie & Systemtechnik), headquartered in Leoben, Austria.",
        "Makes high-end printed circuit boards (PCBs) and IC substrates.",
        "An IC substrate connects a chip to the main board; it is essential for high-performance processors.",
@@ -1192,9 +1296,10 @@ var JOBS = [
     t:"Be able to explain 'IC substrate' in one sentence; many candidates cannot." },
 
   { c:"AT&S", k:"Company-Specific", s:"How could a computer engineering intern contribute at AT&S?",
-    ok:"Automation, manufacturing data and MES support, optical inspection and small tools.",
-    ng:"Designing the customer's processor chips.",
+    a:"I could contribute to **automation and equipment integration** in the plant. I can help collect, analyse and visualise **process and yield data**, and support manufacturing systems such as **MES and traceability**. I could also work on **automated optical inspection**, and write **small tools** that save engineers' time.",
     e:"🤖",
+    kw:"My Role at AT&S",
+    m:[["🤖", "Automation & equipment"], ["📊", "Process & yield data"], ["🗄️", "MES & traceability"], ["👁️", "Optical inspection"], ["🐍", "Time-saving tools"]],
     j:["Automation and equipment integration in a highly automated plant.",
        "Manufacturing data: collecting, analysing and visualising process and yield data.",
        "Supporting manufacturing systems (such as MES) and traceability.",
@@ -1203,9 +1308,10 @@ var JOBS = [
     t:"Use PCB knowledge from your own projects if you have designed a board." },
 
   { c:"AT&S", k:"Company-Specific", s:"What is a PCB, and what do you know about how it is made?",
-    ok:"A board that holds components and connects them with copper tracks, built in layers.",
-    ng:"A silicon chip that processes instructions inside a computer.",
+    a:"A **PCB**, or printed circuit board, **holds components and connects them** with copper tracks. It is made of **layers of copper and insulating material**. The main steps are **imaging the pattern, etching, laminating, drilling and plating** the holes, then the surface finish. **Finer lines** and smaller vias allow smaller, faster products. Quality is checked by **optical inspection and electrical test**.",
     e:"🥪",
+    kw:"PCB",
+    m:[["🟩", "Holds & connects parts"], ["🥪", "Copper + insulation layers"], ["🛠️", "Image, etch, laminate, drill, plate"], ["🔬", "Finer lines: smaller, faster"], ["✅", "AOI & electrical test"]],
     j:["A printed circuit board holds components and connects them with copper tracks.",
        "Made of layers of copper and insulating material; complex boards have many layers.",
        "Main steps: imaging the circuit pattern, etching copper, laminating layers, drilling and plating holes (vias), surface finish, testing.",
@@ -1215,9 +1321,10 @@ var JOBS = [
 
   /* ---------- SCHOTT ---------- */
   { c:"SCHOTT", k:"Company-Specific", s:"What do you know about SCHOTT, and why do you want to intern here?",
-    ok:"German specialty glass group; the Kulim plant makes optical components, e.g. for AR devices.",
-    ng:"French steel company; the Kulim plant makes car body panels.",
+    a:"**SCHOTT** is a **German** technology group headquartered in **Mainz**, owned by the Carl Zeiss Foundation. It makes **specialty glass** and glass-ceramics for electronics, optics and pharmaceutical packaging. **SCHOTT Kulim** is a **new facility completed in 2024** that makes **optical components**, for example for **augmented reality** devices. I want to intern here to experience **precision manufacturing** in a cleanroom.",
     e:"🥽",
+    kw:"SCHOTT",
+    m:[["🌍", "Germany, Mainz, Carl Zeiss Foundation"], ["🔮", "Specialty glass"], ["🏭", "Electronics, optics, pharma"], ["📍", "Kulim: new in 2024"], ["🥽", "Optical parts for AR"], ["✨", "Cleanroom precision"]],
     j:["German technology group, headquartered in Mainz, owned by the Carl Zeiss Foundation.",
        "Makes specialty glass, glass-ceramics and related materials.",
        "Used in electronics, optics, pharmaceutical packaging, home appliances and more.",
@@ -1227,9 +1334,10 @@ var JOBS = [
     t:"Read the 'SCHOTT in Kulim' page on the company website before the interview." },
 
   { c:"SCHOTT", k:"Company-Specific", s:"Your degree is computer engineering. How is it relevant to a glass manufacturer?",
-    ok:"Production is automated and data-driven: process data, machine vision and software systems.",
-    ng:"It is not really relevant, but you are willing to do any work given.",
+    a:"My degree is relevant because modern glass production is **highly automated** and controlled by software and sensors. **Process data** can be collected and analysed to improve quality and yield, and **machine vision** is used to inspect for defects. Production **systems, databases and dashboards** need people who can code. I bring **programming and electronics skills**, and I am keen to learn the process side.",
     e:"👁️",
+    kw:"Comp. Eng. at a Glass Maker",
+    m:[["🤖", "Automated production"], ["📊", "Process data for quality"], ["👁️", "Machine vision"], ["🗄️", "Systems & dashboards"], ["💪", "Coding + keen to learn"]],
     j:["Modern glass production is highly automated and controlled by software and sensors.",
        "Process data can be collected and analysed to improve quality and yield.",
        "Machine vision is used to inspect glass for defects.",
@@ -1238,9 +1346,10 @@ var JOBS = [
     t:"This question tests whether you thought about the fit. Prepare it well." },
 
   { c:"SCHOTT", k:"Company-Specific", s:"How would you approach building a system to detect defects on a product automatically?",
-    ok:"Define the defects, capture with camera and lighting, detect by image processing, decide, log and validate.",
-    ng:"Buy a camera, install it on the line and trust whatever it reports.",
+    a:"First I would **define the defect types** and what counts as pass or fail. Then I would set up a suitable **camera and lighting** so that the defects are visible. The images would be analysed by **image processing or a trained model**. The system would **decide pass, fail or manual review** and log every result. I would **validate it against human inspection**, and **keep improving** it using the wrong calls.",
     e:"📷",
+    kw:"Defect Detection",
+    m:[["📋", "Define defects"], ["📷", "Camera + lighting"], ["🧠", "Image processing / model"], ["🚦", "Pass, fail, review, log"], ["✅", "Validate vs human"], ["🔁", "Keep improving"]],
     j:["Understand the defect types and what counts as pass or fail.",
        "Capture: suitable camera and lighting to make defects visible.",
        "Process: image processing or a trained model to detect and classify defects.",
@@ -1251,9 +1360,10 @@ var JOBS = [
 
   /* ---------- Celestica ---------- */
   { c:"Celestica", k:"Company-Specific", s:"What do you know about Celestica, and why do you want to intern here?",
-    ok:"Canadian electronics manufacturing services company that builds products for other brands.",
-    ng:"A consumer brand that sells its own phones and laptops.",
+    a:"**Celestica** is a **Canadian** company headquartered in **Toronto**, which began as part of IBM. It is an **electronics manufacturing services** company: it designs and builds products **for other brands**, such as **servers, networking and storage** equipment. **Celestica Kulim** is a long-standing site in Kulim Hi-Tech Park. I want to intern here for the exposure to **many products and customers**.",
     e:"🍁",
+    kw:"Celestica",
+    m:[["🌎", "Canada, Toronto, ex-IBM"], ["🏭", "EMS: builds for other brands"], ["🖥️", "Servers, networking, storage"], ["📍", "Long-standing Kulim site"], ["🌐", "Many products & customers"]],
     j:["Canadian company, headquartered in Toronto; it began as part of IBM.",
        "Provides design, manufacturing and supply chain solutions for other brands (electronics manufacturing services).",
        "Builds products such as servers, networking and storage equipment, and products for industrial, healthcare and aerospace customers.",
@@ -1262,9 +1372,10 @@ var JOBS = [
     t:"Know the difference between a brand owner and a contract manufacturer." },
 
   { c:"Celestica", k:"Company-Specific", s:"How could a computer engineering intern contribute at Celestica?",
-    ok:"Test development, board debug, firmware loading and test-yield analysis.",
-    ng:"Marketing the customer's products to end users.",
+    a:"I could contribute in **test development**, with test scripts and fixtures for boards and systems. I could help **debug failed boards** with engineers and technicians, and support **firmware loading and functional testing**. I can also **analyse test yield** and failure trends, and build **small automation tools** for the production line.",
     e:"🔍",
+    kw:"My Role at Celestica",
+    m:[["🧪", "Test scripts & fixtures"], ["🔧", "Debug failed boards"], ["💾", "Firmware & functional test"], ["📊", "Yield & failure trends"], ["🐍", "Line automation tools"]],
     j:["Test development: test scripts, fixtures and automated test for boards and systems.",
        "Debugging failed boards together with engineers and technicians.",
        "Firmware loading, system configuration and functional testing of servers or network products.",
@@ -1273,9 +1384,10 @@ var JOBS = [
     t:"Networking and operating system basics are useful to mention here." },
 
   { c:"Celestica", k:"Company-Specific", s:"What is the difference between ICT and functional test for a circuit board?",
-    ok:"ICT checks components and connections; functional test powers the board and checks that it works.",
-    ng:"ICT powers the board and checks that it works; functional test checks individual components.",
+    a:"**In-circuit test (ICT)** checks **individual components and connections** on the board, such as shorts, opens and wrong values, usually with a **fixture of probes**. **Functional test (FCT)** **powers up the board** and checks that it works as intended. ICT finds manufacturing defects **early**, while functional test **confirms** that the product behaves correctly. Both are used together with **AOI and X-ray** inspection.",
     e:"✅",
+    kw:"ICT vs Functional Test",
+    m:[["🔍", "ICT: parts & connections"], ["📌", "Fixture with probes"], ["⚡", "FCT: power up, does it work"], ["🎯", "ICT early, FCT confirms"], ["👁️", "Plus AOI & X-ray"]],
     j:["In-circuit test (ICT): checks individual components and connections on the board, for example shorts, opens and wrong values.",
        "ICT usually uses a fixture with probes touching test points.",
        "Functional test (FCT): powers up the board and checks it works as intended.",
@@ -1285,9 +1397,10 @@ var JOBS = [
 
   /* ---------- Teleflex ---------- */
   { c:"Teleflex", k:"Company-Specific", s:"What do you know about Teleflex, and why do you want to intern here?",
-    ok:"US medical device company; the Kulim site is linked to anaesthesia and respiratory products.",
-    ng:"US semiconductor company; the Kulim site makes power chips.",
+    a:"**Teleflex** is an **American medical technology** company headquartered in **Pennsylvania**. It makes medical devices used in hospitals, such as **catheters** and products for **anaesthesia** and surgery. **Teleflex Kulim** is a manufacturing site linked to its **LMA** anaesthesia and respiratory products. I want to intern here because the products **directly help patients**, and I want to see engineering in a **regulated industry**.",
     e:"🏥",
+    kw:"Teleflex",
+    m:[["🌎", "USA, Pennsylvania"], ["🏥", "Catheters, anaesthesia, surgery"], ["📍", "Kulim: LMA products"], ["❤️", "Helps patients"], ["📋", "Regulated industry"]],
     j:["American medical technology company, headquartered in Pennsylvania.",
        "Makes medical devices used in hospitals, such as catheters and products for anaesthesia, vascular access, urology and surgery.",
        "Teleflex Kulim is a manufacturing site in Kulim Hi-Tech Park, linked to its anaesthesia and respiratory products (the LMA brand).",
@@ -1296,9 +1409,10 @@ var JOBS = [
     t:"Read the latest company news before the interview, as the business has been restructuring." },
 
   { c:"Teleflex", k:"Company-Specific", s:"How could a computer engineering intern contribute at a medical device manufacturer?",
-    ok:"Digital forms and dashboards, production data analysis, automation support and good documentation.",
-    ng:"Changing validated processes quickly on your own to improve them.",
+    a:"I could help with **digitalisation**, turning paper forms and manual reports into **digital forms and dashboards**. I can **analyse production data** on output, quality and downtime, and support **automation** such as sensors and vision inspection. I can build tools in **Excel, Power BI or Python**, and I understand the need for **good documentation**.",
     e:"📝",
+    kw:"My Role in Medical Devices",
+    m:[["📝", "Paper to digital forms"], ["📊", "Production data"], ["🤖", "Sensors & vision"], ["🐍", "Excel, Power BI, Python"], ["📂", "Good documentation"]],
     j:["Digitalisation: turning paper forms and manual reports into digital forms and dashboards.",
        "Data analysis of production output, quality and downtime.",
        "Automation support: sensors, vision inspection, machine data collection.",
@@ -1307,9 +1421,10 @@ var JOBS = [
     t:"Mention any dashboard, database or automation project you have done." },
 
   { c:"Teleflex", k:"Company-Specific", s:"Medical devices are highly regulated. Why does that matter for an engineer or an intern?",
-    ok:"A defect can harm a patient, so processes are validated, documented and changed only with approval.",
-    ng:"Regulation mainly concerns the marketing team, not engineers or interns.",
+    a:"It matters because a defect can **harm a patient**, so quality comes first. Companies follow a quality system such as **ISO 13485** and regulator requirements such as those of the **US FDA**. Processes, equipment and software must be **validated before use**, and everything is **documented**. Changes must be **reviewed and approved**. As an intern, I would **follow procedures exactly** and ask when unsure.",
     e:"🩺",
+    kw:"Regulation",
+    m:[["❤️", "Patient safety first"], ["📜", "ISO 13485 & FDA"], ["✅", "Validate before use"], ["📝", "Document everything"], ["🔏", "Changes need approval"], ["🙋", "Follow & ask"]],
     j:["A defect can harm a patient, so quality comes first.",
        "Companies follow a quality system (such as ISO 13485) and regulator requirements (such as the US FDA).",
        "Processes, equipment and software must be validated before use.",
@@ -1320,9 +1435,10 @@ var JOBS = [
 
   /* ---------- Lam Research ---------- */
   { c:"Lam Research", k:"Company-Specific", s:"What do you know about Lam Research, and why do you want to intern here?",
-    ok:"It makes the equipment chipmakers use, mainly etch, deposition and clean; it does not make chips.",
-    ng:"It makes processors and memory chips for PCs and phones.",
+    a:"**Lam Research** is an **American** company headquartered in **Fremont**, California, founded in **1980**. It **does not make chips**; it makes the **equipment** that chipmakers use, mainly for **etch, deposition and wafer cleaning**. Its **Kulim** site assembles and tests equipment. I want to intern here because its machines combine **mechanics, electronics, control and software**.",
     e:"🏗️",
+    kw:"Lam Research",
+    m:[["🌎", "USA, Fremont, 1980"], ["🏗️", "Makes equipment, not chips"], ["🧪", "Etch, deposition, clean"], ["🏭", "Customers: chipmakers"], ["📍", "Kulim: assemble & test"], ["⚙️", "Mechanics + electronics + software"]],
     j:["American company, headquartered in Fremont, California, founded in 1980.",
        "It does not make chips; it makes the equipment that chipmakers use to build chips on wafers.",
        "Main areas: etch, deposition and wafer cleaning equipment.",
@@ -1332,9 +1448,10 @@ var JOBS = [
     t:"Be clear on the difference between a chipmaker and an equipment maker; it is the first thing they check." },
 
   { c:"Lam Research", k:"Company-Specific", s:"How could a computer engineering intern contribute at Lam Research?",
-    ok:"Equipment software and controls, test scripts, data analysis and automation.",
-    ng:"Running a wafer fab production line as the process owner.",
+    a:"I could contribute to **equipment software and controls**, since the machines are run by embedded controllers. I could write **scripts to test modules** and complete systems before shipping, and **analyse test data** to find recurring issues. I can also **automate manual checks** and reports, and support engineers with **troubleshooting** electrical and communication problems.",
     e:"🎛️",
+    kw:"My Role at Lam",
+    m:[["🎛️", "Equipment software & controls"], ["🧪", "Test & integration scripts"], ["📊", "Test data analysis"], ["🤖", "Automate checks"], ["🔧", "Troubleshooting support"]],
     j:["Equipment software and controls: the machines are run by embedded controllers and software.",
        "Test and integration: scripts to test modules and complete systems before shipping.",
        "Data analysis of test results and manufacturing data to find recurring issues.",
@@ -1343,9 +1460,10 @@ var JOBS = [
     t:"Mention any control, sensor, PLC or embedded project you have done." },
 
   { c:"Lam Research", k:"Company-Specific", s:"What are etch and deposition in chip manufacturing?",
-    ok:"Deposition adds a thin layer; etch removes material selectively to form the pattern.",
-    ng:"Etch adds a thin layer; deposition removes material to form the pattern.",
+    a:"**Deposition** means **adding a very thin layer** of material onto the wafer. **Etch** means **removing material selectively** to form the circuit pattern. **Lithography** defines the pattern, and etch transfers it into the layer underneath. These steps are **repeated many times**. Many use **plasma inside a vacuum chamber**, and need very **precise control** of gas, pressure, power and temperature.",
     e:"➕",
+    kw:"Etch & Deposition",
+    m:[["➕", "Deposition: add a layer"], ["➖", "Etch: remove material"], ["🖼️", "Lithography sets pattern"], ["🔁", "Repeated many times"], ["🌫️", "Plasma in vacuum"], ["🎛️", "Precise control"]],
     j:["Deposition: adding a very thin layer of material onto the wafer.",
        "Etch: removing material selectively to form the circuit pattern.",
        "Lithography defines the pattern; etch transfers it into the layer underneath.",
@@ -1370,9 +1488,7 @@ var state = {
   cat: null,        // selected category (null = all)
   tab: "quiz",      // setup screen tab: "quiz" (A/B practice), "notes" (answers) or "mine" (own notes)
   queue: [], idx: 0,
-  right: 0,         // number answered correctly
-  wrong: [],        // questions answered wrongly
-  okSide: "A"       // which button holds the correct answer for the current question
+  find: ""          // keyword typed in the mind-map search box
 };
 
 /* --- Current language text --- */
@@ -1391,10 +1507,9 @@ function applyText(){
   $("tabMine").textContent = t.tabMine;   $("lblMine").textContent = t.lblMine;
   $("mineText").placeholder = t.minePh;   $("mineHint").textContent = t.mineHint;
   $("btnMineCopy").textContent = t.mineCopy; $("btnMineFile").textContent = t.mineFile;
-  $("lblChoose").textContent = t.choose;  $("lblAns").textContent = t.ans;
-  $("endTitle").textContent = t.end;      $("lblSGood").textContent = t.sGood;
-  $("lblSBad").textContent = t.sBad;      $("lblSScore").textContent = t.sScore;
-  $("lblReview").textContent = t.review;  $("btnRetry").textContent = t.retry;
+  $("btnShow").textContent = t.showAns;   $("lblAns").textContent = t.ans;
+  $("btnPrev").textContent = t.prev;      $("endTitle").textContent = t.end;
+  $("btnRetry").textContent = t.retry;
   $("btnRestart").textContent = t.restart; $("footText").textContent = state.job ? t.foot : "";
 }
 
@@ -1425,6 +1540,7 @@ function renderMenu(){
 
 function selectJob(job){
   state.job = job;
+  state.find = "";
   state.company = job.syarikat ? job.syarikat[0] : null;
   state.cat = null;
   state.tab = "quiz";
@@ -1546,32 +1662,92 @@ function fileMine(){
   setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
 }
 
-/* --- Notes tab: icon + question + correct answer only, grouped by category --- */
+/* --- Mind map colours --- */
+var BR = [["#d9480f","#fff1e6"],["#1971c2","#e7f1fb"],["#2f9e44","#e9f6ec"],["#9c36b5","#f5eafa"],["#e03131","#fdecec"],["#0c8599","#e3f5f7"]]; // branch: [line, fill]
+var CC = ["#0f5c63","#7a3e9d","#b4581a","#1f5fa8","#2e7d4f","#a23b3b","#5a5f73"];   // one colour per category
+function catColor(q){
+  var cats = [];
+  state.job.soalan.forEach(function(x){ if (cats.indexOf(x.k) < 0) cats.push(x.k); });
+  return CC[cats.indexOf(q.k) % CC.length];
+}
+
+/* Build one mind map: keyword in the centre, one coloured branch per key point */
+function buildMM(q){
+  var mm = document.createElement("div"); mm.className = "mm"; mm.style.setProperty("--cc", catColor(q));
+  var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  var c = document.createElement("div"); c.className = "mmc";
+  var ce = document.createElement("span"); ce.className = "e"; ce.textContent = q.e || "";
+  c.appendChild(ce); c.appendChild(document.createTextNode(q.kw));
+  var bs = document.createElement("div"); bs.className = "mmb";
+  q.m.forEach(function(it, i){
+    var col = BR[i % BR.length];
+    var n = document.createElement("div"); n.className = "mmn";
+    n.style.setProperty("--c", col[0]); n.style.setProperty("--b", col[1]);
+    var e = document.createElement("span"); e.className = "e"; e.textContent = it[0];
+    var t = document.createElement("span"); t.textContent = it[1];
+    n.appendChild(e); n.appendChild(t); bs.appendChild(n);
+  });
+  mm.appendChild(svg); mm.appendChild(c); mm.appendChild(bs);
+  return mm;
+}
+/* Draw the curved lines from the centre to each branch (needs the map to be visible) */
+function drawMM(mm){
+  var svg = mm.querySelector("svg"), c = mm.querySelector(".mmc"), box = mm.getBoundingClientRect();
+  if (!box.width) return;
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+  var cr = c.getBoundingClientRect();
+  var x1 = cr.right - box.left, y1 = cr.top + cr.height / 2 - box.top;
+  Array.prototype.forEach.call(mm.querySelectorAll(".mmn"), function(n, i){
+    var r = n.getBoundingClientRect();
+    var x2 = r.left - box.left, y2 = r.top + r.height / 2 - box.top, dx = (x2 - x1) * 0.55;
+    var p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    p.setAttribute("d", "M" + x1 + " " + y1 + " C" + (x1 + dx) + " " + y1 + " " + (x2 - dx) + " " + y2 + " " + x2 + " " + y2);
+    p.setAttribute("fill", "none"); p.setAttribute("stroke", BR[i % BR.length][0]);
+    p.setAttribute("stroke-width", "2.5"); p.setAttribute("stroke-linecap", "round");
+    svg.appendChild(p);
+  });
+}
+function drawAllMM(){ Array.prototype.forEach.call(document.querySelectorAll(".mm"), drawMM); }
+window.addEventListener("resize", drawAllMM);
+
+/* --- Mind Maps tab: search box + one mind map per question (correct answers only) --- */
 function renderNotes(){
   var box = $("notesBox"); box.innerHTML = "";
-  var lastCat = null;
+  var inp = document.createElement("input"); inp.type = "search"; inp.className = "find";
+  inp.placeholder = T().findPh; inp.value = state.find || "";
+  var list = document.createElement("div");
+  inp.oninput = function(){ state.find = inp.value; renderNoteList(list); };
+  box.appendChild(inp); box.appendChild(list);
+  renderNoteList(list);
+}
+function renderNoteList(box){
+  box.innerHTML = "";
+  var f = (state.find || "").trim().toLowerCase();
+  var lastCat = null, shown = 0;
   pickQuestions().forEach(function(q, i){
-    var cat = q.c ? q.k + " \u2022 " + q.c : q.k;
+    if (f) {
+      var hay = (q.kw + " " + q.s + " " + q.a + " " + q.m.map(function(x){ return x[1]; }).join(" ") + " " + q.j.join(" ")).toLowerCase();
+      if (hay.indexOf(f) < 0) return;
+    }
+    shown++;
+    var cat = q.c ? q.k + " • " + q.c : q.k;
     if (cat !== lastCat) {
-      var h = document.createElement("p"); h.className = "notehead"; h.textContent = cat;
+      var h = document.createElement("p"); h.className = "notehead"; h.style.setProperty("--cc", catColor(q));
+      h.appendChild(document.createElement("i")); h.appendChild(document.createTextNode(cat));
       box.appendChild(h); lastCat = cat;
     }
-    var n = document.createElement("div"); n.className = "note";
-    var em = document.createElement("span"); em.className = "em"; em.textContent = q.e || "\u2022";
-    var body = document.createElement("div");
+    var n = document.createElement("div"); n.className = "mcard"; n.style.setProperty("--cc", catColor(q));
     var nq = document.createElement("p"); nq.className = "nq"; nq.textContent = (i + 1) + ". " + q.s;
-    var na = document.createElement("p"); na.className = "na"; na.textContent = q.ok;
+    var my = document.createElement("div"); my.className = "mynote"; fillMyNote(my, q);
     var d = document.createElement("details");
     var sm = document.createElement("summary"); sm.textContent = T().more;
-    var ul = document.createElement("ul");
-    q.j.forEach(function(p){ var li = document.createElement("li"); li.textContent = p; ul.appendChild(li); });
-    d.appendChild(sm); d.appendChild(ul);
-    var my = document.createElement("div"); my.className = "mynote"; fillMyNote(my, q);
-    body.className = "body";
-    body.appendChild(nq); body.appendChild(na); body.appendChild(my); body.appendChild(d);
-    n.appendChild(em); n.appendChild(body);
+    var ap = document.createElement("p"); ap.className = "ansp"; ap.style.marginTop = "8px"; rich(ap, q.a);
+    d.appendChild(sm); d.appendChild(ap);
+    n.appendChild(nq); n.appendChild(buildMM(q)); n.appendChild(my); n.appendChild(d);
     box.appendChild(n);
   });
+  if (!shown) { var e = document.createElement("p"); e.className = "nohit"; e.textContent = T().noHit; box.appendChild(e); }
+  drawAllMM();
 }
 
 /* Questions for the selected company: general ones + that company's own (kept in file order) */
@@ -1582,71 +1758,64 @@ function pickQuestions(){
   return companyQuestions().filter(function(q){ return state.cat === null || q.k === state.cat; });
 }
 
+/* Write text with **keywords** in bold (safe: builds elements, no HTML from the data) */
+function rich(el, text){
+  el.innerHTML = "";
+  text.split("**").forEach(function(part, i){
+    if (!part) return;
+    if (i % 2) { var b = document.createElement("b"); b.textContent = part; el.appendChild(b); }
+    else { el.appendChild(document.createTextNode(part)); }
+  });
+}
+
 /* --- Screen 2: question session (questions stay in order) --- */
 function startSession(list){
   if (!list.length) return;
   state.queue = list.slice();
-  state.idx = 0; state.right = 0; state.wrong = [];
+  state.idx = 0;
   show("scrQuiz");
   renderQuestion();
 }
 
 function renderQuestion(){
   var q = state.queue[state.idx];
-  $("qCat").textContent = q.c ? q.k + " \u2022 " + q.c : q.k;
+  $("qCat").textContent = q.c ? q.k + " • " + q.c : q.k;
   $("qNum").textContent = T().qn + (state.idx + 1) + " / " + state.queue.length;
-  $("qBar").style.width = (state.idx / state.queue.length * 100) + "%";
+  $("qBar").style.width = ((state.idx + 1) / state.queue.length * 100) + "%";
   $("qText").textContent = q.s;
-
-  // Only the position of the correct answer (A or B) is random; question order is fixed
-  state.okSide = Math.random() < 0.5 ? "A" : "B";
-  $("optAText").textContent = state.okSide === "A" ? q.ok : q.ng;
-  $("optBText").textContent = state.okSide === "B" ? q.ok : q.ng;
-  ["optA","optB"].forEach(function(id){ $(id).disabled = false; $(id).className = "opt"; });
+  var kw = $("qKw"); kw.innerHTML = ""; kw.style.setProperty("--cc", catColor(q));
+  kw.appendChild(document.createTextNode(T().kwLabel));
+  var kb = document.createElement("b"); kb.textContent = (q.e ? q.e + " " : "") + q.kw; kw.appendChild(kb);
   $("ansBox").classList.add("hidden");
+  $("rowShow").classList.remove("hidden");
+  $("btnPrev").disabled = state.idx === 0;
+  $("btnPrev").style.opacity = state.idx === 0 ? ".4" : "1";
+  $("btnNext").textContent = state.idx + 1 >= state.queue.length ? T().finish : T().next;
 }
 
-/* User picks A or B */
-function choose(side){
+/* Show the answer in full sentences (keywords bold), then the mind map below it */
+function showAnswer(){
   var q = state.queue[state.idx];
-  var correct = side === state.okSide;
-  if (correct) { state.right++; } else { state.wrong.push(q); }
-
-  // Colour the two options
-  $("optA").disabled = true; $("optB").disabled = true;
-  $("opt" + state.okSide).classList.add("right");
-  if (!correct) { $("opt" + side).classList.add("wrong"); }
-  else { $("opt" + (side === "A" ? "B" : "A")).classList.add("dim"); }
-
-  // Verdict + the correct answer in full
-  var v = $("verdict");
-  v.className = "verdict " + (correct ? "ok" : "bad");
-  v.textContent = correct ? T().right : T().wrong + state.okSide + ".";
-  $("ansShort").textContent = q.ok;
-  var ul = $("ansList"); ul.innerHTML = "";
-  q.j.forEach(function(p){ var li = document.createElement("li"); li.textContent = p; ul.appendChild(li); });
+  rich($("ansText"), q.a);
+  var mmBox = $("ansMM"); mmBox.innerHTML = ""; mmBox.appendChild(buildMM(q));
   $("ansTip").textContent = T().tip + q.t;
   fillMyNote($("ansMine"), q);
-  $("btnNext").textContent = state.idx + 1 >= state.queue.length ? T().finish : T().next;
+  $("rowShow").classList.add("hidden");
   $("ansBox").classList.remove("hidden");
+  drawAllMM();
 }
 
 function nextQuestion(){
   state.idx++;
   if (state.idx >= state.queue.length) { endSession(); } else { renderQuestion(); window.scrollTo(0, 0); }
 }
+function prevQuestion(){
+  if (state.idx > 0) { state.idx--; renderQuestion(); window.scrollTo(0, 0); }
+}
 
-/* --- Screen 3: summary --- */
+/* --- Screen 3: end of session --- */
 function endSession(){
-  var total = state.queue.length;
-  $("sGood").textContent = state.right;
-  $("sBad").textContent = state.wrong.length;
-  $("sScore").textContent = Math.round(state.right / total * 100) + "%";
-  var ol = $("reviewList"); ol.innerHTML = "";
-  state.wrong.forEach(function(q){ var li = document.createElement("li"); li.textContent = q.s; ol.appendChild(li); });
-  var has = state.wrong.length > 0;
-  $("reviewBox").classList.toggle("hidden", !has);
-  $("btnRetry").classList.toggle("hidden", !has);
+  $("endInfo").textContent = state.queue.length + T().endInfo;
   show("scrEnd");
 }
 
@@ -1661,10 +1830,10 @@ $("tabMine").onclick    = function(){ state.tab = "mine"; renderSetup(); };
 $("mineText").oninput   = saveMine;
 $("btnMineCopy").onclick = copyMine;
 $("btnMineFile").onclick = fileMine;
-$("optA").onclick       = function(){ choose("A"); };
-$("optB").onclick       = function(){ choose("B"); };
+$("btnShow").onclick    = showAnswer;
 $("btnNext").onclick    = nextQuestion;
-$("btnRetry").onclick   = function(){ startSession(state.wrong); };
+$("btnPrev").onclick    = prevQuestion;
+$("btnRetry").onclick   = function(){ startSession(state.queue); };
 $("btnRestart").onclick = goMenu;
 $("btnHome").onclick    = goMenu;
 
