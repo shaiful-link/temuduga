@@ -73,7 +73,7 @@
   ol.review li{margin-bottom:6px}
   /* Tabs + notes */
   .tabs{display:flex;gap:6px;background:#e6e1d6;border-radius:12px;padding:5px;margin-bottom:14px}
-  .tab{flex:1;border:0;background:transparent;border-radius:9px;padding:10px;font:inherit;font-weight:600;color:var(--muted);cursor:pointer}
+  .tab{flex:1;min-width:0;border:0;background:transparent;border-radius:9px;padding:10px 3px;font:inherit;font-size:.85rem;font-weight:600;color:var(--muted);cursor:pointer}
   .tab.on{background:#fff;color:var(--main-dark);box-shadow:0 1px 3px rgba(0,0,0,.12)}
   .notehead{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--main-dark);margin:18px 4px 8px}
   .note{display:flex;gap:12px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:8px}
@@ -151,6 +151,7 @@
     </div>
     <div class="tabs">
       <button class="tab on" id="tabQuiz"></button>
+      <button class="tab" id="tabScript"></button>
       <button class="tab" id="tabNotes"></button>
       <button class="tab" id="tabMine"></button>
     </div>
@@ -167,7 +168,7 @@
         <button class="btn ghost" id="btnBack"></button>
       </div>
     </div>
-    <!-- Notes tab: correct answers only -->
+    <!-- Script tab (written answers only) and Mind Maps tab (mind maps only) share this box -->
     <div id="notesBox" class="hidden"></div>
     <!-- My Notes tab: user's own notes, saved on this phone/browser -->
     <div id="mineList" class="hidden"></div>
@@ -241,11 +242,11 @@ var TEXT = {
     title:"Latihan Temuduga", sub:"Soalan ikut turutan \u2022 Jawapan penuh \u2022 Peta minda",
     picked:"Jawatan dipilih", company:"Pilih syarikat", cat:"Pilih kategori soalan", all:"Semua",
     count:" soalan, ditanya mengikut turutan.", start:"Mula Temuduga", back:"Tukar jawatan",
-    tabQuiz:"Latihan", showAns:"Tunjuk Jawapan", prev:"\u2039 Sebelum", endInfo:" soalan telah dilalui.", tabNotes:"Peta Minda", kwLabel:"Kata kunci:", findPh:"\uD83D\uDD0D Cari kata kunci, cth: IQC, TAT, hadiah", noHit:"Tiada padanan. Cuba kata kunci lain.", tabMine:"Nota Saya",
+    tabQuiz:"Latihan", showAns:"Tunjuk Jawapan", prev:"\u2039 Sebelum", endInfo:" soalan telah dilalui.", tabNotes:"Peta Minda", tabScript:"Skrip", scriptInfo:" skrip jawapan \u2022 teks sahaja.", scriptFile:"Simpan skrip sebagai fail (.txt)", qWord:"Soalan", aWord:"Jawapan", kwLabel:"Kata kunci:", findPh:"\uD83D\uDD0D Cari kata kunci, cth: IQC, TAT, hadiah", noHit:"Tiada padanan. Cuba kata kunci lain.", tabMine:"Nota Saya",
     lblMine:"Nota am (tidak terikat pada soalan)", mineInfo:" soalan \u2022 tulis nota anda di bawah setiap soalan.", qPh:"Nota saya untuk soalan ini...", myTag:"Nota saya", qSaved:"\u2713 Tersimpan", minePh:"Taip atau tampal (paste) nota anda di sini, contohnya daripada ChatGPT...",
     mineHint:"Nota disimpan secara automatik dalam telefon ini sahaja (pelayar ini). Ia tidak dihantar ke internet. Jangan guna mod Private/Incognito, dan nota akan hilang jika data pelayar dipadam. Tekan 'Simpan sebagai fail' untuk salinan sandaran.",
     mineSaved:"\u2713 Tersimpan dalam telefon ini", mineFail:"Tidak dapat simpan dalam pelayar ini. Guna 'Simpan sebagai fail'.",
-    mineCopy:"Salin semua", mineCopied:"\u2713 Disalin", mineFile:"Simpan sebagai fail", notesInfo:" peta minda \u2022 jawapan betul sahaja.", more:"Jawapan penuh",
+    mineCopy:"Salin semua", mineCopied:"\u2713 Disalin", mineFile:"Simpan sebagai fail", notesInfo:" peta minda \u2022 peta minda sahaja.", more:"Jawapan penuh",
     panel:"Soalan panel", choose:"Pilih jawapan yang betul: A atau B",
     right:"Betul!", wrong:"Salah. Jawapan betul ialah ", ans:"Jawapan", tip:"Tip: ",
     next:"Seterusnya \u203A", finish:"Tamat",
@@ -257,11 +258,11 @@ var TEXT = {
     title:"Mock Interview", sub:"Questions in order \u2022 Full answer \u2022 Mind map",
     picked:"Selected role", company:"Select the company", cat:"Select question category", all:"All",
     count:" questions, asked in order.", start:"Start Interview", back:"Change role",
-    tabQuiz:"Practice", showAns:"Show Answer", prev:"\u2039 Previous", endInfo:" questions covered.", tabNotes:"Mind Maps", kwLabel:"Keyword:", findPh:"\uD83D\uDD0D Search a keyword, e.g. CPU, PCB, team", noHit:"No match. Try another keyword.", tabMine:"My Notes",
+    tabQuiz:"Practice", showAns:"Show Answer", prev:"\u2039 Previous", endInfo:" questions covered.", tabNotes:"Mind Maps", tabScript:"Script", scriptInfo:" answer scripts \u2022 text only.", scriptFile:"Save script as a file (.txt)", qWord:"Question", aWord:"Answer", kwLabel:"Keyword:", findPh:"\uD83D\uDD0D Search a keyword, e.g. CPU, PCB, team", noHit:"No match. Try another keyword.", tabMine:"My Notes",
     lblMine:"General notes (not tied to a question)", mineInfo:" questions \u2022 write your note under each question.", qPh:"My note for this question...", myTag:"My note", qSaved:"\u2713 Saved", minePh:"Type or paste your notes here, for example from ChatGPT...",
     mineHint:"Notes are saved automatically on this phone only (this browser). Nothing is sent to the internet. Do not use Private/Incognito mode, and notes are lost if browser data is cleared. Tap 'Save as file' for a backup copy.",
     mineSaved:"\u2713 Saved on this phone", mineFail:"Cannot save in this browser. Use 'Save as file'.",
-    mineCopy:"Copy all", mineCopied:"\u2713 Copied", mineFile:"Save as file", notesInfo:" mind maps \u2022 correct answers only.", more:"Full answer",
+    mineCopy:"Copy all", mineCopied:"\u2713 Copied", mineFile:"Save as file", notesInfo:" mind maps \u2022 mind maps only.", more:"Full answer",
     panel:"Interviewer asks", choose:"Choose the correct answer: A or B",
     right:"Correct!", wrong:"Wrong. The correct answer is ", ans:"Answer", tip:"Tip: ",
     next:"Next \u203A", finish:"Finish",
@@ -2244,7 +2245,7 @@ var state = {
   job: null,        // selected job
   company: null,    // selected company (only for jobs with a company list)
   cat: null,        // selected category (null = all)
-  tab: "quiz",      // setup screen tab: "quiz" (A/B practice), "notes" (answers) or "mine" (own notes)
+  tab: "quiz",      // setup screen tab: "quiz" (practice), "script" (answers only), "notes" (mind maps only) or "mine" (own notes)
   queue: [], idx: 0,
   find: "",         // keyword typed in the mind-map search box
   lang: "ms",       // language for jobs that have two languages
@@ -2272,6 +2273,7 @@ function applyText(){
   $("lblCat").textContent = t.cat;        $("btnStart").textContent = t.start;
   $("btnBack").textContent = t.back;      $("lblPanel").textContent = t.panel;
   $("tabQuiz").textContent = t.tabQuiz;   $("tabNotes").textContent = t.tabNotes;
+  $("tabScript").textContent = t.tabScript;
   $("tabMine").textContent = t.tabMine;   $("lblMine").textContent = t.lblMine;
   $("mineText").placeholder = t.minePh;   $("mineHint").textContent = t.mineHint;
   $("btnMineCopy").textContent = t.mineCopy; $("btnMineFile").textContent = t.mineFile;
@@ -2359,16 +2361,18 @@ function renderSetup(){
     box.appendChild(b);
   });
   // Tabs: practice shows the Start button, notes shows the answer list
-  var notes = state.tab === "notes", mine = state.tab === "mine";
+  var script = state.tab === "script";
+  var notes = state.tab === "notes" || script, mine = state.tab === "mine";
   $("tabQuiz").classList.toggle("on", state.tab === "quiz");
-  $("tabNotes").classList.toggle("on", notes);
+  $("tabScript").classList.toggle("on", script);
+  $("tabNotes").classList.toggle("on", state.tab === "notes");
   $("tabMine").classList.toggle("on", mine);
   $("mineBox").classList.toggle("hidden", !mine);
   $("mineList").classList.toggle("hidden", !mine);
   if (mine) { renderMineList(); loadMine(); }
   $("btnStart").classList.toggle("hidden", notes || mine);
   $("notesBox").classList.toggle("hidden", !notes);
-  $("countInfo").textContent = pickQuestions().length + (notes ? T().notesInfo : mine ? T().mineInfo : T().count);
+  $("countInfo").textContent = pickQuestions().length + (script ? T().scriptInfo : notes ? T().notesInfo : mine ? T().mineInfo : T().count);
   if (notes) renderNotes();
 }
 
@@ -2490,18 +2494,27 @@ function drawMM(mm){
 function drawAllMM(){ Array.prototype.forEach.call(document.querySelectorAll(".mm"), drawMM); }
 window.addEventListener("resize", drawAllMM);
 
-/* --- Mind Maps tab: search box + one mind map per question (correct answers only) --- */
+/* --- Script tab (written answers only) and Mind Maps tab (mind maps only): search box + list --- */
 function renderNotes(){
   var box = $("notesBox"); box.innerHTML = "";
   var inp = document.createElement("input"); inp.type = "search"; inp.className = "find";
   inp.placeholder = T().findPh; inp.value = state.find || "";
   var list = document.createElement("div");
   inp.oninput = function(){ state.find = inp.value; renderNoteList(list); };
-  box.appendChild(inp); box.appendChild(list);
+  box.appendChild(inp);
+  if (state.tab === "script") {
+    // Button to download the script of the selected questions as plain text
+    var r = document.createElement("div"); r.className = "row"; r.style.margin = "6px 0 4px";
+    var b = document.createElement("button"); b.className = "btn ghost"; b.id = "btnScriptFile";
+    b.textContent = T().scriptFile; b.onclick = fileScript;
+    r.appendChild(b); box.appendChild(r);
+  }
+  box.appendChild(list);
   renderNoteList(list);
 }
 function renderNoteList(box){
   box.innerHTML = "";
+  var script = state.tab === "script";
   var f = (state.find || "").trim().toLowerCase();
   var lastCat = null, shown = 0;
   pickQuestions().forEach(function(q, i){
@@ -2518,16 +2531,39 @@ function renderNoteList(box){
     }
     var n = document.createElement("div"); n.className = "mcard"; n.style.setProperty("--cc", catColor(q));
     var nq = document.createElement("p"); nq.className = "nq"; nq.textContent = (i + 1) + ". " + F(q, "s");
-    var my = document.createElement("div"); my.className = "mynote"; fillMyNote(my, q);
-    var d = document.createElement("details");
-    var sm = document.createElement("summary"); sm.textContent = T().more;
-    var ap = document.createElement("p"); ap.className = "ansp"; ap.style.marginTop = "8px"; rich(ap, F(q, "a"));
-    d.appendChild(sm); d.appendChild(ap);
-    n.appendChild(nq); n.appendChild(buildMM(q)); n.appendChild(my); n.appendChild(d);
+    n.appendChild(nq);
+    if (script) {
+      // Script tab: the written answer only
+      var ap = document.createElement("p"); ap.className = "ansp"; ap.style.marginTop = "8px"; rich(ap, F(q, "a"));
+      n.appendChild(ap);
+    } else {
+      // Mind Maps tab: the mind map only
+      n.appendChild(buildMM(q));
+    }
     box.appendChild(n);
   });
   if (!shown) { var e = document.createElement("p"); e.className = "nohit"; e.textContent = T().noHit; box.appendChild(e); }
-  drawAllMM();
+  if (!script) drawAllMM();
+}
+
+/* Plain-text script of the selected questions (no bold marks), for reading aloud or video narration */
+function scriptText(){
+  var out = [], lastCat = null;
+  pickQuestions().forEach(function(q, i){
+    var cat = catLine(q);
+    if (cat !== lastCat) { out.push("=== " + cat.toUpperCase() + " ===", ""); lastCat = cat; }
+    out.push(T().qWord + " " + (i + 1) + ": " + F(q, "s"));
+    out.push(T().aWord + ": " + F(q, "a").replace(/\*\*/g, ""), "");
+  });
+  return out.join("\r\n");
+}
+function fileScript(){
+  var blob = new Blob(["\uFEFF" + scriptText()], { type: "text/plain;charset=utf-8" });
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "skrip-" + state.job.id + "-" + curLang() + ".txt";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
 }
 
 /* Questions for the selected company: general ones + that company's own (kept in file order) */
@@ -2610,6 +2646,7 @@ function goMenu(){ state.job = null; applyText(); renderMenu(); show("scrMenu");
 $("btnStart").onclick   = function(){ startSession(pickQuestions()); };
 $("btnBack").onclick    = goMenu;
 $("tabQuiz").onclick    = function(){ state.tab = "quiz"; renderSetup(); };
+$("tabScript").onclick  = function(){ state.tab = "script"; renderSetup(); };
 $("tabNotes").onclick   = function(){ state.tab = "notes"; renderSetup(); };
 $("tabMine").onclick    = function(){ state.tab = "mine"; renderSetup(); };
 $("mineText").oninput   = saveMine;
